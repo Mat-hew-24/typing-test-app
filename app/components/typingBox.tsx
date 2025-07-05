@@ -7,8 +7,9 @@ function strToNestedArray(str: string): string[][] {
   return str.split("\n").map((line) => [...line]);
 }
 
-const targetText = "hi what is your name\nMy name is Amer";
-
+const targetText = `for(let i=0;i<6;i++){
+console.log("fuck you");
+}`;
 export default function TypingBox() {
   const [userInput, setUserInput] = useState("");
   const lettersArr = strToNestedArray(targetText);
@@ -47,6 +48,10 @@ export default function TypingBox() {
                     } else {
                       letterClass += " " + styles.incorrect;
                     }
+                  }
+                  // Highlight the current letter to type
+                  if (inputIndex === userInput.length) {
+                    letterClass += " " + styles.activeLetter;
                   }
                   inputIndex++;
                   return (
