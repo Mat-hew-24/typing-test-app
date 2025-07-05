@@ -21,7 +21,11 @@
 
 body {
   font-family: "Poppins" !important ;
-  background: rgb(203, 230, 112);
-  color: black;
+  background: burlywood;
+  color: rgb(255, 242, 100);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.barbtn {
+  @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-amber-400 hover:text-black;
 }
