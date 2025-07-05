@@ -6,7 +6,7 @@
 
 .wordBox {
   display: flex;
-  top: 20%;
+  top: 200px;
   width: 100%;
   height: 200px;
   padding: 15px;
@@ -63,16 +63,35 @@
 }
 
 .line {
-  display: flex;
+  display: block; /* stack lines vertically */
   margin-bottom: 8px;
 }
 
 .word {
-  display: flex;
+  display: inline; /* keep words inline */
 }
 
 .letter {
-  display: inline-block;
-  color: #feff04;
-  /* Add your letter styling here */
+  display: inline-block; /* or just inline */
+  margin: 0;
+  padding: 0;
+  /* your other styles */
+}
+.correct {
+  color: #22c55e; /* green-500 */
+}
+.incorrect {
+  color: #ef4444; /* red-500 */
+}
+
+.textBox {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  resize: none;
+  pointer-events: auto;
 }
