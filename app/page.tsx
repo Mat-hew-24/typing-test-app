@@ -16,7 +16,7 @@ export default function Home() {
   
   //for dev purpose
 
-  const togglebtn= <button onClick={HandleToggle} className="hover:cursor-pointer text-white bg-black rounded-3xl p-2 text-sm">Toggle</button>
+  const togglebtn= <button onClick={HandleToggle} className="barbtn bg-black">Toggle</button>
   
   function HandleToggle(){
     setIsToggle(!isToggle);
@@ -53,7 +53,7 @@ export default function Home() {
     }
     
     {!isValid && <Loading/>}
-    {isToggle && <TypingBox />}
+    {isToggle && isValid && <TypingBox /> }
     </> 
   )
 
