@@ -6,7 +6,7 @@ import Image from "next/image"
 export default function Navbar(){
     
     return (
-    <div className="text-black right-0 left-0 flex p-4">
+    <div className="text-black right-0 left-0 flex justify-center p-4">
         
             <Image src="/euro.png" width={25} alt="" height={20} className="h-6 mr-4 ml-5"></Image>
             <span className="mr-220">Typemonkey</span>

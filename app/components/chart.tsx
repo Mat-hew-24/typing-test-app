@@ -22,8 +22,8 @@ export default function LineChart({time}:{time:number[]}) {
           {
             label: 'Views',
             data: [1,2,3,4,5,6,7,30, 45, 60, 40, 80],
-            borderColor: '#00007f',
-            backgroundColor: 'rgba(85,85,255,0.1)',
+            borderColor: '#116611',
+            backgroundColor: 'rgba(17,102,16,0.1)',
             fill: true,
             tension: 0,
           },
