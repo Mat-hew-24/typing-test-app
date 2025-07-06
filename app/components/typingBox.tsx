@@ -7,9 +7,7 @@ function strToNestedArray(str: string): string[][] {
   return str.split("\n").map((line) => [...line]);
 }
 
-const targetText = `for(let i=0;i<6;i++){
-console.log("fuck you");
-}`;
+const targetText = `hi how are you in this world`;
 export default function TypingBox() {
   const [userInput, setUserInput] = useState("");
   const lettersArr = strToNestedArray(targetText);
@@ -26,7 +24,7 @@ export default function TypingBox() {
   let inputIndex = 0;
 
   return (
-    <div>
+    <div className={styles.mainBox}>
       <textarea
         value={userInput}
         onChange={handleChange}
