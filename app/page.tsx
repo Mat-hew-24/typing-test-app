@@ -9,12 +9,13 @@ import TypingBox from "./components/typingBox";
 
 
 export default function Home() {
-  const [time,setTime] = useState([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
-  const [isValid,setIsValid]= useState(false);
-  const [hideNav,setHideNav]=useState(true);
-  const [isToggle,setIsToggle]=useState(true);
-  const [timeVal,setTimeVal]=useState(15);
-  const [timeRunner,setTimeRunner]=useState(false);
+  const [time,setTime] = useState([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]); //data part
+  const [isValid,setIsValid]= useState(false); //loader process status
+  const [hideNav,setHideNav]=useState(true); //nav visibility
+  const [isToggle,setIsToggle]=useState(true); //chart->box box->chart
+  const [timeVal,setTimeVal]=useState(15); //value of timer
+  const [timeRunner,setTimeRunner]=useState(false); //timer running status
+  const [loader,setLoader]=useState(false); //loading initiation
 
   function changeTime(x:number){
     const newTime=[];
@@ -24,6 +25,7 @@ export default function Home() {
     setTime(newTime);
   }
 
+  //First time loading into the site
   useEffect(()=>{
     const timeval = setTimeout(()=>{
       setIsValid(true);
@@ -35,19 +37,28 @@ export default function Home() {
 
   return (
     <>
-    {!hideNav &&
-     <Navbar/>
-    }
+    {!hideNav && <Navbar/>}
+  
     {
     <div className="flex flex-col items-center">
-      {isValid && <Bar  changeTime={changeTime} setTimeVal={setTimeVal} setIsToggle={setIsToggle} setTimeRunner={setTimeRunner}/>}
-      {!isToggle && <LineChart time={time}/>}
+
+      {isValid && <Bar loader={loader} changeTime={changeTime}
+       setTimeVal={setTimeVal} setIsToggle={setIsToggle}
+        setTimeRunner={setTimeRunner} setLoader={setLoader} />}
+
+      {!isToggle && !loader&& <LineChart time={time}/>}
+
     </div>
     }
     
     {!isValid && <Loading/>}
+
     <div className="flex justify-center">
-    {isToggle && isValid && <TypingBox timeVal={timeVal} setTimeRunner={setTimeRunner} timeRunner={timeRunner} setTimeVal={setTimeVal}/> }
+
+      {isToggle && isValid && !loader && <TypingBox timeVal={timeVal}
+      setTimeRunner={setTimeRunner} timeRunner={timeRunner}
+        setTimeVal={setTimeVal} setIsToggle={setIsToggle}/> }
+
     </div>
     </> 
   )
