@@ -16,7 +16,7 @@ export default function Home() {
   
   //for dev purpose
 
-  const togglebtn= <button onClick={HandleToggle} className="barbtn bg-black">Toggle</button>
+  const togglebtn= <button onClick={HandleToggle} className="barbtn bg-black mb-4 p-2">Toggle</button>
   
   function HandleToggle(){
     setIsToggle(!isToggle);
