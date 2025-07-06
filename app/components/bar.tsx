@@ -1,15 +1,17 @@
-type Barprop = {changeTime: (x:number)=> void,setIsValid: (x:boolean)=>void}
+'use client';
 
-export default function Bar({changeTime,setIsValid}:Barprop){
+type Barprop = {changeTime: (x:number)=> void,setIsToggle: (x:boolean)=>void,setTimeVal: (x:number)=>void,setTimeRunner: (x:boolean)=>void}
+
+export default function Bar({changeTime,setIsToggle,setTimeVal,setTimeRunner}:Barprop){
     
    
     function handleclick(x:number){
         changeTime(x);
-        setIsValid(false)
-        setTimeout(()=>{
-            setIsValid(true);    
-        },1000);
-        
+        setIsToggle(true);
+        setTimeVal(x);
+        setTimeRunner(false);
+        setTimeout(()=>{   
+        },250);
     }
     
     return (

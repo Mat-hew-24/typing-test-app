@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./mainPage.module.css";
+import Timer from "./timer";
 
 function strToNestedArray(str: string): string[][] {
   return str.split("\n").map((line) => [...line]);
 }
 
+type TypingBoxProp={timeVal:number,setTimeRunner:(x:boolean)=>void,timeRunner:boolean,setTimeVal:(x:number)=>void}
+
 const targetText = "HELLO MDJFVJ SDHBFCJISB ESDJVFJSN NJKNSKJFEN HJHJ  B JB HJB HJUB J KJB J KUIJ KJH KUIH JH BJH HJB FX DRFF TYGY GYT FT FY GYU GYU YH YI GYU GYU G7U HYU G YUGYU G IUHU7GU GH7U HU G7U GG 7UG Y7GF 6TYGF Y GF6Y7 GFY GF GU";
-export default function TypingBox() {
+export default function TypingBox({timeVal,timeRunner,setTimeRunner,setTimeVal}:TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
   const lettersArr = strToNestedArray(targetText);
 
@@ -22,6 +25,13 @@ export default function TypingBox() {
 
   let inputIndex = 0;
 
+  useEffect(()=>{
+    if (userInput){
+      setTimeRunner(true);
+      console.log(timeRunner);
+    }
+  },[userInput]);
+
   return (
     <>
       <textarea
@@ -32,6 +42,9 @@ export default function TypingBox() {
         tabIndex={0}
       />
       <div className={styles.wordBox}>
+        <div>
+        <Timer timeVal={timeVal} setTimeVal={setTimeVal} timeRunner={timeRunner} />
+        </div>
         {lettersArr.map((words, lineIdx) => (
           <div className={styles.line} key={lineIdx}>
             {words.map((word, wordIdx) => (

@@ -13,14 +13,8 @@ export default function Home() {
   const [isValid,setIsValid]= useState(false);
   const [hideNav,setHideNav]=useState(true);
   const [isToggle,setIsToggle]=useState(true);
-  
-  //for dev purpose
-
-  const togglebtn= <button onClick={HandleToggle} className="barbtn bg-black mb-4 p-2">Toggle</button>
-  
-  function HandleToggle(){
-    setIsToggle(!isToggle);
-  }
+  const [timeVal,setTimeVal]=useState(15);
+  const [timeRunner,setTimeRunner]=useState(false);
 
   function changeTime(x:number){
     const newTime=[];
@@ -44,16 +38,17 @@ export default function Home() {
     {!hideNav &&
      <Navbar/>
     }
-    {isValid &&
+    {
     <div className="flex flex-col items-center">
-      <Bar setIsValid={setIsValid} changeTime={changeTime}/>
-      {togglebtn}
+      {isValid && <Bar  changeTime={changeTime} setTimeVal={setTimeVal} setIsToggle={setIsToggle} setTimeRunner={setTimeRunner}/>}
       {!isToggle && <LineChart time={time}/>}
     </div>
     }
     
     {!isValid && <Loading/>}
-    {isToggle && isValid && <TypingBox /> }
+    <div className="flex justify-center">
+    {isToggle && isValid && <TypingBox timeVal={timeVal} setTimeRunner={setTimeRunner} timeRunner={timeRunner} setTimeVal={setTimeVal}/> }
+    </div>
     </> 
   )
 
