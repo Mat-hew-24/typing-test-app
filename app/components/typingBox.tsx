@@ -2,13 +2,21 @@
 
 import React, { useState } from "react";
 import styles from "./mainPage.module.css";
+import englsh_1k from "./english_1k.json";
 
 function strToNestedArray(str: string): string[][] {
   return str.split("\n").map((line) => [...line]);
 }
+function getRandomString(len: number) {
+  const wordList = englsh_1k.words;
+  const result = Array.from({ length: len }, () => {
+    const i = Math.floor(Math.random() * wordList.length);
+    return wordList[i];
+  }).join(" ");
+  return result;
+}
 
-const targetText =
-  "HELLO MDJFVJ SDHBFCJISB ESDJVFJSN NJKNSKJFEN HJHJ  B JB HJB HJUB J KJB J KUIJ KJH KUIH JH BJH HJB FX DRFF TYGY GYT FT FY GYU GYU YH YI GYU GYU G7U HYU G YUGYU G IUHU7GU GH7U HU G7U GG 7UG Y7GF 6TYGF Y GF6Y7 GFY GF GU";
+const targetText = getRandomString(20);
 
 export default function TypingBox() {
   const [userInput, setUserInput] = useState("");
