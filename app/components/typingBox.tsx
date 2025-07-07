@@ -12,7 +12,7 @@ function getRandomString(len: number) {
   }).join(" ");
 }
 
-const targetText = getRandomString(20);
+const targetText = getRandomString(30);
 
 export default function TypingBox() {
   const [userInput, setUserInput] = useState("");
