@@ -1,45 +1,70 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./mainPage.module.css";
-import englsh_1k from "./english_1k.json";
+import english_1k from "./english_1k.json";
 import Timer from "./timer";
-function strToNestedArray(str: string): string[][] {
-  return str.split("\n").map((line) => [...line]);
-}
+
 function getRandomString(len: number) {
-  const wordList = englsh_1k.words;
-  const result = Array.from({ length: len }, () => {
+  const wordList = english_1k.words;
+  return Array.from({ length: len }, () => {
     const i = Math.floor(Math.random() * wordList.length);
     return wordList[i];
   }).join(" ");
-  return result;
 }
 
-const targetText = getRandomString(20);
+const targetText = getRandomString(30);
+type TypingBoxProp = {
+  timeVal: number;
+  setTimeRunner: (x: boolean) => void;
+  timeRunner: boolean;
+  setTimeVal: (x: number) => void;
+  setIsToggle: (x: boolean) => void;
+};
 
-type TypingBoxProp={timeVal:number,setTimeRunner:(x:boolean)=>void,timeRunner:boolean,setTimeVal:(x:number)=>void,setIsToggle:(x:boolean)=>void}
-
-export default function TypingBox({timeVal,timeRunner,setTimeRunner,setTimeVal,setIsToggle}:TypingBoxProp) {
+export default function TypingBox({
+  timeVal,
+  timeRunner,
+  setTimeRunner,
+  setTimeVal,
+  setIsToggle,
+}: TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
-  const lettersArr = strToNestedArray(targetText);
+  const wordStartTime = useRef<number | null>(null);
 
-  // Flatten the target text for comparison (preserves spaces and newlines)
-  const flatInput = userInput.split("");
+  const flatTarget = [...targetText];
+  const flatInput = [...userInput];
 
-  // Handle input
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setUserInput(e.target.value);
+    const value = e.target.value;
+
+    // Start time when new word begins
+    if (
+      value.length === 1 ||
+      (userInput.endsWith(" ") && value.length > userInput.length)
+    ) {
+      wordStartTime.current = Date.now();
+    }
+
+    // If space typed, calculate word time
+    if (
+      value.length > userInput.length &&
+      value[value.length - 1] === " " &&
+      wordStartTime.current
+    ) {
+      const duration = Date.now() - wordStartTime.current;
+      console.log("Word typed in", duration, "ms");
+      wordStartTime.current = null;
+    }
+
+    setUserInput(value);
   };
 
-  let inputIndex = 0;
-
-  useEffect(()=>{
-    if (userInput){
+  useEffect(() => {
+    if (userInput) {
       setTimeRunner(true);
     }
-  },[userInput]);
-
+  }, [userInput]);
   return (
     <>
       <textarea
@@ -50,39 +75,39 @@ export default function TypingBox({timeVal,timeRunner,setTimeRunner,setTimeVal,s
         tabIndex={0}
       />
       <div className={styles.wordBox}>
-        <div>
-          <Timer timeVal={timeVal} setTimeVal={setTimeVal} timeRunner={timeRunner} setIsToggle={setIsToggle} />
+        <div className={styles.timerBox}>
+          <Timer
+            timeVal={timeVal}
+            setTimeVal={setTimeVal}
+            timeRunner={timeRunner}
+            setIsToggle={setIsToggle}
+          />
         </div>
-        {lettersArr.map((words, lineIdx) => (
-          <div className={styles.line} key={lineIdx}>
-            {words.map((word, wordIdx) => (
-              <span className={styles.word} key={wordIdx}>
-                {[...word].map((letter, letterIdx) => {
-                  const currentInput = flatInput[inputIndex];
-                  let letterClass = styles.letter;
-                  if (currentInput !== undefined) {
-                    if (currentInput === letter) {
-                      letterClass += " " + styles.correct;
-                    } else {
-                      letterClass += " " + styles.incorrect;
-                    }
-                  }
-                  // Highlight the current letter to type
-                  if (inputIndex === userInput.length) {
-                    letterClass += " " + styles.activeLetter;
-                  }
-                  inputIndex++;
-                  return (
-                    <span className={letterClass} key={letterIdx}>
-                      {letter === " " ? "\u00A0" : letter}
-                    </span>
-                  );
-                })}
-                {/* Removed: {wordIdx < words.length - 1 && <span>{"\u00A0"}</span>} */}
-              </span>
-            ))}
-          </div>
-        ))}
+        {flatTarget.map((letter, idx) => {
+          const currentInput = flatInput[idx];
+          let letterClass = styles.letter;
+
+          if (currentInput !== undefined) {
+            if (currentInput === letter) {
+              letterClass += " " + styles.correct;
+            } else {
+              letterClass += " " + styles.incorrect;
+            }
+          }
+
+          if (idx === userInput.length) {
+            letterClass += " " + styles.activeLetter;
+          }
+
+          return (
+            <span
+              key={idx}
+              className={`${letterClass} ${letter === " " ? styles.space : ""}`}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </span>
+          );
+        })}
       </div>
     </>
   );
