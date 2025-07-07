@@ -7,13 +7,14 @@ function strToNestedArray(str: string): string[][] {
   return str.split("\n").map((line) => [...line]);
 }
 
-const targetText = `hi how are you in this world`;
+const targetText =
+  "HELLO MDJFVJ SDHBFCJISB ESDJVFJSN NJKNSKJFEN HJHJ  B JB HJB HJUB J KJB J KUIJ KJH KUIH JH BJH HJB FX DRFF TYGY GYT FT FY GYU GYU YH YI GYU GYU G7U HYU G YUGYU G IUHU7GU GH7U HU G7U GG 7UG Y7GF 6TYGF Y GF6Y7 GFY GF GU";
+
 export default function TypingBox() {
   const [userInput, setUserInput] = useState("");
   const lettersArr = strToNestedArray(targetText);
 
   // Flatten the target text for comparison (preserves spaces and newlines)
-  const flatTarget = targetText.split("");
   const flatInput = userInput.split("");
 
   // Handle input
@@ -24,7 +25,7 @@ export default function TypingBox() {
   let inputIndex = 0;
 
   return (
-    <div className={styles.mainBox}>
+    <>
       <textarea
         value={userInput}
         onChange={handleChange}
@@ -64,6 +65,6 @@ export default function TypingBox() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

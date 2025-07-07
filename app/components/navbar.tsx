@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 
-
+//Nav optional
 
 export default function Navbar(){
     
