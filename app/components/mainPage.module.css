@@ -6,24 +6,22 @@
 
 .wordBox {
   display: flex;
+  flex-wrap: wrap; /* allow words to wrap like a paragraph */
   width: 85%;
-  top: 50px;
-  height: 200px;
+  margin: 50px auto 0 auto; /* instead of top + margin-left */
   padding: 15px;
-  margin-left: 95px;
   background: white;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  position: fixed;
   font-family: var(--font-geist-mono);
   font-weight: 400;
   font-size: 25px;
   color: black;
-  resize: none;
-  flex-direction: column;
+  white-space: normal;
+  word-break: break-word;
+  position: relative; /* changed from fixed */
 }
 
 .wordBox::before {
@@ -39,50 +37,44 @@
     rgba(255, 255, 255, 0.05)
   );
   pointer-events: none;
-}
-
-.rr {
-  position: absolute;
-  left: 15px;
-  top: 15px;
-  pointer-events: none;
-  background: transparent;
-  opacity: 0.3;
-  z-index: 1;
-
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 25px;
-  color: #feff04;
-}
-
-.letters {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 25px;
-  color: #feff04;
-}
-
-.line {
-  display: block; /* stack lines vertically */
-  margin-bottom: 8px;
+  z-index: 0;
 }
 
 .word {
-  display: inline; /* keep words inline */
+  display: inline-block;
+  margin-right: 8px; /* space between words */
+  white-space: nowrap;
 }
 
 .letter {
-  display: inline-block; /* or just inline */
-  margin: 0;
-  padding: 0;
-  /* your other styles */
+  display: inline;
 }
+
 .correct {
-  color: #61e893; /* green-500 */
+  color: #61e893;
 }
 .incorrect {
-  color: #ef4444; /* red-500 */
+  color: #ef4444;
+}
+
+.activeLetter {
+  background: #feff04;
+  color: #0033ff;
+  border-radius: 4px;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .textBox {
@@ -97,24 +89,7 @@
   pointer-events: auto;
 }
 
-.activeLetter {
-  background: #feff04;
-  color: #fff;
-  border-radius: 4px;
-  animation: blink 1.5s ease-in-out infinite;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  40% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 1;
-  }
+.space {
+  display: inline-block;
+  width: 0.6em;
 }
