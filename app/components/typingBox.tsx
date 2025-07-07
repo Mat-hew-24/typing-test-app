@@ -37,7 +37,6 @@ export default function TypingBox({timeVal,timeRunner,setTimeRunner,setTimeVal,s
   useEffect(()=>{
     if (userInput){
       setTimeRunner(true);
-      console.log(timeRunner);
     }
   },[userInput]);
 
@@ -52,7 +51,7 @@ export default function TypingBox({timeVal,timeRunner,setTimeRunner,setTimeVal,s
       />
       <div className={styles.wordBox}>
         <div>
-        <Timer timeVal={timeVal} setTimeVal={setTimeVal} timeRunner={timeRunner} setIsToggle={setIsToggle} />
+          <Timer timeVal={timeVal} setTimeVal={setTimeVal} timeRunner={timeRunner} setIsToggle={setIsToggle} />
         </div>
         {lettersArr.map((words, lineIdx) => (
           <div className={styles.line} key={lineIdx}>

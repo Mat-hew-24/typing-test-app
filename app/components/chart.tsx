@@ -48,7 +48,7 @@ export default function LineChart({time}:{time:number[]}) {
 
   return (
     <div className='flex justify-center'>
-    <canvas ref={canvasRef} className='ml-100 w-full max-w-3xl h-[400px]'>hi</canvas>
+    <canvas ref={canvasRef} className='ml-100 w-full max-w-3xl h-[400px]'></canvas>
     </div>
   )
 }
