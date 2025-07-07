@@ -83,31 +83,48 @@ export default function TypingBox({
             setIsToggle={setIsToggle}
           />
         </div>
-        {flatTarget.map((letter, idx) => {
-          const currentInput = flatInput[idx];
-          let letterClass = styles.letter;
+        {(() => {
+          const wordList = targetText.split(" ");
+          let charIndex = 0;
 
-          if (currentInput !== undefined) {
-            if (currentInput === letter) {
-              letterClass += " " + styles.correct;
-            } else {
-              letterClass += " " + styles.incorrect;
-            }
-          }
+          return wordList.map((word, wordIdx) => {
+            const wordWithSpace = word + " ";
+            return (
+              <div key={wordIdx} className={styles.word}>
+                {[...wordWithSpace].map((letter, i) => {
+                  const currentInput = flatInput[charIndex];
+                  let letterClass = styles.letter;
 
-          if (idx === userInput.length) {
-            letterClass += " " + styles.activeLetter;
-          }
+                  if (currentInput !== undefined) {
+                    if (currentInput === letter) {
+                      letterClass += " " + styles.correct;
+                    } else {
+                      letterClass += " " + styles.incorrect;
+                    }
+                  }
 
-          return (
-            <span
-              key={idx}
-              className={`${letterClass} ${letter === " " ? styles.space : ""}`}
-            >
-              {letter === " " ? "\u00A0" : letter}
-            </span>
-          );
-        })}
+                  if (charIndex === userInput.length) {
+                    letterClass += " " + styles.activeLetter;
+                  }
+
+                  const span = (
+                    <span
+                      key={charIndex}
+                      className={`${letterClass} ${
+                        letter === " " ? styles.space : ""
+                      }`}
+                    >
+                      {letter === " " ? "\u00A0" : letter}
+                    </span>
+                  );
+
+                  charIndex++;
+                  return span;
+                })}
+              </div>
+            );
+          });
+        })()}
       </div>
     </>
   );
