@@ -32,8 +32,9 @@ export default function TypingBox({
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
 
-  const flatTarget = [...targetText];
   const flatInput = [...userInput];
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -65,16 +66,24 @@ export default function TypingBox({
       setTimeRunner(true);
     }
   }, [userInput]);
+  useEffect(() => {
+    textareaRef.current?.focus();
+  }, []);
+
+  const handleWordBoxClick = () => {
+    textareaRef.current?.focus();
+  };
+
   return (
     <>
-      <textarea
-        value={userInput}
-        onChange={handleChange}
-        className={styles.textBox}
-        autoFocus
-        tabIndex={0}
-      />
-      <div className={styles.wordBox}>
+      <div className={styles.wordBox} onClick={handleWordBoxClick}>
+        <textarea
+          value={userInput}
+          onChange={handleChange}
+          className={styles.textBox}
+          autoFocus
+          tabIndex={0}
+        />
         <div className={styles.timerBox}>
           <Timer
             timeVal={timeVal}
