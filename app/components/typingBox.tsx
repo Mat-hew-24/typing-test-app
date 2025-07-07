@@ -59,12 +59,10 @@ export default function TypingBox({
 
     setUserInput(value);
   };
-  let inputIndex = 0;
 
   useEffect(() => {
     if (userInput) {
       setTimeRunner(true);
-      console.log(timeRunner);
     }
   }, [userInput]);
   return (
@@ -77,7 +75,7 @@ export default function TypingBox({
         tabIndex={0}
       />
       <div className={styles.wordBox}>
-        <div>
+        <div className={styles.timerBox}>
           <Timer
             timeVal={timeVal}
             setTimeVal={setTimeVal}
