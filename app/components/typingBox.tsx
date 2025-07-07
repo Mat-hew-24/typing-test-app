@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./mainPage.module.css";
 import english_1k from "./english_1k.json";
+import Timer from "./timer";
 
 function getRandomString(len: number) {
   const wordList = english_1k.words;
@@ -13,8 +14,21 @@ function getRandomString(len: number) {
 }
 
 const targetText = getRandomString(30);
+type TypingBoxProp = {
+  timeVal: number;
+  setTimeRunner: (x: boolean) => void;
+  timeRunner: boolean;
+  setTimeVal: (x: number) => void;
+  setIsToggle: (x: boolean) => void;
+};
 
-export default function TypingBox() {
+export default function TypingBox({
+  timeVal,
+  timeRunner,
+  setTimeRunner,
+  setTimeVal,
+  setIsToggle,
+}: TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
 
@@ -45,7 +59,14 @@ export default function TypingBox() {
 
     setUserInput(value);
   };
+  let inputIndex = 0;
 
+  useEffect(() => {
+    if (userInput) {
+      setTimeRunner(true);
+      console.log(timeRunner);
+    }
+  }, [userInput]);
   return (
     <>
       <textarea
@@ -56,6 +77,14 @@ export default function TypingBox() {
         tabIndex={0}
       />
       <div className={styles.wordBox}>
+        <div>
+          <Timer
+            timeVal={timeVal}
+            setTimeVal={setTimeVal}
+            timeRunner={timeRunner}
+            setIsToggle={setIsToggle}
+          />
+        </div>
         {flatTarget.map((letter, idx) => {
           const currentInput = flatInput[idx];
           let letterClass = styles.letter;
