@@ -13,7 +13,7 @@ import { tr } from "framer-motion/client";
 export default function Home() {
   const [time, setTime] = useState([
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-  ]); //data part
+  ]); //time as data 
   const [isValid, setIsValid] = useState(false); //loader process status
   const [hideNav, setHideNav] = useState(true); //nav visibility
   const [isToggle, setIsToggle] = useState(true); //chart->box box->chart
@@ -21,6 +21,8 @@ export default function Home() {
   const [timeRunner, setTimeRunner] = useState(false); //timer running status
   const [loader, setLoader] = useState(false); //loading initiation
 
+
+  //time array
   function changeTime(x: number) {
     const newTime = [];
     for (let i = 0; i < x + 1; i++) {
