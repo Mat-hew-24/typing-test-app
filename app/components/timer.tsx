@@ -22,8 +22,8 @@ export default function Timer({timeVal,timeRunner,setTimeVal,setIsToggle}:timerp
     
     
     return (
-        <>
+        <div className="text-black">
             {timeVal}
-        </>
+        </div>
     );
 }
