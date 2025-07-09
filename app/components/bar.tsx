@@ -1,9 +1,10 @@
 'use client';
-import Image from "next/image";
 
 type Barprop = {changeTime: (x:number)=> void,setIsToggle: (x:boolean)=>void
     ,setTimeVal: (x:number)=>void,setTimeRunner: (x:boolean)=>void,
     setLoader:(x:boolean)=>void,loader:boolean}
+
+const Spinner = <div className="w-12 h-12 m-auto border-4 border-t-transparent border-emerald-500 rounded-full animate-spin"></div>
 
 export default function Bar({changeTime,setIsToggle,setTimeVal,
     setTimeRunner,setLoader,loader}:Barprop){
@@ -27,7 +28,11 @@ export default function Bar({changeTime,setIsToggle,setTimeVal,
                 <button onClick={()=>{handleclick(60)}} className="barbtn">60</button>
             </div>
 
-       {loader && <Image src="https://media.tenor.com/2BLI5EO7yVAAAAAm/loading-image.webp" alt="" width={40} height={40} className="mt-28" />}
+       {loader &&
+        <div className="w-full h-full pt-30">
+            {Spinner}
+        </div>
+       }
         </>
     );
 }

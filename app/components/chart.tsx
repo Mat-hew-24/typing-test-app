@@ -31,6 +31,7 @@ export default function LineChart({time}:{time:number[]}) {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
         },
@@ -47,8 +48,10 @@ export default function LineChart({time}:{time:number[]}) {
   },[time]);
 
   return (
-    <div className='flex justify-center'>
-    <canvas ref={canvasRef} className='ml-100 w-full max-w-3xl h-[400px]'></canvas>
+    <div className="flex-1">
+      <div className="relative w-full h-[250px]">
+        <canvas ref={canvasRef} className="w-full h-full" />
+      </div>
     </div>
   )
 }

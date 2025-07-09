@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import Loading from "./loading";
 import Navbar from "./components/navbar";
 import TypingBox from "./components/typingBox";
+import Results from "./components/results";
+import Statbar from "./components/statbar";
 
 export default function Home() {
   const [time,setTime] = useState([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]); //data part
@@ -47,7 +49,20 @@ export default function Home() {
        setTimeVal={setTimeVal} setIsToggle={setIsToggle}
         setTimeRunner={setTimeRunner} setLoader={setLoader} />}
 
-      {!isToggle && !loader&& <LineChart time={time}/>}
+      {!isToggle && !loader && 
+        (
+          <>
+            <div className="flex w-full max-w-[1200px] gap-4 px-4">
+              <div className="w-[300px]">
+                <Results />
+              </div>
+              <LineChart time={time} />
+            </div>
+            <Statbar />
+          </>
+        )
+      }
+
 
     </div>
     }
