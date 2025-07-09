@@ -1,0 +1,36 @@
+.mainBox {
+  width: 100%;
+  /* max-width: 700px; */
+  margin: 0 auto;
+  padding: 1rem;
+  background: transparent;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.subBox {
+  position: relative;
+  height: 250px;
+  width: 100%;
+}
+
+.canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.tooltipBox {
+  position: absolute;
+  background: rgb(180, 114, 114);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 14px;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translate(-50%, 0); /* horizontally center, show below cursor */
+  transition: opacity 0.2s ease, top 0.05s ease, left 0.05s ease;
+  z-index: 10;
+  opacity: 0;
+  font-family: var(--font-geist-mono);
+}

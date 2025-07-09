@@ -13,6 +13,8 @@ function getRandomString(len: number) {
   }).join(" ");
 }
 
+let arrayOfTime: number[] = [];
+
 const targetText = getRandomString(30);
 type TypingBoxProp = {
   timeVal: number;
@@ -55,6 +57,7 @@ export default function TypingBox({
     ) {
       const duration = Date.now() - wordStartTime.current;
       console.log("Word typed in", duration, "ms");
+      arrayOfTime.push(duration);
       wordStartTime.current = null;
     }
 
@@ -64,6 +67,9 @@ export default function TypingBox({
   useEffect(() => {
     if (userInput) {
       setTimeRunner(true);
+    }
+    if (userInput.length === targetText.length) {
+      console.log("Word times:", arrayOfTime);
     }
   }, [userInput]);
   useEffect(() => {
