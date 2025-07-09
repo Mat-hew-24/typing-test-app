@@ -8,6 +8,7 @@ import Navbar from "./components/navbar";
 import TypingBox from "./components/typingBox";
 import Results from "./components/results";
 import Statbar from "./components/statbar";
+import { tr } from "framer-motion/client";
 
 export default function Home() {
   const [time, setTime] = useState([
@@ -15,7 +16,7 @@ export default function Home() {
   ]); //data part
   const [isValid, setIsValid] = useState(false); //loader process status
   const [hideNav, setHideNav] = useState(true); //nav visibility
-  const [isToggle, setIsToggle] = useState(false); //chart->box box->chart
+  const [isToggle, setIsToggle] = useState(true); //chart->box box->chart
   const [timeVal, setTimeVal] = useState(15); //value of timer
   const [timeRunner, setTimeRunner] = useState(false); //timer running status
   const [loader, setLoader] = useState(false); //loading initiation
