@@ -1,6 +1,11 @@
-import Image from "next/image"
+const Spinner =<div className="w-12 h-12 m-auto border-4 border-t-transparent border-emerald-500 rounded-full animate-spin"></div>
+
+
+
 export default function Loading(){
     return (
-        <Image src="https://media.tenor.com/2BLI5EO7yVAAAAAm/loading-image.webp" alt="" width={40} height={40} className="mt-60 ml-150"/>
+        <div className="w-full h-full m-auto pt-75">
+            {Spinner}
+        </div>
     )
 }

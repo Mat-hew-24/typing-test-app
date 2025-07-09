@@ -52,15 +52,19 @@ export default function Home() {
     </div>
     }
     
-    {!isValid && <Loading/>}
+    {!isValid && <>
+    <Loading/>
+    </>}
 
-    <div className="flex justify-center">
+      <div className="flex justify-center">
 
-      {isToggle && isValid && !loader && <TypingBox timeVal={timeVal}
-      setTimeRunner={setTimeRunner} timeRunner={timeRunner}
-        setTimeVal={setTimeVal} setIsToggle={setIsToggle}/> }
+        {isToggle && isValid && !loader && <TypingBox 
+        timeVal={timeVal} setTimeRunner={setTimeRunner} 
+        timeRunner={timeRunner} setTimeVal={setTimeVal} 
+        setIsToggle={setIsToggle}
+        />}
 
-    </div>
+      </div>
     </> 
   )
 }
