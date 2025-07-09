@@ -71,22 +71,27 @@
 }
 
 .activeLetter {
-  background: #feff04;
-  color: #0033ff;
   border-radius: 4px;
-  animation: blink 1.5s ease-in-out infinite;
+  position: relative;
+}
+.activeLetter::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background-color: purple;
+  animation: blink 1s ease-in-out infinite;
 }
 
 @keyframes blink {
   0%,
-  40% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 0.2;
-  }
   100% {
     opacity: 1;
+  }
+  50% {
+    opacity: 0;
   }
 }
 
