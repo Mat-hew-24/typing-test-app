@@ -61,7 +61,7 @@ export default function Home() {
           {!isToggle && !loader && (
             <>
               <div className="flex w-full max-w-[1200px] gap-4 px-4">
-                <div className="w-[300px]">
+                <div className="w-[300px] mt-6">
                   <Results />
                 </div>
                 <LineChart time={time} />
