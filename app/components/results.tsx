@@ -7,7 +7,7 @@ export default function Results({accuracy,wpm}:Resultsprop) {
         <div className=" bg-red-400 p-6 mt-3 rounded-lg shadow-lg mr-10">
             <div className="text-black text-2xl m-auto mb-4">wpm
                 <div className="text-5xl">
-                    {wpm}
+                    {wpm.toFixed(0)}
                 </div>
             </div>
             <div className="text-black text-2xl m-auto">acc

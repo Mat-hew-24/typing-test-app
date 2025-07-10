@@ -90,12 +90,11 @@ export default function TypingBox({
     }
 
     //WPM?(instant wpm)
-    const elapsedTime = (mode - timeVal) / 60;
-    if (elapsedTime > 0) {
-      const wordsTyped = value.length / 5;
-      const wpm = (wordsTyped / elapsedTime).toFixed(0);
-
-    setWpm(Number(wpm));
+    const elapsed = (mode-timeVal) / 60;
+    if (elapsed>0) {
+      const wordsTyped = value.length/5; //averaging out
+      const wpmVal = (wordsTyped/elapsed);
+      setWpm(wpmVal); //setting instant wpm by every single change
     }
 
     
