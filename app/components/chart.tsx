@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import styles from "./chart.module.css";
 
-type chartProp = {time:number[],raw:number}
+type chartProp = {time:number[],raw:number,wpm:number}
 
-export default function LineChart({ time,raw }: chartProp){
+export default function LineChart({ time,raw,wpm }: chartProp){
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);

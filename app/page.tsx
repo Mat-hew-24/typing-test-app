@@ -23,7 +23,8 @@ export default function Home() {
   const [wordTime,setWordTime]=useState<number[]>([]); //durations of word completion for one session
   const [raw,setRaw]=useState(0);
   const [accuracy,setAccuracy]=useState(0); //Accuracy calculations
-  const [mode,setMode]=useState(15);
+  const [mode,setMode]=useState(15);//Mode of Timer
+  const [wpm,setWpm]=useState(0);//WPM calculation
 
   //time array
   function changeTime(x: number) {
@@ -63,6 +64,7 @@ export default function Home() {
               setLoader={setLoader}
               setRaw={setRaw}
               setMode={setMode}
+              setWpm={setWpm}
             />
           )}
 
@@ -70,9 +72,9 @@ export default function Home() {
             <>
               <div className="flex w-full max-w-[1200px] gap-4 px-4">
                 <div className="w-[300px] mt-6">
-                  <Results accuracy={accuracy}/>
+                  <Results accuracy={accuracy} wpm={wpm}/>
                 </div>
-                <LineChart raw={raw} 
+                <LineChart raw={raw} wpm={wpm}
                 time={time} />
               </div>
               <Statbar accuracy={accuracy} raw={raw} mode={mode}/>
@@ -94,6 +96,7 @@ export default function Home() {
             timeRunner={timeRunner} setTimeVal={setTimeVal}
             wordTime={wordTime} setIsToggle={setIsToggle}
             setRaw={setRaw} setAccuracy={setAccuracy}
+            setWpm={setWpm} mode={mode}
           />
         )}
       </div>

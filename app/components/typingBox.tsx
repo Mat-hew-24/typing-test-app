@@ -20,15 +20,17 @@ const targetText = getRandomString(30);
 type TypingBoxProp = {
   timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
   setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
-  wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void;
+  wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
+  setWpm:(x:number)=>void,mode:number;
 };
 
 export default function TypingBox({
-  timeVal,
+  timeVal,setWpm,
   timeRunner,
   setTimeRunner,
   setTimeVal,
   setIsToggle,
+  mode,
   wordTime, setAccuracy,
   setRaw
 }: TypingBoxProp) {
@@ -84,9 +86,19 @@ export default function TypingBox({
       }
     }
     if (value.length){
-      setAccuracy((correct/value.length)*100)
+      setAccuracy((correct/value.length)*100);
     }
 
+    //WPM?(instant wpm)
+    const elapsedTime = (mode - timeVal) / 60;
+    if (elapsedTime > 0) {
+      const wordsTyped = value.length / 5;
+      const wpm = (wordsTyped / elapsedTime).toFixed(0);
+
+    setWpm(Number(wpm));
+    }
+
+    
   };
 
   useEffect(() => {
