@@ -3,12 +3,12 @@
 type Barprop = {changeTime: (x:number)=> void,setIsToggle: (x:boolean)=>void
     ,setTimeVal: (x:number)=>void,setTimeRunner: (x:boolean)=>void,
     setLoader:(x:boolean)=>void,loader:boolean,setWordTime:(x:Array<number>)=>void,
-    setRaw:(x:number)=>void}
+    setRaw:(x:number)=>void ,setMode:(x:number)=>void}
 
 const Spinner = <div className="w-12 h-12 m-auto border-4 border-t-transparent border-emerald-500 rounded-full animate-spin"></div>
 
 export default function Bar({changeTime,setIsToggle,setTimeVal,
-    setTimeRunner,setLoader,loader,setWordTime,setRaw}:Barprop){
+    setTimeRunner,setLoader,loader,setWordTime,setRaw,setMode}:Barprop){
     
     function handleclick(x:number){
         setLoader(true);
@@ -16,6 +16,7 @@ export default function Bar({changeTime,setIsToggle,setTimeVal,
         setIsToggle(true);
         setWordTime([]);
         setTimeVal(x);
+        setMode(x);
         setRaw(0);
         setTimeRunner(false); 
         setTimeout(()=>{  

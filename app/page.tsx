@@ -23,6 +23,7 @@ export default function Home() {
   const [wordTime,setWordTime]=useState<number[]>([]); //durations of word completion for one session
   const [raw,setRaw]=useState(0);
   const [accuracy,setAccuracy]=useState(0); //Accuracy calculations
+  const [mode,setMode]=useState(15);
 
   //time array
   function changeTime(x: number) {
@@ -61,6 +62,7 @@ export default function Home() {
               setTimeRunner={setTimeRunner}
               setLoader={setLoader}
               setRaw={setRaw}
+              setMode={setMode}
             />
           )}
 
@@ -73,7 +75,7 @@ export default function Home() {
                 <LineChart raw={raw} 
                 time={time} />
               </div>
-              <Statbar accuracy={accuracy} raw={raw} timeVal={timeVal}/>
+              <Statbar accuracy={accuracy} raw={raw} mode={mode}/>
             </>
           )}
         </div>

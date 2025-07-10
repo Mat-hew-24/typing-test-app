@@ -1,7 +1,7 @@
 type Statbarprop={raw:number,
-  accuracy:number,timeVal:number};
+  accuracy:number,mode:number};
 
-export default function Statbar({raw,accuracy,timeVal}:Statbarprop) {
+export default function Statbar({raw,accuracy,mode}:Statbarprop) {
   return (
     <div className="bg-amber-400 rounded-lg pt-4 pb-4 shadow-lg mt-4">
       <div className="text-black flex w-270 ml-20 gap-[270px]">
@@ -20,7 +20,7 @@ export default function Statbar({raw,accuracy,timeVal}:Statbarprop) {
         <div>
             mode
             <div>
-                {timeVal}s
+                {mode}s
             </div>
         </div>
       </div>
