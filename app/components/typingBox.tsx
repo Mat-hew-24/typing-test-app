@@ -21,12 +21,12 @@ type TypingBoxProp = {
   timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
   setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
   wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
-  setWpm:(x:number)=>void,mode:number;
+  setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>;
 };
 
 export default function TypingBox({
   timeVal,setWpm,
-  timeRunner,
+  timeRunner, dynoRawTime,
   setTimeRunner,
   setTimeVal,
   setIsToggle,
@@ -38,12 +38,6 @@ export default function TypingBox({
   const wordStartTime = useRef<number | null>(null);
 
   const flatInput = [...userInput];
-
-
-//Dynamic data calculating constants
-  const dynoRawTime=useRef(0);
-
-
 
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);

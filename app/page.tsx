@@ -2,7 +2,7 @@
 
 import Bar from "./components/bar";
 import LineChart from "./components/chart";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import Loading from "./loading";
 import Navbar from "./components/navbar";
 import TypingBox from "./components/typingBox";
@@ -25,6 +25,10 @@ export default function Home() {
   const [accuracy,setAccuracy]=useState(0); //Accuracy calculations
   const [mode,setMode]=useState(15);//Mode of Timer
   const [wpm,setWpm]=useState(0);//WPM calculation
+
+  //running
+    const dynoRawTime=useRef(0);
+
 
   //time array
   function changeTime(x: number) {
@@ -65,6 +69,7 @@ export default function Home() {
               setRaw={setRaw}
               setMode={setMode}
               setWpm={setWpm}
+              dynoRawTime={dynoRawTime}
             />
           )}
 
@@ -96,7 +101,7 @@ export default function Home() {
             timeRunner={timeRunner} setTimeVal={setTimeVal}
             wordTime={wordTime} setIsToggle={setIsToggle}
             setRaw={setRaw} setAccuracy={setAccuracy}
-            setWpm={setWpm} mode={mode}
+            setWpm={setWpm} mode={mode} dynoRawTime={dynoRawTime}
           />
         )}
       </div>
