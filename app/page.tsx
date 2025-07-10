@@ -12,7 +12,7 @@ import Statbar from "./components/statbar";
 
 export default function Home() {
   const [time, setTime] = useState([
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
   ]); //time as data 
   const [isValid, setIsValid] = useState(false); //loader process status
   const [hideNav, setHideNav] = useState(true); //nav visibility
@@ -25,6 +25,9 @@ export default function Home() {
   const [accuracy,setAccuracy]=useState(0); //Accuracy calculations
   const [mode,setMode]=useState(15);//Mode of Timer
   const [wpm,setWpm]=useState(0);//WPM calculation
+  const [chartWpm,setChartWpm]=useState<number[]>([]);//WPM for chart
+  const [chartRaw,setChartRaw]=useState<number[]>([]);//RAW for chart
+
 
   //running
     const dynoRawTime=useRef(0);//I dont know sire
@@ -33,7 +36,7 @@ export default function Home() {
   //time array
   function changeTime(x: number) {
     const newTime = [];
-    for (let i = 0; i < x + 1; i++) {
+    for (let i = 1; i < x + 1; i++) {
       newTime.push(i);
     }
     setTime(newTime);
@@ -59,8 +62,8 @@ export default function Home() {
         <div className="flex flex-col items-center">
           {isValid && (
             <Bar
-              loader={loader}
-              changeTime={changeTime}
+              loader={loader} setChartRaw={setChartRaw}
+              changeTime={changeTime} setChartWpm={setChartWpm}
               setTimeVal={setTimeVal}
               setWordTime={setWordTime}
               setIsToggle={setIsToggle}
@@ -79,7 +82,7 @@ export default function Home() {
                 <div className="w-[300px] mt-6">
                   <Results accuracy={accuracy} wpm={wpm}/>
                 </div>
-                <LineChart raw={raw} wpm={wpm}
+                <LineChart chartRaw={chartRaw} chartWpm={chartWpm}
                 time={time} />
               </div>
               <Statbar accuracy={accuracy} raw={raw} mode={mode}/>
@@ -97,10 +100,10 @@ export default function Home() {
       <div className="flex justify-center">
         {isToggle && isValid && !loader && (
           <TypingBox
-            timeVal={timeVal} setTimeRunner={setTimeRunner}
-            timeRunner={timeRunner} setTimeVal={setTimeVal}
-            wordTime={wordTime} setIsToggle={setIsToggle}
-            setRaw={setRaw} setAccuracy={setAccuracy}
+            timeVal={timeVal} setTimeRunner={setTimeRunner} setChartRaw={setChartRaw}
+            timeRunner={timeRunner} setTimeVal={setTimeVal} setChartWpm={setChartWpm}
+            wordTime={wordTime} setIsToggle={setIsToggle} wpm={wpm}
+            setRaw={setRaw} setAccuracy={setAccuracy} raw={wpm}
             setWpm={setWpm} mode={mode} dynoRawTime={dynoRawTime}
           />
         )}

@@ -22,18 +22,21 @@ type TypingBoxProp = {
   setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
   wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
   setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
-};
+  setChartRaw:React.Dispatch<React.SetStateAction<number[]>>,setChartWpm:React.Dispatch<React.SetStateAction<number[]>>
+  wpm:number,raw:number};
 
 export default function TypingBox({
   timeVal,setWpm,
   timeRunner, dynoRawTime,
-  setTimeRunner,
-  setTimeVal, 
-  setIsToggle,
-  mode,
+  setTimeRunner, setChartRaw,
+  setTimeVal, setChartWpm,
+  setIsToggle, wpm,
+  mode, raw,
   wordTime, setAccuracy,
   setRaw
 }: TypingBoxProp) {
+
+
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
 
@@ -136,10 +139,10 @@ export default function TypingBox({
         />
         <div className={styles.timerBox}>
           <Timer
-            timeVal={timeVal}
-            setTimeVal={setTimeVal}
-            timeRunner={timeRunner}
-            setIsToggle={setIsToggle}
+            timeVal={timeVal} setChartRaw={setChartRaw}
+            setTimeVal={setTimeVal} setChartWpm={setChartWpm}
+            timeRunner={timeRunner} wpm={wpm}
+            setIsToggle={setIsToggle} raw={raw}
           />
         </div>
         {(() => {
