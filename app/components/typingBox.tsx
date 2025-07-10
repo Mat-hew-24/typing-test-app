@@ -21,14 +21,14 @@ type TypingBoxProp = {
   timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
   setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
   wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
-  setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>;
+  setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
 };
 
 export default function TypingBox({
   timeVal,setWpm,
   timeRunner, dynoRawTime,
   setTimeRunner,
-  setTimeVal,
+  setTimeVal, 
   setIsToggle,
   mode,
   wordTime, setAccuracy,
@@ -44,6 +44,7 @@ export default function TypingBox({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
+
 
     // Start time when new word begins
     if (
@@ -66,30 +67,41 @@ export default function TypingBox({
         dynoRawTime.current+=duration;
         wordStartTime.current = null;
       }
-      setRaw((wordTime.length/dynoRawTime.current)*60000);
     }
 
     setUserInput(value);
 
-    //ACCURACY?
+    let correctcount=0;
+    let totalcount=0;
 
-    let correct=0;
+    //RUNNER CALCULATOR
     for (let i=0;i<value.length;i++){
-      if (value[i]===targetText[i]){
-        correct++;
+      if (value[i]!=" "){
+        if (value[i]==targetText[i]){
+          correctcount+=1;
+        }
+        totalcount+=1;
       }
     }
-    if (value.length){
-      setAccuracy((correct/value.length)*100);
-    }
 
-    //WPM?(instant wpm)
-    const elapsed = (mode-timeVal) / 60;
-    if (elapsed>0) {
-      const wordsTyped = value.length/5; //averaging out
-      const wpmVal = (wordsTyped/elapsed);
-      setWpm(wpmVal); //setting instant wpm by every single change
+    //ACCURACY
+    if (value.length){
+      setAccuracy((correctcount/totalcount)*100);
     }
+    //
+
+    //WPM?(static wpm)
+    const elapsed = mode/60;
+    const wordsTyped = correctcount/5; //averaging out
+    const wpmVal = (wordsTyped/elapsed);
+    setWpm(wpmVal); //setting static wpm by every single change
+    //
+
+    //RAW?(static raw value)
+    const wordsRawTyped=totalcount/5;
+    const rawVal= (wordsRawTyped/elapsed);
+    setRaw(rawVal);
+    //
 
     
   };

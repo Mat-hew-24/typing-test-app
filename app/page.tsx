@@ -27,7 +27,7 @@ export default function Home() {
   const [wpm,setWpm]=useState(0);//WPM calculation
 
   //running
-    const dynoRawTime=useRef(0);
+    const dynoRawTime=useRef(0);//I dont know sire
 
 
   //time array

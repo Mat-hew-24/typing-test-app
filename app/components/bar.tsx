@@ -14,7 +14,7 @@ export default function Bar({changeTime,setIsToggle,setTimeVal,
     
     function handleclick(x:number){
         setLoader(true); changeTime(x); setIsToggle(true); setWordTime([]);
-        setTimeVal(x); setMode(x); setRaw(0); setWpm(0);
+        setTimeVal(x); setMode(x); setRaw(0); setWpm(0) ;
         setTimeRunner(false); dynoRawTime.current=0;
         setTimeout(()=>{  
             setLoader(false)
