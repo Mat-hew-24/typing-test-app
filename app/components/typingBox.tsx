@@ -13,15 +13,14 @@ function getRandomString(len: number) {
   }).join(" ");
 }
 
-let arrayOfTime: number[] = [];
 
 const targetText = getRandomString(30);
+
+
 type TypingBoxProp = {
-  timeVal: number;
-  setTimeRunner: (x: boolean) => void;
-  timeRunner: boolean;
-  setTimeVal: (x: number) => void;
-  setIsToggle: (x: boolean) => void;
+  timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
+  setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
+  wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void;
 };
 
 export default function TypingBox({
@@ -30,11 +29,20 @@ export default function TypingBox({
   setTimeRunner,
   setTimeVal,
   setIsToggle,
+  wordTime, setAccuracy,
+  setRaw
 }: TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
 
   const flatInput = [...userInput];
+
+
+//Dynamic data calculating constants
+  const dynoRawTime=useRef(0);
+
+
+
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -57,11 +65,28 @@ export default function TypingBox({
     ) {
       const duration = Date.now() - wordStartTime.current;
       console.log("Word typed in", duration, "ms");
-      arrayOfTime.push(duration);
-      wordStartTime.current = null;
+      if (duration){
+        wordTime.push(duration);
+        dynoRawTime.current+=duration;
+        wordStartTime.current = null;
+      }
+      setRaw((wordTime.length/dynoRawTime.current)*60000);
     }
 
     setUserInput(value);
+
+    //ACCURACY?
+
+    let correct=0;
+    for (let i=0;i<value.length;i++){
+      if (value[i]===targetText[i]){
+        correct++;
+      }
+    }
+    if (value.length){
+      setAccuracy((correct/value.length)*100)
+    }
+
   };
 
   useEffect(() => {
@@ -69,9 +94,11 @@ export default function TypingBox({
       setTimeRunner(true);
     }
     if (userInput.length === targetText.length) {
-      console.log("Word times:", arrayOfTime);
+      console.log("Word times:", wordTime);
     }
   }, [userInput]);
+
+
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);

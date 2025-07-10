@@ -8,7 +8,7 @@ import Navbar from "./components/navbar";
 import TypingBox from "./components/typingBox";
 import Results from "./components/results";
 import Statbar from "./components/statbar";
-import { tr } from "framer-motion/client";
+
 
 export default function Home() {
   const [time, setTime] = useState([
@@ -20,7 +20,9 @@ export default function Home() {
   const [timeVal, setTimeVal] = useState(15); //value of timer
   const [timeRunner, setTimeRunner] = useState(false); //timer running status
   const [loader, setLoader] = useState(false); //loading initiation
-
+  const [wordTime,setWordTime]=useState<number[]>([]); //durations of word completion for one session
+  const [raw,setRaw]=useState(0);
+  const [accuracy,setAccuracy]=useState(0); //Accuracy calculations
 
   //time array
   function changeTime(x: number) {
@@ -54,9 +56,11 @@ export default function Home() {
               loader={loader}
               changeTime={changeTime}
               setTimeVal={setTimeVal}
+              setWordTime={setWordTime}
               setIsToggle={setIsToggle}
               setTimeRunner={setTimeRunner}
               setLoader={setLoader}
+              setRaw={setRaw}
             />
           )}
 
@@ -64,11 +68,12 @@ export default function Home() {
             <>
               <div className="flex w-full max-w-[1200px] gap-4 px-4">
                 <div className="w-[300px] mt-6">
-                  <Results />
+                  <Results accuracy={accuracy}/>
                 </div>
-                <LineChart time={time} />
+                <LineChart raw={raw} 
+                time={time} />
               </div>
-              <Statbar />
+              <Statbar accuracy={accuracy} raw={raw} timeVal={timeVal}/>
             </>
           )}
         </div>
@@ -83,11 +88,10 @@ export default function Home() {
       <div className="flex justify-center">
         {isToggle && isValid && !loader && (
           <TypingBox
-            timeVal={timeVal}
-            setTimeRunner={setTimeRunner}
-            timeRunner={timeRunner}
-            setTimeVal={setTimeVal}
-            setIsToggle={setIsToggle}
+            timeVal={timeVal} setTimeRunner={setTimeRunner}
+            timeRunner={timeRunner} setTimeVal={setTimeVal}
+            wordTime={wordTime} setIsToggle={setIsToggle}
+            setRaw={setRaw} setAccuracy={setAccuracy}
           />
         )}
       </div>

@@ -1,4 +1,6 @@
-export default function Results() {
+type Resultsprop={accuracy:number}
+
+export default function Results({accuracy}:Resultsprop) {
     
     
     return (
@@ -10,7 +12,7 @@ export default function Results() {
             </div>
             <div className="text-black text-2xl m-auto">acc
                 <div className="text-5xl">
-                    74%
+                    {accuracy.toFixed(0)}%
                 </div>
             </div>
         </div>

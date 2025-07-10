@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import styles from "./chart.module.css";
 
-export default function LineChart({ time }: { time: number[] }) {
+type chartProp = {time:number[],raw:number}
+
+export default function LineChart({ time,raw }: chartProp){
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -134,7 +136,7 @@ export default function LineChart({ time }: { time: number[] }) {
     <div className={styles.mainBox}>
       <div className={styles.subBox}>
         <canvas ref={canvasRef} className={styles.canvas} />
-        {/* Tooltip is injected dynamically */}
+        {}
       </div>
     </div>
   );

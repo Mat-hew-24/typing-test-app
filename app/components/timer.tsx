@@ -3,7 +3,8 @@ import { useEffect } from "react";
 type timerprop={timeVal:number,timeRunner:boolean,setTimeVal:(x:number)=>void,setIsToggle:(x:boolean)=>void}
 
 export default function Timer({timeVal,timeRunner,setTimeVal,setIsToggle}:timerprop) {
-    
+   
+  //TIMER
     useEffect(() => {
     if (timeRunner && timeVal > 0) {
       const timeout = setTimeout(() => {
@@ -13,6 +14,7 @@ export default function Timer({timeVal,timeRunner,setTimeVal,setIsToggle}:timerp
     }
   }, [timeRunner,timeVal]);
 
+  //SHOW CHART
   useEffect(()=>{
     if (!timeVal){
       setIsToggle(false);
