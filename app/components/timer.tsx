@@ -31,7 +31,7 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
     if (!starter.current) starter.current=performance.now();//setting up small timer
     //perfomance.now() => is a browser provided timer more accurate than Date.now()
 
-    //Measuring Data every 250ms(changeable)
+    //Measuring Data every ms(changeable)
     const interval = setInterval(() => {
       tickingCounter.current+=1;
       const typedlength=totalCount.current-previousCount.current;
@@ -40,7 +40,9 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
 
       const elapsed = (performance.now() - (starter.current?? 0))/1000;
 
-      const rawFrame=typedlength*(12);
+      const rawFrame =typedlength>0 ? (typedlength / 5) / (1 / 60): 0; 
+
+
       const wpm = (correctCount.current / 5) / (elapsed / 60);
 
       setChartRaw(val => [...val,rawFrame]);
