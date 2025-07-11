@@ -28,6 +28,8 @@ export default function Home() {
 
   //running
     const dynoRawTime=useRef(0);//I dont know sire
+    const correctCount=useRef(0);// Correct characters typed per session
+    const totalCount=useRef(0); // Total characters typed per session
 
 
   //time array
@@ -59,17 +61,13 @@ export default function Home() {
         <div className="flex flex-col items-center">
           {isValid && (
             <Bar
-              loader={loader}
-              changeTime={changeTime}
-              setTimeVal={setTimeVal}
-              setWordTime={setWordTime}
-              setIsToggle={setIsToggle}
-              setTimeRunner={setTimeRunner}
-              setLoader={setLoader}
-              setRaw={setRaw}
-              setMode={setMode}
-              setWpm={setWpm}
-              dynoRawTime={dynoRawTime}
+              loader={loader} changeTime={changeTime}
+              setTimeVal={setTimeVal} setWordTime={setWordTime}
+              setIsToggle={setIsToggle} setTimeRunner={setTimeRunner}
+              setLoader={setLoader} setRaw={setRaw}
+              setMode={setMode} setWpm={setWpm}
+              dynoRawTime={dynoRawTime} correctCount={correctCount}
+              totalCount={totalCount}
             />
           )}
 
@@ -102,6 +100,7 @@ export default function Home() {
             wordTime={wordTime} setIsToggle={setIsToggle}
             setRaw={setRaw} setAccuracy={setAccuracy}
             setWpm={setWpm} mode={mode} dynoRawTime={dynoRawTime}
+            correctCount={correctCount} totalCount={totalCount}
           />
         )}
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef,MutableRefObject } from "react";
 import styles from "./mainPage.module.css";
 import english_1k from "./english_1k.json";
 import Timer from "./timer";
@@ -22,13 +22,14 @@ type TypingBoxProp = {
   setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
   wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
   setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
+  correctCount:MutableRefObject<number>,totalCount:MutableRefObject<number>,
 };
 
 export default function TypingBox({
   timeVal,setWpm,
   timeRunner, dynoRawTime,
-  setTimeRunner,
-  setTimeVal, 
+  setTimeRunner, correctCount,
+  setTimeVal, totalCount,
   setIsToggle,
   mode,
   wordTime, setAccuracy,
@@ -71,34 +72,36 @@ export default function TypingBox({
 
     setUserInput(value);
 
-    let correctcount=0;
-    let totalcount=0;
+    correctCount.current=0;
+    totalCount.current=0;
+
+    
 
     //RUNNER CALCULATOR
     for (let i=0;i<value.length;i++){
       if (value[i]!=" "){
         if (value[i]==targetText[i]){
-          correctcount+=1;
+          correctCount.current+=1;
         }
-        totalcount+=1;
+        totalCount.current+=1;
       }
     }
 
     //ACCURACY
     if (value.length){
-      setAccuracy((correctcount/totalcount)*100);
+      setAccuracy((correctCount.current/totalCount.current)*100);
     }
     //
 
     //WPM?(static wpm)
     const elapsed = mode/60;
-    const wordsTyped = correctcount/5; //averaging out
+    const wordsTyped = correctCount.current/5; //averaging out
     const wpmVal = (wordsTyped/elapsed);
     setWpm(wpmVal); //setting static wpm by every single change
     //
 
     //RAW?(static raw value)
-    const wordsRawTyped=totalcount/5;
+    const wordsRawTyped=totalCount.current/5;
     const rawVal= (wordsRawTyped/elapsed);
     setRaw(rawVal);
     //
