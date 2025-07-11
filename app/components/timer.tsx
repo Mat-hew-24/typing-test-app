@@ -40,11 +40,15 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
       const rawFrame =typedlength>0 ? (typedlength / 5) / (1 / 60): 0; 
       if (tickingCounter.current<=1) return;
 
+
+              //ROLLING AVERAGE
+      //Buffer handling
       buffer.current.unshift(rawFrame);
-      if (buffer.current.length>5){
+      if (buffer.current.length>5){ //seek
         buffer.current.pop();
       }
       
+      //calculation
       const bufferLength=buffer.current.length;
       const bufferSum = buffer.current.reduce((a,b)=>a+b,0);
       const rollingAverage=(bufferSum/bufferLength).toFixed(0);
@@ -55,7 +59,6 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
       const wpm = (correctCount.current / 5) / (elapsed / 60);
 
       setChartRaw(val => [...val,Number(rollingAverage)]);
-
       setChartWpm(val => [...val, wpm]);
 
       setSmallTimer(t => t + 1);
