@@ -22,7 +22,6 @@ function getRandomString(len: number) {
 
 const targetText = getRandomString(30);
 
-// CUSTOM ALIAS TYPE !!
 type dotdotdot<T> = Dispatch<SetStateAction<T>>;
 
 type TypingBoxProp = {
@@ -62,15 +61,36 @@ export default function TypingBox({
 }: TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
-  const previousCount=useRef(0);
+  const previousCount = useRef(0);
+  const currentWordIndex = useRef(0);
 
   const flatInput = [...userInput];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
+  const targetWords = targetText.split(" ");
 
+  const getCurrentWordStart = () => {
+    let index = 0;
+    for (let i = 0; i < currentWordIndex.current; i++) {
+      index += targetWords[i].length + 1; // +1 for space
+    }
+    return index;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let value = e.target.value;
+    const lastChar = value[value.length - 1];
+    const prevLength = userInput.length;
+
+    const wordStart = getCurrentWordStart();
+
+    // ⛔ Prevent backspacing beyond current word
+    if (value.length < prevLength && value.length < wordStart) {
+      return;
+    }
+
+    // 🕒 Start timing word
     if (
       value.length === 1 ||
       (userInput.endsWith(" ") && value.length > userInput.length)
@@ -78,27 +98,38 @@ export default function TypingBox({
       wordStartTime.current = Date.now();
     }
 
+    // ␣ Space pressed — handle word completion or skipping
     if (
-      value.length > userInput.length &&
-      value[value.length - 1] === " " &&
+      value.length > prevLength &&
+      lastChar === " " &&
       wordStartTime.current
     ) {
       const duration = Date.now() - wordStartTime.current;
-      console.log("Word typed in", duration, "ms");
-      if (duration) {
-        wordTime.push(duration);
-        dynoRawTime.current += duration;
-        wordStartTime.current = null;
+      wordTime.push(duration);
+      dynoRawTime.current += duration;
+      wordStartTime.current = null;
+
+      const typedWord = value.slice(wordStart, value.length - 1); // current word excluding space
+      const expectedWord = targetWords[currentWordIndex.current] || "";
+
+      if (typedWord.length < expectedWord.length) {
+        const pad = "~".repeat(expectedWord.length - typedWord.length);
+        value = value.slice(0, value.length - 1) + pad + " "; // overwrite with incorrect padding
       }
+
+      // ✅ Move to next word
+      currentWordIndex.current++;
     }
 
     setUserInput(value);
+
+    // 🧠 Count stats
     correctCount.current = 0;
     totalCount.current = 0;
 
     for (let i = 0; i < value.length; i++) {
-      if (value[i] != " ") {
-        if (value[i] == targetText[i]) {
+      if (value[i] !== " ") {
+        if (value[i] === targetText[i]) {
           correctCount.current += 1;
         }
         totalCount.current += 1;
@@ -111,18 +142,14 @@ export default function TypingBox({
 
     const elapsed = mode / 60;
     const wordsTyped = correctCount.current / 5;
-    const wpmVal = wordsTyped / elapsed;
-    setWpm(wpmVal);
+    setWpm(wordsTyped / elapsed);
 
     const wordsRawTyped = totalCount.current / 5;
-    const rawVal = wordsRawTyped / elapsed;
-    setRaw(rawVal);
+    setRaw(wordsRawTyped / elapsed);
   };
 
   useEffect(() => {
-    if (userInput) {
-      setTimeRunner(true);
-    }
+    if (userInput) setTimeRunner(true);
     if (userInput.length === targetText.length) {
       console.log("Word times:", wordTime);
     }
@@ -132,7 +159,6 @@ export default function TypingBox({
     textareaRef.current?.focus();
   }, []);
 
-  // Animate cursor to active letter
   useEffect(() => {
     const activeEl = document.querySelector(
       `.${styles.activeLetter}`
@@ -165,7 +191,8 @@ export default function TypingBox({
         />
         <div className={styles.timerBox}>
           <Timer
-            timeVal={timeVal} previousCount={previousCount}
+            timeVal={timeVal}
+            previousCount={previousCount}
             correctCount={correctCount}
             totalCount={totalCount}
             setTimeVal={setTimeVal}
@@ -178,14 +205,13 @@ export default function TypingBox({
         </div>
         <div ref={cursorRef} className={styles.customCursor} />
         {(() => {
-          const wordList = targetText.split(" ");
           let charIndex = 0;
 
-          return wordList.map((word, wordIdx) => {
+          return targetWords.map((word, wordIdx) => {
             const wordWithSpace = word + " ";
             return (
               <div key={wordIdx} className={styles.word}>
-                {[...wordWithSpace].map((letter, i) => {
+                {[...wordWithSpace].map((letter) => {
                   const currentInput = flatInput[charIndex];
                   let letterClass = styles.letter;
 
