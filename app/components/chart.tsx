@@ -50,13 +50,13 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
           {
             label: "wpm",
             data: chartWpm,
-            borderColor: "#aa00ff",
+            borderColor: "rgba(169, 4, 254, 0.5)",
             backgroundColor: "rgba(169, 4, 254, 0.1)",
             fill: true,
             tension: 0.4,
             pointRadius: 3,
-            pointBackgroundColor: "#a904fe",
-            pointBorderColor: "#a904fe",
+            pointBackgroundColor: "rgba(169, 4, 254, 0.8)",
+            pointBorderColor: "rgba(169, 4, 254, 0.8)",
           },
           {
             label: "Important Points",
