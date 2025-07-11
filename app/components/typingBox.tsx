@@ -41,6 +41,7 @@ export default function TypingBox({
 }: TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
+  const previousCount=useRef(0);
 
   const flatInput = [...userInput];
 
@@ -143,7 +144,7 @@ export default function TypingBox({
         />
         <div className={styles.timerBox}>
           <Timer
-            timeVal={timeVal}
+            timeVal={timeVal} previousCount={previousCount}
             correctCount={correctCount}
             totalCount={totalCount}
             setTimeVal={setTimeVal}
