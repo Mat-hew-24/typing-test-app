@@ -63,6 +63,7 @@ export default function Home() {
         <div className="flex flex-col items-center">
           {isValid && (
             <Bar
+              mode={mode}
               loader={loader}
               changeTime={changeTime}
               setTimeVal={setTimeVal}

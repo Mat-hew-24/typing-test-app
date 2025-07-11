@@ -18,6 +18,7 @@ type Barprop = {
   totalCount: MutableRefObject<number>;
   setChartWpm: (x: Array<number>) => void;
   setChartRaw: (x: Array<number>) => void;
+  mode:number;
 };
 
 const Spinner = (
@@ -28,6 +29,7 @@ export default function Bar({
   changeTime,
   setIsToggle,
   setTimeVal,
+  mode,
   setTimeRunner,
   setLoader,
   loader,
@@ -92,7 +94,7 @@ export default function Bar({
         </div>
 
         <div>
-            <button className="barbtn p-2 filter invert hover:invert-0">
+            <button className="barbtn p-2 filter invert hover:invert-0" onClick={() => {handleclick(mode)}}>
               <Image src="/reload.png" alt="no" width={20} height={20} />
             </button>
         </div>
