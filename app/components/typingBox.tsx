@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  MutableRefObject,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import styles from "./mainPage.module.css";
 import english_1k from "./english_1k.json";
 import Timer from "./timer";
@@ -13,42 +20,55 @@ function getRandomString(len: number) {
   }).join(" ");
 }
 
-
 const targetText = getRandomString(30);
 
+// CUSTOM ALIAS TYPE !!
+type dotdotdot<T> = Dispatch<SetStateAction<T>>;
 
 type TypingBoxProp = {
-  timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
-  setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
-  wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
-  setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
-  setChartRaw:React.Dispatch<React.SetStateAction<number[]>>,setChartWpm:React.Dispatch<React.SetStateAction<number[]>>
-  wpm:number,raw:number,totalCount:number,correctCount:number,setCorrectCount:(x:number)=>void,
-  setTotalCount:(x:number)=>void};
+  timeVal: number;
+  setTimeRunner: (x: boolean) => void;
+  timeRunner: boolean;
+  setTimeVal: (x: number) => void;
+  setIsToggle: (x: boolean) => void;
+  wordTime: Array<number>;
+  setRaw: (x: number) => void;
+  setAccuracy: (x: number) => void;
+  setWpm: (x: number) => void;
+  mode: number;
+  dynoRawTime: React.MutableRefObject<number>;
+  correctCount: MutableRefObject<number>;
+  totalCount: MutableRefObject<number>;
+  setChartWpm: dotdotdot<number[]>;
+  setChartRaw: dotdotdot<number[]>;
+};
 
 export default function TypingBox({
-  timeVal,setWpm,
-  timeRunner, dynoRawTime,
-  setTimeRunner, setChartRaw,
-  setTimeVal, setChartWpm,
-  setIsToggle, wpm, setCorrectCount, setTotalCount,
-  mode, raw, totalCount,correctCount,
-  wordTime, setAccuracy,
-  setRaw
+  timeVal,
+  setWpm,
+  timeRunner,
+  dynoRawTime,
+  setTimeRunner,
+  correctCount,
+  setTimeVal,
+  totalCount,
+  setIsToggle,
+  setChartWpm,
+  mode,
+  setChartRaw,
+  wordTime,
+  setAccuracy,
+  setRaw,
 }: TypingBoxProp) {
-
-
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
 
   const flatInput = [...userInput];
 
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-
 
     // Start time when new word begins
     if (
@@ -66,50 +86,46 @@ export default function TypingBox({
     ) {
       const duration = Date.now() - wordStartTime.current;
       console.log("Word typed in", duration, "ms");
-      if (duration){
+      if (duration) {
         wordTime.push(duration);
-        dynoRawTime.current+=duration;
+        dynoRawTime.current += duration;
         wordStartTime.current = null;
       }
     }
 
     setUserInput(value);
 
-    let correctcount=0;
-    let totalcount=0;
+    correctCount.current = 0;
+    totalCount.current = 0;
 
     //RUNNER CALCULATOR
-    for (let i=0;i<value.length;i++){
-      if (value[i]!=" "){
-        if (value[i]==targetText[i]){
-          correctcount+=1;
-          setCorrectCount(correctCount+1);
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] != " ") {
+        if (value[i] == targetText[i]) {
+          correctCount.current += 1;
         }
-        totalcount+=1;
-        setTotalCount(totalCount+1);
+        totalCount.current += 1;
       }
     }
 
     //ACCURACY
-    if (value.length){
-      setAccuracy((correctcount/totalcount)*100);
+    if (value.length) {
+      setAccuracy((correctCount.current / totalCount.current) * 100);
     }
     //
 
     //WPM?(static wpm)
-    const elapsed = mode/60;
-    const wordsTyped = correctcount/5; //averaging out
-    const wpmVal = (wordsTyped/elapsed);
+    const elapsed = mode / 60;
+    const wordsTyped = correctCount.current / 5; //averaging out
+    const wpmVal = wordsTyped / elapsed;
     setWpm(wpmVal); //setting static wpm by every single change
     //
 
     //RAW?(static raw value)
-    const wordsRawTyped=totalcount/5;
-    const rawVal= (wordsRawTyped/elapsed);
+    const wordsRawTyped = totalCount.current / 5;
+    const rawVal = wordsRawTyped / elapsed;
     setRaw(rawVal);
     //
-
-    
   };
 
   useEffect(() => {
@@ -120,7 +136,6 @@ export default function TypingBox({
       console.log("Word times:", wordTime);
     }
   }, [userInput]);
-
 
   useEffect(() => {
     textareaRef.current?.focus();
@@ -142,12 +157,15 @@ export default function TypingBox({
         />
         <div className={styles.timerBox}>
           <Timer
-            timeVal={timeVal} setChartRaw={setChartRaw}
-            setTimeVal={setTimeVal} setChartWpm={setChartWpm} 
-            timeRunner={timeRunner} setTotalCount={setTotalCount}
-            setIsToggle={setIsToggle}  setCorrectCount={setCorrectCount}
-            totalCount={totalCount} correctCount={correctCount}
+            timeVal={timeVal}
+            correctCount={correctCount}
+            totalCount={totalCount}
+            setTimeVal={setTimeVal}
+            timeRunner={timeRunner}
+            setChartRaw={setChartRaw}
+            setChartWpm={setChartWpm}
             mode={mode}
+            setIsToggle={setIsToggle}
           />
         </div>
         {(() => {
