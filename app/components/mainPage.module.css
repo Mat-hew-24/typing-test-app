@@ -70,7 +70,7 @@
   color: #ef4444;
 }
 
-.activeLetter {
+/* .activeLetter {
   border-radius: 4px;
   position: relative;
 }
@@ -83,17 +83,7 @@
   height: 100%;
   background-color: purple;
   animation: blink 1s ease-in-out infinite;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
+} */
 
 .space {
   display: inline-block;
@@ -105,4 +95,25 @@
   z-index: 2;
   pointer-events: none;
   opacity: 0.5;
+}
+
+.customCursor {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 2px;
+  background-color: purple;
+  /* animation: blink 1s ease-in-out infinite; */
+  transition: transform 0.12s ease, height 0.12s ease;
+  z-index: 1;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }

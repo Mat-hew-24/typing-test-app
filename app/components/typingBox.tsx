@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useEffect, useState, useRef,MutableRefObject,SetStateAction,Dispatch } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  MutableRefObject,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import styles from "./mainPage.module.css";
 import english_1k from "./english_1k.json";
 import Timer from "./timer";
@@ -13,46 +20,57 @@ function getRandomString(len: number) {
   }).join(" ");
 }
 
-
 const targetText = getRandomString(30);
 
 // CUSTOM ALIAS TYPE !!
-type dotdotdot<T>=Dispatch<SetStateAction<T>>
-
+type dotdotdot<T> = Dispatch<SetStateAction<T>>;
 
 type TypingBoxProp = {
-  timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
-  setTimeVal: (x: number) => void, setIsToggle: (x: boolean) => void;
-  wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
-  setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
-  correctCount:MutableRefObject<number>,totalCount:MutableRefObject<number>,
-  setChartWpm:dotdotdot<number[]>,setChartRaw:dotdotdot<number[]>;
+  timeVal: number;
+  setTimeRunner: (x: boolean) => void;
+  timeRunner: boolean;
+  setTimeVal: (x: number) => void;
+  setIsToggle: (x: boolean) => void;
+  wordTime: Array<number>;
+  setRaw: (x: number) => void;
+  setAccuracy: (x: number) => void;
+  setWpm: (x: number) => void;
+  mode: number;
+  dynoRawTime: React.MutableRefObject<number>;
+  correctCount: MutableRefObject<number>;
+  totalCount: MutableRefObject<number>;
+  setChartWpm: dotdotdot<number[]>;
+  setChartRaw: dotdotdot<number[]>;
 };
 
 export default function TypingBox({
-  timeVal,setWpm,
-  timeRunner, dynoRawTime,
-  setTimeRunner, correctCount,
-  setTimeVal, totalCount,
-  setIsToggle, setChartWpm,
-  mode, setChartRaw,
-  wordTime, setAccuracy,
-  setRaw
+  timeVal,
+  setWpm,
+  timeRunner,
+  dynoRawTime,
+  setTimeRunner,
+  correctCount,
+  setTimeVal,
+  totalCount,
+  setIsToggle,
+  setChartWpm,
+  mode,
+  setChartRaw,
+  wordTime,
+  setAccuracy,
+  setRaw,
 }: TypingBoxProp) {
   const [userInput, setUserInput] = useState("");
   const wordStartTime = useRef<number | null>(null);
   const previousCount=useRef(0);
 
   const flatInput = [...userInput];
-
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
 
-
-    // Start time when new word begins
     if (
       value.length === 1 ||
       (userInput.endsWith(" ") && value.length > userInput.length)
@@ -60,7 +78,6 @@ export default function TypingBox({
       wordStartTime.current = Date.now();
     }
 
-    // If space typed, calculate word time
     if (
       value.length > userInput.length &&
       value[value.length - 1] === " " &&
@@ -68,50 +85,38 @@ export default function TypingBox({
     ) {
       const duration = Date.now() - wordStartTime.current;
       console.log("Word typed in", duration, "ms");
-      if (duration){
+      if (duration) {
         wordTime.push(duration);
-        dynoRawTime.current+=duration;
+        dynoRawTime.current += duration;
         wordStartTime.current = null;
       }
     }
 
     setUserInput(value);
+    correctCount.current = 0;
+    totalCount.current = 0;
 
-    correctCount.current=0;
-    totalCount.current=0;
-
-    
-
-    //RUNNER CALCULATOR
-    for (let i=0;i<value.length;i++){
-      if (value[i]!=" "){
-        if (value[i]==targetText[i]){
-          correctCount.current+=1;
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] != " ") {
+        if (value[i] == targetText[i]) {
+          correctCount.current += 1;
         }
-        totalCount.current+=1;
+        totalCount.current += 1;
       }
     }
 
-    //ACCURACY
-    if (value.length){
-      setAccuracy((correctCount.current/totalCount.current)*100);
+    if (value.length) {
+      setAccuracy((correctCount.current / totalCount.current) * 100);
     }
-    //
 
-    //WPM?(static wpm)
-    const elapsed = mode/60;
-    const wordsTyped = correctCount.current/5; //averaging out
-    const wpmVal = (wordsTyped/elapsed);
-    setWpm(wpmVal); //setting static wpm by every single change
-    //
+    const elapsed = mode / 60;
+    const wordsTyped = correctCount.current / 5;
+    const wpmVal = wordsTyped / elapsed;
+    setWpm(wpmVal);
 
-    //RAW?(static raw value)
-    const wordsRawTyped=totalCount.current/5;
-    const rawVal= (wordsRawTyped/elapsed);
+    const wordsRawTyped = totalCount.current / 5;
+    const rawVal = wordsRawTyped / elapsed;
     setRaw(rawVal);
-    //
-
-    
   };
 
   useEffect(() => {
@@ -123,10 +128,26 @@ export default function TypingBox({
     }
   }, [userInput]);
 
-
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
+
+  // Animate cursor to active letter
+  useEffect(() => {
+    const activeEl = document.querySelector(
+      `.${styles.activeLetter}`
+    ) as HTMLElement;
+    if (activeEl && cursorRef.current) {
+      const rect = activeEl.getBoundingClientRect();
+      const parentRect = activeEl.offsetParent?.getBoundingClientRect();
+      if (rect && parentRect) {
+        const x = rect.left - parentRect.left;
+        const y = rect.top - parentRect.top;
+        cursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
+        cursorRef.current.style.height = `${rect.height}px`;
+      }
+    }
+  }, [userInput]);
 
   const handleWordBoxClick = () => {
     textareaRef.current?.focus();
@@ -155,6 +176,7 @@ export default function TypingBox({
             setIsToggle={setIsToggle}
           />
         </div>
+        <div ref={cursorRef} className={styles.customCursor} />
         {(() => {
           const wordList = targetText.split(" ");
           let charIndex = 0;

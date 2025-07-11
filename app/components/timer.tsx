@@ -1,6 +1,11 @@
-import { useEffect,MutableRefObject,Dispatch,SetStateAction,
-  useState,useRef
- } from "react";
+import {
+  useEffect,
+  MutableRefObject,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useRef,
+} from "react";
 
 type timerprop={timeVal:number,timeRunner:boolean,
   setTimeVal:(x:number)=>void,setIsToggle:(x:boolean)=>void
@@ -50,15 +55,15 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
 
   //Timer inside the wordbox
   useEffect(() => {
-  if (timeRunner && timeVal > 0) {
-    const timeout = setTimeout(() => {
-      const timing=timeVal-1;
-      setTimeVal(timing);
-    }, 1000);
+    if (timeRunner && timeVal > 0) {
+      const timeout = setTimeout(() => {
+        const timing = timeVal - 1;
+        setTimeVal(timing);
+      }, 1000);
 
-    return () => clearTimeout(timeout);
-  }
-}, [timeRunner, timeVal]);
+      return () => clearTimeout(timeout);
+    }
+  }, [timeRunner, timeVal]);
 
   //SHOW CHART AND ADD LAST POINT is inserted into the graph data
   useEffect(()=>{
@@ -71,13 +76,7 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
       
       setIsToggle(false);
     }
-  },[timeVal]);
-    
-    
-    
-    return (
-        <div className="text-black">
-            {timeVal}
-        </div>
-    );
+  }, [timeVal]);
+
+  return <div className="text-black">{timeVal}</div>;
 }
