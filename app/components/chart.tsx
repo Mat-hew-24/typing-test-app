@@ -38,7 +38,7 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
         datasets: [
           {
             label: "raw",
-            data: chartRaw,
+            data: chartRaw.map((a)=>a>=0?a:0),
             borderColor: "#4Cff50",
             backgroundColor: "rgba(169, 4, 254, 0.1)",
             fill: false,
