@@ -7,18 +7,18 @@ type Barprop = {changeTime: (x:number)=> void,setIsToggle: (x:boolean)=>void
     setLoader:(x:boolean)=>void,loader:boolean,setWordTime:(x:Array<number>)=>void,
     setRaw:(x:number)=>void ,setMode:(x:number)=>void,setWpm:(x:number)=>void
     dynoRawTime:React.MutableRefObject<number>,setChartRaw:(x:Array<number>)=>void,
-    setChartWpm:(x:Array<number>)=>void}
+    setChartWpm:(x:Array<number>)=>void , setTotalCount:(x:number)=>void,setCorrectCount:(x:number)=>void}
 
 const Spinner = <div className="w-12 h-12 m-auto border-4 border-t-transparent border-emerald-500 rounded-full animate-spin"></div>
 
 export default function Bar({changeTime,setIsToggle,setTimeVal,
     setTimeRunner,setLoader,loader,setWordTime,setRaw,setMode,setWpm,
-    dynoRawTime,setChartRaw,setChartWpm}:Barprop){
+    dynoRawTime,setChartRaw,setChartWpm,setCorrectCount,setTotalCount}:Barprop){
     
     function handleclick(x:number){
         setLoader(true); changeTime(x); setIsToggle(true); setWordTime([]);
         setTimeVal(x); setMode(x); setRaw(0); setWpm(0) ; setChartRaw([]);
-        setChartWpm([]);
+        setChartWpm([]); setCorrectCount(0); setTotalCount(0); 
         setTimeRunner(false); dynoRawTime.current=0;
         setTimeout(()=>{  
             setLoader(false)

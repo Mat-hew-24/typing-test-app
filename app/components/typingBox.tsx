@@ -23,15 +23,16 @@ type TypingBoxProp = {
   wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
   setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
   setChartRaw:React.Dispatch<React.SetStateAction<number[]>>,setChartWpm:React.Dispatch<React.SetStateAction<number[]>>
-  wpm:number,raw:number};
+  wpm:number,raw:number,totalCount:number,correctCount:number,setCorrectCount:(x:number)=>void,
+  setTotalCount:(x:number)=>void};
 
 export default function TypingBox({
   timeVal,setWpm,
   timeRunner, dynoRawTime,
   setTimeRunner, setChartRaw,
   setTimeVal, setChartWpm,
-  setIsToggle, wpm,
-  mode, raw,
+  setIsToggle, wpm, setCorrectCount, setTotalCount,
+  mode, raw, totalCount,correctCount,
   wordTime, setAccuracy,
   setRaw
 }: TypingBoxProp) {
@@ -82,8 +83,10 @@ export default function TypingBox({
       if (value[i]!=" "){
         if (value[i]==targetText[i]){
           correctcount+=1;
+          setCorrectCount(correctCount+1);
         }
         totalcount+=1;
+        setTotalCount(totalCount+1);
       }
     }
 
@@ -140,9 +143,11 @@ export default function TypingBox({
         <div className={styles.timerBox}>
           <Timer
             timeVal={timeVal} setChartRaw={setChartRaw}
-            setTimeVal={setTimeVal} setChartWpm={setChartWpm}
-            timeRunner={timeRunner} wpm={wpm}
-            setIsToggle={setIsToggle} raw={raw}
+            setTimeVal={setTimeVal} setChartWpm={setChartWpm} 
+            timeRunner={timeRunner} setTotalCount={setTotalCount}
+            setIsToggle={setIsToggle}  setCorrectCount={setCorrectCount}
+            totalCount={totalCount} correctCount={correctCount}
+            mode={mode}
           />
         </div>
         {(() => {

@@ -29,8 +29,12 @@ export default function Home() {
   const [chartRaw,setChartRaw]=useState<number[]>([]);//RAW for chart
 
 
+
+
   //running
     const dynoRawTime=useRef(0);//I dont know sire
+    const [correctCount,setCorrectCount]=useState(0);
+    const[totalCount,setTotalCount]=useState(0);
 
 
   //time array
@@ -72,6 +76,8 @@ export default function Home() {
               setRaw={setRaw}
               setMode={setMode}
               setWpm={setWpm}
+              setCorrectCount={setCorrectCount}
+              setTotalCount={setTotalCount}
               dynoRawTime={dynoRawTime}
             />
           )}
@@ -102,9 +108,9 @@ export default function Home() {
           <TypingBox
             timeVal={timeVal} setTimeRunner={setTimeRunner} setChartRaw={setChartRaw}
             timeRunner={timeRunner} setTimeVal={setTimeVal} setChartWpm={setChartWpm}
-            wordTime={wordTime} setIsToggle={setIsToggle} wpm={wpm}
-            setRaw={setRaw} setAccuracy={setAccuracy} raw={wpm}
-            setWpm={setWpm} mode={mode} dynoRawTime={dynoRawTime}
+            wordTime={wordTime} setIsToggle={setIsToggle} wpm={wpm} setTotalCount={setTotalCount}
+            setRaw={setRaw} setAccuracy={setAccuracy} raw={wpm} setCorrectCount={setCorrectCount}
+            setWpm={setWpm} mode={mode} dynoRawTime={dynoRawTime} correctCount={correctCount} totalCount={totalCount}
           />
         )}
       </div>
