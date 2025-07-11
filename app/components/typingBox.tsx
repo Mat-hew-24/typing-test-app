@@ -64,13 +64,12 @@ export default function TypingBox({
   const wordStartTime = useRef<number | null>(null);
 
   const flatInput = [...userInput];
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
 
-    // Start time when new word begins
     if (
       value.length === 1 ||
       (userInput.endsWith(" ") && value.length > userInput.length)
@@ -78,7 +77,6 @@ export default function TypingBox({
       wordStartTime.current = Date.now();
     }
 
-    // If space typed, calculate word time
     if (
       value.length > userInput.length &&
       value[value.length - 1] === " " &&
@@ -94,11 +92,9 @@ export default function TypingBox({
     }
 
     setUserInput(value);
-
     correctCount.current = 0;
     totalCount.current = 0;
 
-    //RUNNER CALCULATOR
     for (let i = 0; i < value.length; i++) {
       if (value[i] != " ") {
         if (value[i] == targetText[i]) {
@@ -108,24 +104,18 @@ export default function TypingBox({
       }
     }
 
-    //ACCURACY
     if (value.length) {
       setAccuracy((correctCount.current / totalCount.current) * 100);
     }
-    //
 
-    //WPM?(static wpm)
     const elapsed = mode / 60;
-    const wordsTyped = correctCount.current / 5; //averaging out
+    const wordsTyped = correctCount.current / 5;
     const wpmVal = wordsTyped / elapsed;
-    setWpm(wpmVal); //setting static wpm by every single change
-    //
+    setWpm(wpmVal);
 
-    //RAW?(static raw value)
     const wordsRawTyped = totalCount.current / 5;
     const rawVal = wordsRawTyped / elapsed;
     setRaw(rawVal);
-    //
   };
 
   useEffect(() => {
@@ -140,6 +130,23 @@ export default function TypingBox({
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
+
+  // Animate cursor to active letter
+  useEffect(() => {
+    const activeEl = document.querySelector(
+      `.${styles.activeLetter}`
+    ) as HTMLElement;
+    if (activeEl && cursorRef.current) {
+      const rect = activeEl.getBoundingClientRect();
+      const parentRect = activeEl.offsetParent?.getBoundingClientRect();
+      if (rect && parentRect) {
+        const x = rect.left - parentRect.left;
+        const y = rect.top - parentRect.top;
+        cursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
+        cursorRef.current.style.height = `${rect.height}px`;
+      }
+    }
+  }, [userInput]);
 
   const handleWordBoxClick = () => {
     textareaRef.current?.focus();
@@ -168,6 +175,7 @@ export default function TypingBox({
             setIsToggle={setIsToggle}
           />
         </div>
+        <div ref={cursorRef} className={styles.customCursor} />
         {(() => {
           const wordList = targetText.split(" ");
           let charIndex = 0;
