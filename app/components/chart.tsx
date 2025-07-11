@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import styles from "./chart.module.css";
 
-type chartProp = {time:number[],raw:number,wpm:number}
+type chartProp = {time:number[],chartWpm:Array<number>,chartRaw:Array<number>}
 
-export default function LineChart({ time,raw,wpm }: chartProp){
+export default function LineChart({ time,chartRaw,chartWpm }: chartProp){
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -33,9 +33,20 @@ export default function LineChart({ time,raw,wpm }: chartProp){
         labels: time,
         datasets: [
           {
-            label: "Views",
-            data: [37, 46, 55, 61, 64, 62, 56, 47, 37, 29, 24, 21, 22, 28, 37],
-            borderColor: "#4CAF50",
+            label: "raw",
+            data: chartRaw,
+            borderColor: "#4Cff50",
+            backgroundColor: "rgba(76, 175, 80, 0.1)",
+            fill: false,
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: "#4CAF50",
+            pointBorderColor: "#4CAF50",
+          },
+          {
+            label: "wpm",
+            data: chartWpm,
+            borderColor: "#aa00ff",
             backgroundColor: "rgba(76, 175, 80, 0.1)",
             fill: false,
             tension: 0.4,

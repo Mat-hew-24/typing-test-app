@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef,MutableRefObject } from "react";
+import React, { useEffect, useState, useRef,MutableRefObject,SetStateAction,Dispatch } from "react";
 import styles from "./mainPage.module.css";
 import english_1k from "./english_1k.json";
 import Timer from "./timer";
@@ -16,6 +16,9 @@ function getRandomString(len: number) {
 
 const targetText = getRandomString(30);
 
+// CUSTOM ALIAS TYPE !!
+type dotdotdot<T>=Dispatch<SetStateAction<T>>
+
 
 type TypingBoxProp = {
   timeVal: number; setTimeRunner: (x: boolean) => void ,timeRunner: boolean;
@@ -23,6 +26,7 @@ type TypingBoxProp = {
   wordTime: Array<number> , setRaw:(x:number)=>void, setAccuracy:(x:number)=>void,
   setWpm:(x:number)=>void,mode:number ,dynoRawTime:React.MutableRefObject<number>,
   correctCount:MutableRefObject<number>,totalCount:MutableRefObject<number>,
+  setChartWpm:dotdotdot<number[]>,setChartRaw:dotdotdot<number[]>;
 };
 
 export default function TypingBox({
@@ -30,8 +34,8 @@ export default function TypingBox({
   timeRunner, dynoRawTime,
   setTimeRunner, correctCount,
   setTimeVal, totalCount,
-  setIsToggle,
-  mode,
+  setIsToggle, setChartWpm,
+  mode, setChartRaw,
   wordTime, setAccuracy,
   setRaw
 }: TypingBoxProp) {
@@ -140,8 +144,13 @@ export default function TypingBox({
         <div className={styles.timerBox}>
           <Timer
             timeVal={timeVal}
+            correctCount={correctCount}
+            totalCount={totalCount}
             setTimeVal={setTimeVal}
             timeRunner={timeRunner}
+            setChartRaw={setChartRaw}
+            setChartWpm={setChartWpm}
+            mode={mode}
             setIsToggle={setIsToggle}
           />
         </div>

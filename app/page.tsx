@@ -12,7 +12,7 @@ import Statbar from "./components/statbar";
 
 export default function Home() {
   const [time, setTime] = useState([
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
   ]); //time as data 
   const [isValid, setIsValid] = useState(false); //loader process status
   const [hideNav, setHideNav] = useState(true); //nav visibility
@@ -25,6 +25,11 @@ export default function Home() {
   const [accuracy,setAccuracy]=useState(0); //Accuracy calculations
   const [mode,setMode]=useState(15);//Mode of Timer
   const [wpm,setWpm]=useState(0);//WPM calculation
+  
+  //CHART ARRAY STATES
+  const [chartRaw,setChartRaw]=useState<number[]>([]);
+  const [chartWpm,setChartWpm]=useState<number[]>([]);
+
 
   //running
     const dynoRawTime=useRef(0);//I dont know sire
@@ -35,7 +40,7 @@ export default function Home() {
   //time array
   function changeTime(x: number) {
     const newTime = [];
-    for (let i = 0; i < x + 1; i++) {
+    for (let i = 1; i < x + 1; i++) {
       newTime.push(i);
     }
     setTime(newTime);
@@ -67,7 +72,8 @@ export default function Home() {
               setLoader={setLoader} setRaw={setRaw}
               setMode={setMode} setWpm={setWpm}
               dynoRawTime={dynoRawTime} correctCount={correctCount}
-              totalCount={totalCount}
+              totalCount={totalCount} setChartRaw={setChartRaw}
+              setChartWpm={setChartWpm}
             />
           )}
 
@@ -77,8 +83,8 @@ export default function Home() {
                 <div className="w-[300px] mt-6">
                   <Results accuracy={accuracy} wpm={wpm}/>
                 </div>
-                <LineChart raw={raw} wpm={wpm}
-                time={time} />
+                <LineChart 
+                time={time} chartRaw={chartRaw} chartWpm={chartWpm} />
               </div>
               <Statbar accuracy={accuracy} raw={raw} mode={mode}/>
             </>
@@ -101,6 +107,7 @@ export default function Home() {
             setRaw={setRaw} setAccuracy={setAccuracy}
             setWpm={setWpm} mode={mode} dynoRawTime={dynoRawTime}
             correctCount={correctCount} totalCount={totalCount}
+            setChartRaw={setChartRaw} setChartWpm={setChartWpm}
           />
         )}
       </div>
