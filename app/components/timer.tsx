@@ -20,6 +20,7 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
     const [smallTimer,setSmallTimer] = useState(0);
     const starter = useRef<number|null>(null);
     const tickingCounter =useRef(0);
+    const buffer=useRef<number[]>([]);
 
     console.log(smallTimer);
 
@@ -36,16 +37,24 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
       tickingCounter.current+=1;
       const typedlength=totalCount.current-previousCount.current;
       previousCount.current=totalCount.current;
+      const rawFrame =typedlength>0 ? (typedlength / 5) / (1 / 60): 0; 
       if (tickingCounter.current<=1) return;
 
-      const elapsed = (performance.now() - (starter.current?? 0))/1000;
+      buffer.current.unshift(rawFrame);
+      if (buffer.current.length>5){
+        buffer.current.pop();
+      }
+      
+      const bufferLength=buffer.current.length;
+      const bufferSum = buffer.current.reduce((a,b)=>a+b,0);
+      const rollingAverage=(bufferSum/bufferLength).toFixed(0);
 
-      const rawFrame =typedlength>0 ? (typedlength / 5) / (1 / 60): 0; 
+      const elapsed = (performance.now() - (starter.current?? 0))/1000;
 
 
       const wpm = (correctCount.current / 5) / (elapsed / 60);
 
-      setChartRaw(val => [...val,rawFrame]);
+      setChartRaw(val => [...val,Number(rollingAverage)]);
 
       setChartWpm(val => [...val, wpm]);
 
