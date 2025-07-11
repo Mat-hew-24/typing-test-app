@@ -7,61 +7,74 @@ import {
   useRef,
 } from "react";
 
-type timerprop={timeVal:number,timeRunner:boolean,
-  setTimeVal:(x:number)=>void,setIsToggle:(x:boolean)=>void
-  setChartRaw:Dispatch<SetStateAction<number[]>>;setChartWpm:Dispatch<SetStateAction<number[]>>;
-  correctCount:MutableRefObject<number>;totalCount:MutableRefObject<number>;mode:number;
-  previousCount:MutableRefObject<number>;
-}
+type timerprop = {
+  timeVal: number;
+  timeRunner: boolean;
+  setTimeVal: (x: number) => void;
+  setIsToggle: (x: boolean) => void;
+  setChartRaw: Dispatch<SetStateAction<number[]>>;
+  setChartWpm: Dispatch<SetStateAction<number[]>>;
+  correctCount: MutableRefObject<number>;
+  totalCount: MutableRefObject<number>;
+  mode: number;
+  previousCount: MutableRefObject<number>;
+};
 
-export default function Timer({timeVal,timeRunner,setTimeVal,
-  setIsToggle,setChartRaw,setChartWpm,correctCount,mode,totalCount,previousCount}:timerprop) {
-   
-    const [smallTimer,setSmallTimer] = useState(0);
-    const starter = useRef<number|null>(null);
-    const tickingCounter =useRef(0);
-    const buffer=useRef<number[]>([]);
+export default function Timer({
+  timeVal,
+  timeRunner,
+  setTimeVal,
+  setIsToggle,
+  setChartRaw,
+  setChartWpm,
+  correctCount,
+  mode,
+  totalCount,
+  previousCount,
+}: timerprop) {
+  const [smallTimer, setSmallTimer] = useState(0);
+  const starter = useRef<number | null>(null);
+  const tickingCounter = useRef(0);
+  const buffer = useRef<number[]>([]);
 
-    console.log(smallTimer);
+  console.log(smallTimer);
 
   // SMALL TIMER (FOR GRAPH)
-    useEffect(() => {
-
+  useEffect(() => {
     if (!timeRunner) return; //BASE CASE
 
-    if (!starter.current) starter.current=performance.now();//setting up small timer
+    if (!starter.current) starter.current = performance.now(); //setting up small timer
     //perfomance.now() => is a browser provided timer more accurate than Date.now()
 
     //Measuring Data every ms(changeable)
     const interval = setInterval(() => {
-      tickingCounter.current+=1;
-      const typedlength=totalCount.current-previousCount.current;
-      previousCount.current=totalCount.current;
-      const rawFrame =typedlength>0 ? (typedlength / 5) / (1 / 60): 0; 
-      if (tickingCounter.current<=1) return;
+      tickingCounter.current += 1;
+      const typedlength = totalCount.current - previousCount.current;
+      previousCount.current = totalCount.current;
+      const rawFrame = typedlength > 0 ? typedlength / 5 / (1 / 60) : 0;
+      if (tickingCounter.current <= 1) return;
 
-
-              //ROLLING AVERAGE
+      //ROLLING AVERAGE
       //Buffer handling
       buffer.current.unshift(rawFrame);
-      if (buffer.current.length>5){ //seek
+      if (buffer.current.length > 5) {
+        //seek
         buffer.current.pop();
       }
-      
+
       //calculation
-      const bufferLength=buffer.current.length;
-      const bufferSum = buffer.current.reduce((a,b)=>a+b,0);
-      const rollingAverage=(bufferSum/bufferLength).toFixed(0);
+      const bufferLength = buffer.current.length;
+      const bufferSum = buffer.current.reduce((a, b) => a + b, 0);
+      const rollingAverage = (bufferSum / bufferLength).toFixed(0);
 
-      const elapsed = (performance.now() - (starter.current?? 0))/1000;
+      const elapsed = (performance.now() - (starter.current ?? 0)) / 1000;
 
+      const wpm = correctCount.current / 5 / (elapsed / 60);
 
-      const wpm = (correctCount.current / 5) / (elapsed / 60);
+      setChartRaw((val) => [...val, Number(rollingAverage)]);
+      setChartWpm((val) => [...val, wpm]);
 
-      setChartRaw(val => [...val,Number(rollingAverage)]);
-      setChartWpm(val => [...val, wpm]);
-
-      setSmallTimer(t => t + 1);
+      setSmallTimer((t) => t + 1);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -80,17 +93,17 @@ export default function Timer({timeVal,timeRunner,setTimeVal,
   }, [timeRunner, timeVal]);
 
   //SHOW CHART AND ADD LAST POINT is inserted into the graph data
-  useEffect(()=>{
-    if (timeVal===0){
-      const raw=(totalCount.current/5)/((mode)/60);
-      const wpm=(correctCount.current/5)/((mode)/60);
-      
-      setChartRaw(val => [...val,raw]);
-      setChartWpm(val => [...val,wpm]);
-      
+  useEffect(() => {
+    if (timeVal === 0) {
+      const raw = totalCount.current / 5 / (mode / 60);
+      const wpm = correctCount.current / 5 / (mode / 60);
+
+      setChartRaw((val) => [...val, raw]);
+      setChartWpm((val) => [...val, wpm]);
+
       setIsToggle(false);
     }
   }, [timeVal]);
 
-  return <div className="text-black">{timeVal}</div>;
+  return <div className="text-[var(--timer-color)]">{timeVal}</div>;
 }

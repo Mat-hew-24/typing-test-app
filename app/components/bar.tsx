@@ -1,6 +1,7 @@
 "use client";
 import React, { MutableRefObject } from "react";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 type Barprop = {
   changeTime: (x: number) => void;
@@ -18,7 +19,7 @@ type Barprop = {
   totalCount: MutableRefObject<number>;
   setChartWpm: (x: Array<number>) => void;
   setChartRaw: (x: Array<number>) => void;
-  mode:number;
+  mode: number;
 };
 
 const Spinner = (
@@ -63,11 +64,17 @@ export default function Bar({
     }, 500);
   }
 
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
   return (
     <>
       <div className="bg-black flex justify-start gap-4 w-[500px] mt-4 mb-12 rounded-3xl p-2 px-6 shadow-[1px_1px_2px_rgba(0,0,0,1)]">
         <div className="mr-50 ml-2 flex gap-4">
-            <button
+          <button
             onClick={() => {
               handleclick(15);
             }}
@@ -94,9 +101,15 @@ export default function Bar({
         </div>
 
         <div>
-            <button className="barbtn p-2 filter invert hover:invert-0" onClick={() => {handleclick(mode)}}>
-              <Image src="/reload.png" alt="no" width={20} height={20} />
-            </button>
+          <button
+            className="barbtn p-2 filter invert hover:invert-0"
+            onClick={() => {
+              handleclick(mode);
+              setTheme(theme === "light" ? "dark" : "light");
+            }}
+          >
+            <Image src="/reload.png" alt="no" width={20} height={20} />
+          </button>
         </div>
       </div>
 

@@ -16,12 +16,14 @@ body {
   --bg-color: #b1c7cc;
   --text-color: #000000;
   --box-color: #ffffff;
+  --timer-color: #101112;
 }
 
 [data-theme="dark"] {
   --bg-color: #1e3b41;
   --text-color: #ffffff;
   --box-color: #000000;
+  --timer-color: #bfe9f4;
 }
 
 @theme inline {
