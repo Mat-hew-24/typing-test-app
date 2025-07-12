@@ -75,6 +75,7 @@ export default function Home() {
 
   return (
     <>
+      <title>TypeMonkey</title>
       {!hideNav && <Navbar />}
 
       {
