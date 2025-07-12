@@ -8,6 +8,7 @@ import Navbar from "./components/navbar";
 import TypingBox from "./components/typingBox";
 import Results from "./components/results";
 import Statbar from "./components/statbar";
+import english_1k from "./components/english_1k.json";
 
 export default function Home() {
   const [time, setTime] = useState([
@@ -33,6 +34,18 @@ export default function Home() {
   const dynoRawTime = useRef(0); //I dont know sire
   const correctCount = useRef(0); // Correct characters typed per session
   const totalCount = useRef(0); // Total characters typed per session
+
+  //TEXT OPERATIONS AND SHUFFLING
+  function getRandomString(len: number) {
+    const wordList = english_1k.words;
+    return Array.from({ length: len }, () => {
+      const i = Math.floor(Math.random() * wordList.length);
+      return wordList[i];
+    }).join(" ");
+  }
+
+  const [targetText,setTargetText]=useState(getRandomString(30));
+  const [shuffleCount,setShuffleCount]=useState(0);
 
   //time array
   function changeTime(x: number) {
@@ -79,6 +92,7 @@ export default function Home() {
               totalCount={totalCount}
               setChartRaw={setChartRaw}
               setChartWpm={setChartWpm}
+              setShuffleCount={setShuffleCount}
             />
           )}
 
@@ -118,6 +132,10 @@ export default function Home() {
             setRaw={setRaw}
             setAccuracy={setAccuracy}
             setWpm={setWpm}
+            targetText={targetText}
+            setTargetText={setTargetText}
+            getRandomString={getRandomString}
+            shuffleCount={shuffleCount}
             mode={mode}
             dynoRawTime={dynoRawTime}
             correctCount={correctCount}

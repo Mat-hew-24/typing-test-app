@@ -19,6 +19,7 @@ type Barprop = {
   totalCount: MutableRefObject<number>;
   setChartWpm: (x: Array<number>) => void;
   setChartRaw: (x: Array<number>) => void;
+  setShuffleCount:React.Dispatch<React.SetStateAction<number>>
   mode: number;
 };
 
@@ -29,6 +30,7 @@ const Spinner = (
 export default function Bar({
   changeTime,
   setIsToggle,
+  setShuffleCount,
   setTimeVal,
   mode,
   setTimeRunner,
@@ -114,7 +116,10 @@ export default function Bar({
 
           <button 
             className="barbtn p-2 filter invert hover:invert-0 active:outline-0"
-            onClick={()=>handleclick(mode)}>
+            onClick={()=>{
+              handleclick(mode);
+              setShuffleCount(val=>val+1);
+            }}>
               <Image src="/reload.png" alt="no" width={20} height={20} />
           </button>
 

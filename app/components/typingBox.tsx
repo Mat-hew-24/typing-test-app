@@ -9,20 +9,11 @@ import React, {
   Dispatch,
 } from "react";
 import styles from "./mainPage.module.css";
-import english_1k from "./english_1k.json";
 import Timer from "./timer";
 
-function getRandomString(len: number) {
-  const wordList = english_1k.words;
-  return Array.from({ length: len }, () => {
-    const i = Math.floor(Math.random() * wordList.length);
-    return wordList[i];
-  }).join(" ");
-}
 
-const targetText = getRandomString(30);
 
-type dotdotdot<T> = Dispatch<SetStateAction<T>>;
+type dotdotdot<T> = Dispatch<SetStateAction<T>>; //custom aliasing!!
 
 type TypingBoxProp = {
   timeVal: number;
@@ -34,17 +25,26 @@ type TypingBoxProp = {
   setRaw: (x: number) => void;
   setAccuracy: (x: number) => void;
   setWpm: (x: number) => void;
+  setTargetText:(x:string)=>void;
+  getRandomString:(x:number)=>string;
   mode: number;
   dynoRawTime: React.MutableRefObject<number>;
   correctCount: MutableRefObject<number>;
   totalCount: MutableRefObject<number>;
   setChartWpm: dotdotdot<number[]>;
   setChartRaw: dotdotdot<number[]>;
+  targetText:string;
+  shuffleCount:number;
+  
 };
 
 export default function TypingBox({
   timeVal,
   setWpm,
+  targetText,
+  getRandomString,
+  setTargetText,
+  shuffleCount,
   timeRunner,
   dynoRawTime,
   setTimeRunner,
@@ -64,9 +64,16 @@ export default function TypingBox({
   const previousCount = useRef(0);
   const currentWordIndex = useRef(0);
 
+  useState()
+
+
   const flatInput = [...userInput];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(()=>{
+    setTargetText(getRandomString(30));
+  },[shuffleCount])
 
   const targetWords = targetText.split(" ");
 
@@ -85,12 +92,12 @@ export default function TypingBox({
 
     const wordStart = getCurrentWordStart();
 
-    // ⛔ Prevent backspacing beyond current word
+    //Prevent backspacing beyond current word
     if (value.length < prevLength && value.length < wordStart) {
       return;
     }
 
-    // 🕒 Start timing word
+    //Start timing word
     if (
       value.length === 1 ||
       (userInput.endsWith(" ") && value.length > userInput.length)
@@ -117,13 +124,13 @@ export default function TypingBox({
         value = value.slice(0, value.length - 1) + pad + " "; // overwrite with incorrect padding
       }
 
-      // ✅ Move to next word
+      //Move to next word
       currentWordIndex.current++;
     }
 
     setUserInput(value);
 
-    // 🧠 Count stats
+    //Count stats
     correctCount.current = 0;
     totalCount.current = 0;
 
@@ -136,14 +143,17 @@ export default function TypingBox({
       }
     }
 
+    //ACCURACY
     if (value.length) {
       setAccuracy((correctCount.current / totalCount.current) * 100);
     }
 
+    //Wpm
     const elapsed = mode / 60;
     const wordsTyped = correctCount.current / 5;
     setWpm(wordsTyped / elapsed);
 
+    //Raw
     const wordsRawTyped = totalCount.current / 5;
     setRaw(wordsRawTyped / elapsed);
   };
