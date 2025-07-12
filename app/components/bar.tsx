@@ -21,6 +21,7 @@ type Barprop = {
   setChartRaw: (x: Array<number>) => void;
   setShuffleCount:React.Dispatch<React.SetStateAction<number>>
   mode: number;
+  isToggle:boolean
 };
 
 const Spinner = (
@@ -33,6 +34,7 @@ export default function Bar({
   setShuffleCount,
   setTimeVal,
   mode,
+  isToggle,
   setTimeRunner,
   setLoader,
   loader,
@@ -46,7 +48,7 @@ export default function Bar({
   setChartRaw,
   setChartWpm,
 }: Barprop) {
-  function handleclick(x: number) {
+  function handleclick(x: number,shuffles=false) {
     setLoader(true);
     changeTime(x);
     setIsToggle(true);
@@ -61,10 +63,17 @@ export default function Bar({
     dynoRawTime.current = 0;
     correctCount.current = 0;
     totalCount.current = 0;
+    
+    if (shuffles){
+      setShuffleCount(val=>val+1); //shuffle if (optionalparam)
+    }
+
     setTimeout(() => {
       setLoader(false);
     }, 500);
   }
+
+  
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
@@ -77,25 +86,25 @@ export default function Bar({
       <div className="bg-black flex justify-start gap-4 w-[500px] mt-4 mb-12 rounded-3xl p-2 px-6 shadow-[1px_1px_2px_rgba(0,0,0,1)]">
         <div className="mr-55 ml-2 flex gap-4">
           <button
-            onClick={() => {
-              handleclick(15);
-            }}
+            onClick={() => 
+              !isToggle ? handleclick(15,true) : handleclick(15)
+            }
             className="barbtn"
           >
             15
           </button>
           <button
-            onClick={() => {
-              handleclick(30);
-            }}
+            onClick={() => 
+              !isToggle ? handleclick(30,true) : handleclick(30)
+            }
             className="barbtn"
           >
             30
           </button>
           <button
-            onClick={() => {
-              handleclick(60);
-            }}
+            onClick={() => 
+              !isToggle ? handleclick(60,true) : handleclick(60)
+            }
             className="barbtn"
           >
             60
@@ -104,24 +113,26 @@ export default function Bar({
 
         <div className="flex gap-4">
 
-          <button
+          {/*dark mode btn*/}  
+          <button  
             className="barbtn p-1 rounded-4xl filter invert hover:invert-0 active:outline-0"
             onClick={() => {
               
               setTheme(theme === "light" ? "dark" : "light");
             }}
-          >
-            <Image src="/dark-mode.png" alt="no" width={30} height={30} />
+          > 
+            <Image src="/dark-mode.png" alt="no" width={20} height={20} />
           </button>
 
+          {/*retry btn*/}  
+          {!isToggle && 
           <button 
             className="barbtn p-2 filter invert hover:invert-0 active:outline-0"
             onClick={()=>{
               handleclick(mode);
-              setShuffleCount(val=>val+1);
             }}>
-              <Image src="/reload.png" alt="no" width={20} height={20} />
-          </button>
+              <Image src="/reload.png" alt="no" width={15} height={15} />
+          </button>}
 
         </div>
       </div>

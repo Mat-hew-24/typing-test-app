@@ -11,7 +11,7 @@ import React, {
 import styles from "./mainPage.module.css";
 import Timer from "./timer";
 
-
+type REFS<T> = MutableRefObject<T>;
 
 type dotdotdot<T> = Dispatch<SetStateAction<T>>; //custom aliasing!!
 
@@ -28,19 +28,22 @@ type TypingBoxProp = {
   setTargetText:(x:string)=>void;
   getRandomString:(x:number)=>string;
   mode: number;
-  dynoRawTime: React.MutableRefObject<number>;
-  correctCount: MutableRefObject<number>;
-  totalCount: MutableRefObject<number>;
+  dynoRawTime: REFS<number>;
+  correctCount: REFS<number>;
+  totalCount: REFS<number>;
   setChartWpm: dotdotdot<number[]>;
   setChartRaw: dotdotdot<number[]>;
   targetText:string;
   shuffleCount:number;
-  
+  shuffleFirst:REFS<boolean>;
+  shufflePrevCount: REFS<number>;
 };
 
 export default function TypingBox({
   timeVal,
   setWpm,
+  shuffleFirst,
+  shufflePrevCount,
   targetText,
   getRandomString,
   setTargetText,
@@ -64,16 +67,21 @@ export default function TypingBox({
   const previousCount = useRef(0);
   const currentWordIndex = useRef(0);
 
-  useState()
-
-
   const flatInput = [...userInput];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(()=>{
-    setTargetText(getRandomString(30));
-  },[shuffleCount])
+    if (!shuffleFirst.current){
+      shuffleFirst.current=true;
+      setTargetText(getRandomString(30));
+      return;
+    }
+    if (shufflePrevCount.current!=shuffleCount){
+      shufflePrevCount.current=shuffleCount;
+      setTargetText(getRandomString(30));
+    }
+  },[shuffleCount]);
 
   const targetWords = targetText.split(" ");
 

@@ -44,8 +44,13 @@ export default function Home() {
     }).join(" ");
   }
 
-  const [targetText,setTargetText]=useState(getRandomString(30));
+  const [targetText,setTargetText]=useState("");
   const [shuffleCount,setShuffleCount]=useState(0);
+  
+  //Shuffle Guards
+  const shuffleFirst=useRef(false);
+  const shufflePrevCount=useRef(0);
+  //
 
   //time array
   function changeTime(x: number) {
@@ -76,6 +81,7 @@ export default function Home() {
         <div className="flex flex-col items-center">
           {isValid && (
             <Bar
+              isToggle={isToggle}
               mode={mode}
               loader={loader}
               changeTime={changeTime}
@@ -124,6 +130,8 @@ export default function Home() {
         {isToggle && isValid && !loader && (
           <TypingBox
             timeVal={timeVal}
+            shuffleFirst={shuffleFirst}
+            shufflePrevCount={shufflePrevCount}
             setTimeRunner={setTimeRunner}
             timeRunner={timeRunner}
             setTimeVal={setTimeVal}
