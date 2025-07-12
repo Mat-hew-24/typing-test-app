@@ -73,7 +73,7 @@ export default function Bar({
   return (
     <>
       <div className="bg-black flex justify-start gap-4 w-[500px] mt-4 mb-12 rounded-3xl p-2 px-6 shadow-[1px_1px_2px_rgba(0,0,0,1)]">
-        <div className="mr-50 ml-2 flex gap-4">
+        <div className="mr-55 ml-2 flex gap-4">
           <button
             onClick={() => {
               handleclick(15);
@@ -100,16 +100,24 @@ export default function Bar({
           </button>
         </div>
 
-        <div>
+        <div className="flex gap-4">
+
           <button
-            className="barbtn p-2 filter invert hover:invert-0"
+            className="barbtn p-1 rounded-4xl filter invert hover:invert-0 active:outline-0"
             onClick={() => {
-              handleclick(mode);
+              
               setTheme(theme === "light" ? "dark" : "light");
             }}
           >
-            <Image src="/reload.png" alt="no" width={20} height={20} />
+            <Image src="/dark-mode.png" alt="no" width={30} height={30} />
           </button>
+
+          <button 
+            className="barbtn p-2 filter invert hover:invert-0 active:outline-0"
+            onClick={()=>handleclick(mode)}>
+              <Image src="/reload.png" alt="no" width={20} height={20} />
+          </button>
+
         </div>
       </div>
 
