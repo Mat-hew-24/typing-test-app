@@ -148,12 +148,16 @@ export default function LineChart({ time, chartRaw, chartWpm,theme,noop,mistake 
         },
         scales: {
           x: {
-            ticks: { color: theme==="light" ?"#000":"#fff", font: { size: 12 } },
+            ticks: { color: theme==="light" ?"#000":"#fff",
+              font: { size: 12 }, 
+            },
             grid: { display: false },
           },
           y: {
             beginAtZero: true,
-            ticks: { color: theme==="light" ?"#000":"#fff", font: { size: 12 } },
+            ticks: { color: theme==="light" ?"#000":"#fff",
+              font: { size: 12 }, 
+            },
             grid: { display: false },
           },
           y1:{
