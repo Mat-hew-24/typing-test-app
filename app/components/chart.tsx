@@ -16,19 +16,25 @@ export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp)
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-  const tickColor=useRef("#000");
 
   useEffect(()=>{
-    if (theme==="light"){
-      tickColor.current="#000";
-    }else{
-      tickColor.current="#fff"
+    
+    const chartVal=chartRef.current;
+    if (!chartVal) return;
+    
+    const tickX=chartVal.options?.scales?.x?.ticks;
+    const tickY=chartVal.options?.scales?.y?.ticks;
+
+    if (tickX && tickY){
+      const colorToggle = theme==="light"?"#000":"#fff";
+      tickX.color=colorToggle;
+      tickY.color=colorToggle;
+      chartVal.update("none");
     }
   },[theme])
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
     
     // Create custom tooltip element if not already present
     let tooltipEl = tooltipRef.current;
@@ -111,12 +117,12 @@ export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp)
         },
         scales: {
           x: {
-            ticks: { color: tickColor.current, font: { size: 12 } },
+            ticks: { color: theme==="light" ?"#000":"#fff", font: { size: 12 } },
             grid: { display: false },
           },
           y: {
             beginAtZero: true,
-            ticks: { color: tickColor.current, font: { size: 12 } },
+            ticks: { color: theme==="light" ?"#000":"#fff", font: { size: 12 } },
             grid: { display: false },
           },
         },
@@ -128,7 +134,7 @@ export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp)
       tooltipRef.current?.remove();
       tooltipRef.current = null;
     };
-  }, [time,theme]);
+  }, [time]);
 
   return (
     <div className={styles.mainBox}>
