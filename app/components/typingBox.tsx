@@ -21,6 +21,7 @@ type TypingBoxProp = {
   setTimeVal: (x: number) => void;
   setIsToggle: (x: boolean) => void;
   setRaw: (x: number) => void;
+  noop:(x:unknown)=>void,
   setAccuracy: (x: number) => void;
   setWpm: (x: number) => void;
   setTargetText:(x:string)=>void;
@@ -59,6 +60,7 @@ export default function TypingBox({
   dynoRawTime,
   setTimeRunner,
   correctCount,
+  noop,
   setTimeVal,
   totalCount,
   setIsToggle,
@@ -77,6 +79,7 @@ export default function TypingBox({
   const flatInput = [...userInput];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const innerBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(()=>{
     if (!shuffleFirst.current){
@@ -183,6 +186,11 @@ export default function TypingBox({
     }
   }, [userInput]);
 
+  useEffect(()=>{
+    const view=innerBoxRef.current;
+    if (view) view.scrollTop=view?.scrollHeight;
+  },[])
+
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
@@ -219,6 +227,7 @@ export default function TypingBox({
         />
         <div className={styles.timerBox}>
           <Timer
+            noop={noop}
             timeVal={timeVal}
             incorrectCountPrev={incorrectCountPrev}
             previousCount={previousCount}
@@ -235,47 +244,49 @@ export default function TypingBox({
           />
         </div>
         <div ref={cursorRef} className={styles.customCursor} />
-        {(() => {
-          let charIndex = 0;
+        <div ref={innerBoxRef} className={styles.innerBox}>
+          {(() => {
+            let charIndex = 0;
 
-          return targetWords.map((word, wordIdx) => {
-            const wordWithSpace = word + " ";
-            return (
-              <div key={wordIdx} className={styles.word}>
-                {[...wordWithSpace].map((letter) => {
-                  const currentInput = flatInput[charIndex];
-                  let letterClass = styles.letter;
+            return targetWords.map((word, wordIdx) => {
+              const wordWithSpace = word + " ";
+              return (
+                <div key={wordIdx} className={styles.word}>
+                  {[...wordWithSpace].map((letter) => {
+                    const currentInput = flatInput[charIndex];
+                    let letterClass = styles.letter;
 
-                  if (currentInput !== undefined) {
-                    if (currentInput === letter) {
-                      letterClass += " " + styles.correct;
-                    } else {
-                      letterClass += " " + styles.incorrect;
+                    if (currentInput !== undefined) {
+                      if (currentInput === letter) {
+                        letterClass += " " + styles.correct;
+                      } else {
+                        letterClass += " " + styles.incorrect;
+                      }
                     }
-                  }
 
-                  if (charIndex === userInput.length) {
-                    letterClass += " " + styles.activeLetter;
-                  }
+                    if (charIndex === userInput.length) {
+                      letterClass += " " + styles.activeLetter;
+                    }
 
-                  const span = (
-                    <span
-                      key={charIndex}
-                      className={`${letterClass} ${
-                        letter === " " ? styles.space : ""
-                      }`}
-                    >
-                      {letter === " " ? "\u00A0" : letter}
-                    </span>
-                  );
+                    const span = (
+                      <span
+                        key={charIndex}
+                        className={`${letterClass} ${
+                          letter === " " ? styles.space : ""
+                        }`}
+                      >
+                        {letter === " " ? "\u00A0" : letter}
+                      </span>
+                    );
 
-                  charIndex++;
-                  return span;
-                })}
-              </div>
-            );
-          });
-        })()}
+                    charIndex++;
+                    return span;
+                  })}
+                </div>
+              );
+            });
+          })()}
+        </div>
       </div>
     </>
   );

@@ -161,6 +161,7 @@ export default function Home() {
             shufflePrevCount={shufflePrevCount}
             setTimeRunner={setTimeRunner}
             timeRunner={timeRunner}
+            noop={noop}
             setTimeVal={setTimeVal}
             wordTime={wordTime}
             setIsToggle={setIsToggle}

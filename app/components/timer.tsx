@@ -11,6 +11,7 @@ type refNum=MutableRefObject<number>
 
 type timerprop = {
   timeVal: number;
+  noop:(x:unknown)=>void,
   timeRunner: boolean;
   setTimeVal: (x: number) => void;
   setIsToggle: (x: boolean) => void;
@@ -31,6 +32,7 @@ export default function Timer({
   setTimeVal,
   setIsToggle,
   incorrectCount,
+  noop,
   incorrectCountPrev,
   setMistake,
   setChartRaw,
@@ -43,9 +45,35 @@ export default function Timer({
   const [smallTimer, setSmallTimer] = useState(0);
   const starter = useRef<number | null>(null);
   const tickingCounter = useRef(0);
-  const buffer = useRef<number[]>([]);
+  const KalmanBuffer = useRef<number[]>([]);
+  const smoothRaw=useRef(0);
+  const rawFrame=useRef(0);
+  const KalmanRaw = useRef({
+    estimate: null as null | number,
+    error: 1,
+    noise: 0.01,
+    processNoise:1
+  }) //Kalman Ref
 
-  console.log(smallTimer);
+  noop(smallTimer); //avoiding for now
+
+  //1D Kalman Filter
+  //KALMAN FILTER is a method to filer out and smoothen statistical data
+  function KalmanFilter(val:number){ 
+    const x=KalmanRaw.current;
+    if (x.estimate===null || x.estimate===0){
+      x.estimate=val
+      return x.estimate;
+    }
+    const gained = x.error/(x.error+x.processNoise);
+    x.estimate+=(gained*(val-x.estimate));
+    x.error=(1-gained)*x.error+Math.abs(val-x.estimate)*x.noise;
+    return x.estimate;
+  }
+  //
+
+
+  
 
   // SMALL TIMER (FOR GRAPH)
   useEffect(() => {
@@ -54,36 +82,53 @@ export default function Timer({
     if (!starter.current) starter.current = performance.now(); //setting up small timer
     //perfomance.now() => is a browser provided timer more accurate than Date.now()
 
-    //Measuring Data every 1000ms(changeable)
+    //Measuring Data every 1000ms(changeable) //thas why "smallTimer"
     const interval = setInterval(() => {
       tickingCounter.current += 1;
       const typedlength = totalCount.current - previousCount.current;
       previousCount.current = totalCount.current;
-      const rawFrame = typedlength > 0 ? typedlength / 5 / (1 / 60) : 0;
+
       if (tickingCounter.current <= 1) return;
 
-      //ROLLING AVERAGE
-      //Buffer handling
-      buffer.current.unshift(rawFrame);
-      if (buffer.current.length > 5) {
-        //seek
-        buffer.current.pop();
+      let ClampedKalman=0;
+
+      if (typedlength > 0){
+        rawFrame.current= typedlength > 0 ? typedlength / 5 / (1 / 60) : 0;
+        smoothRaw.current= KalmanFilter(rawFrame.current);
+
+        //Buffer handling
+        KalmanBuffer.current.unshift(smoothRaw.current);
+        if (KalmanBuffer.current.length > 5) {
+          //seek
+          KalmanBuffer.current.pop();
+        }
+        //
+        
+      }else{
+        rawFrame.current = 0;
+        const decayed = KalmanFilter(0);
+        KalmanBuffer.current.unshift(decayed);
+        if (KalmanBuffer.current.length > 5) {
+          KalmanBuffer.current.pop();
+        }
       }
 
-      //calculation
-      const bufferLength = buffer.current.length; //length of buffer
-      const bufferSum = buffer.current.reduce((a, b) => a + b, 0); //sum of elements in buffer
-      //arr.reduce((accumulator,currentVal,currentIndex,array));
+      const averageKalman = (
+          KalmanBuffer.current.reduce((acc,val)=> acc+val,0)
+          /
+          KalmanBuffer.current.length
+        );
 
-      //Rolling average
-      const rollingAverage = (bufferSum / bufferLength).toFixed(0);
-
+      ClampedKalman = Math.min(Math.max(averageKalman,0),300);
       const elapsed = (performance.now() - (starter.current ?? 0)) / 1000;
 
       const wpm = correctCount.current / 5 / (elapsed / 60);
+      
+
+      
 
       setChartWpm((val) => [...val, Math.round(wpm)]);
-      setChartRaw((val) => [...val, Math.round((Number(rollingAverage)))]);
+      setChartRaw((val) => [...val, Math.round(ClampedKalman)]);
       
       setSmallTimer((t) => t + 1);
     }, 1000);
@@ -110,10 +155,27 @@ export default function Timer({
   useEffect(() => {
     if (timeVal === 0) {
       const raw = totalCount.current / 5 / (mode / 60);
-      const wpm = correctCount.current / 5 / (mode / 60);
+
+
+      smoothRaw.current=KalmanFilter(rawFrame.current);
+
+      KalmanBuffer.current.unshift(smoothRaw.current);
+      if (KalmanBuffer.current.length > 5) {
+        //seek
+        KalmanBuffer.current.pop();
+      }
+
+      const averageKalman = (
+        KalmanBuffer.current.reduce((acc,val)=> acc+val,0)
+        /
+        KalmanBuffer.current.length
+      );
+
+      const ClampedKalman = Math.min(Math.max(averageKalman,0),300);
+
 
       setChartRaw((val) => [...val, Math.round(raw)]);
-      setChartWpm((val) => [...val, Math.round(wpm)]);
+      setChartWpm((val) => [...val, Math.round(ClampedKalman)]);
       setMistake(val=>[...val,incorrectCount.current-incorrectCountPrev.current]);
       incorrectCountPrev.current=incorrectCount.current;
 
