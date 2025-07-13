@@ -8,23 +8,28 @@ type chartProp = {
   time: number[];
   chartWpm: Array<number>;
   chartRaw: Array<number>;
+  theme:string;
 };
 
-export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
+export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
+  const tickColor=useRef("#000");
+
+  useEffect(()=>{
+    if (theme==="light"){
+      tickColor.current="#000";
+    }else{
+      tickColor.current="#fff"
+    }
+  },[theme])
+
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    function getCssVar(name: string): string {
-      return getComputedStyle(document.documentElement)
-        .getPropertyValue(name)
-        .trim();
-    }
-    const textColor = getCssVar("--text-color");
-
+    
     // Create custom tooltip element if not already present
     let tooltipEl = tooltipRef.current;
     if (!tooltipEl) {
@@ -106,12 +111,12 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
         },
         scales: {
           x: {
-            ticks: { color: textColor, font: { size: 12 } },
+            ticks: { color: tickColor.current, font: { size: 12 } },
             grid: { display: false },
           },
           y: {
             beginAtZero: true,
-            ticks: { color: textColor, font: { size: 12 } },
+            ticks: { color: tickColor.current, font: { size: 12 } },
             grid: { display: false },
           },
         },
@@ -123,7 +128,7 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
       tooltipRef.current?.remove();
       tooltipRef.current = null;
     };
-  }, [time]);
+  }, [time,theme]);
 
   return (
     <div className={styles.mainBox}>

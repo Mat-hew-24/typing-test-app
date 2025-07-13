@@ -1,7 +1,7 @@
 "use client";
 import React, { MutableRefObject } from "react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 type Barprop = {
   changeTime: (x: number) => void;
@@ -21,6 +21,8 @@ type Barprop = {
   setChartRaw: (x: Array<number>) => void;
   setShuffleCount: React.Dispatch<React.SetStateAction<number>>;
   mode: number;
+  theme:string;
+  setTheme:(x:"light"|"dark")=>void,
   isToggle: boolean;
 };
 
@@ -43,11 +45,19 @@ export default function Bar({
   setMode,
   setWpm,
   correctCount,
+  theme,
+  setTheme,
   totalCount,
   dynoRawTime,
   setChartRaw,
   setChartWpm,
 }: Barprop) {
+
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
   function handleclick(x: number, shuffles = false) {
     setLoader(true);
     changeTime(x);
@@ -73,16 +83,10 @@ export default function Bar({
     }, 500);
   }
 
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
   return (
     <>
       <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl p-2 px-6 md:w-[500px]">
-        <div className="mr-55 ml-2 flex gap-1">
+        <div className="mr-60 ml-2 flex gap-1">
           <button
             onClick={() =>
               !isToggle ? handleclick(15, true) : handleclick(15)

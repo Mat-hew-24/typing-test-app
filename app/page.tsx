@@ -25,6 +25,8 @@ export default function Home() {
   const [accuracy, setAccuracy] = useState(0); //Accuracy calculations
   const [mode, setMode] = useState(15); //Mode of Timer
   const [wpm, setWpm] = useState(0); //WPM calculation
+  const [mistake,setMistake] = useState<number[]>([]);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   //
 
   //CHART ARRAY STATES
@@ -36,6 +38,7 @@ export default function Home() {
   const dynoRawTime = useRef(0); //I don't know sire(cleanUp Day??)
   const correctCount = useRef(0); // Correct characters typed per session
   const totalCount = useRef(0); // Total characters typed per session
+  const incorrectCount=useRef(0);
   //
 
   //TEXT OPERATIONS AND SHUFFLING
@@ -91,6 +94,8 @@ export default function Home() {
               isToggle={isToggle}
               mode={mode}
               loader={loader}
+              theme={theme}
+              setTheme={setTheme}
               changeTime={changeTime}
               setTimeVal={setTimeVal}
               setWordTime={setWordTime}
@@ -117,6 +122,7 @@ export default function Home() {
                 </div>
                 <LineChart
                   time={time}
+                  theme={theme}
                   chartRaw={chartRaw}
                   chartWpm={chartWpm}
                 />
