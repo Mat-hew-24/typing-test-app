@@ -9,29 +9,44 @@ type chartProp = {
   chartWpm: Array<number>;
   chartRaw: Array<number>;
   theme:string;
+  noop:(x:unknown)=>void;
+  mistake:Array<number>
 };
 
-export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp) {
+
+
+export default function LineChart({ time, chartRaw, chartWpm,theme,noop,mistake }: chartProp) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-
+  //CHART TICKS COLOR
   useEffect(()=>{
     
     const chartVal=chartRef.current;
-    if (!chartVal) return;
+    if (!chartVal || !chartVal.options?.scales?.x?.ticks || 
+      !chartVal.options?.scales?.y?.ticks || !chartVal.options?.scales?.y1?.ticks
+    ) return;
     
     const tickX=chartVal.options?.scales?.x?.ticks;
     const tickY=chartVal.options?.scales?.y?.ticks;
+    const tickY1=chartVal.options?.scales?.y1?.ticks;
 
-    if (tickX && tickY){
+
+    if (tickX && tickY && tickY1){
       const colorToggle = theme==="light"?"#000":"#fff";
       tickX.color=colorToggle;
       tickY.color=colorToggle;
-      chartVal.update("none");
+      tickY1.color=colorToggle;
+      try{
+        chartVal.update("none");
+      }catch{
+        console.warn("ERR");
+      }
     }
-  },[theme])
+
+  },[theme,chartRef.current]);
+  //
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -76,6 +91,21 @@ export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp)
             pointBackgroundColor: "rgba(169, 4, 254, 0.8)",
             pointBorderColor: "rgba(169, 4, 254, 0.8)",
           },
+          {
+            label: "mistake",
+            data: mistake.map((item)=>{
+              if (!item){
+                return null;
+              }
+              return item;
+            }),
+            yAxisID: "y1",
+            borderWidth: 0,
+            backgroundColor: "red",
+            pointRadius: 5,
+            pointStyle: "circle",
+            showLine: false, // only show dots
+          }
         ],
       },
       options: {
@@ -87,6 +117,7 @@ export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp)
             enabled: false, // Disable default
             external: function (context) {
               const { chart, tooltip } = context;
+              noop(chart);
               const tooltipEl = tooltipRef.current;
               if (!tooltipEl) return;
 
@@ -125,6 +156,19 @@ export default function LineChart({ time, chartRaw, chartWpm,theme }: chartProp)
             ticks: { color: theme==="light" ?"#000":"#fff", font: { size: 12 } },
             grid: { display: false },
           },
+          y1:{
+            position:"right",
+            min:0,
+            max:Math.max(...mistake)+1,
+            beginAtZero:true,
+            ticks: {
+              color: theme==="light" ?"#000":"#fff", 
+              font: { size: 12 } ,
+              callback: (value: string | number) => Number(value).toFixed(0),
+              maxTicksLimit: 5,
+            },
+            grid: { display: false },
+          }
         },
       },
     });

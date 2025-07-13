@@ -35,10 +35,11 @@ export default function Home() {
   //
 
   //running
-  const dynoRawTime = useRef(0); //I don't know sire(cleanUp Day??)
+  const dynoRawTime = useRef(0); // I don't know sire(cleanUp Day??)
   const correctCount = useRef(0); // Correct characters typed per session
   const totalCount = useRef(0); // Total characters typed per session
-  const incorrectCount=useRef(0);
+  const incorrectCount=useRef(0); // incorrect count at nth second
+  const incorrectCountPrev=useRef(0); //incorrect count at n-1th second 
   //
 
   //TEXT OPERATIONS AND SHUFFLING
@@ -49,6 +50,11 @@ export default function Home() {
       return wordList[i];
     }).join(" ");
   }
+
+  //noop function
+  const noop=(item:unknown) => {void item};
+  void (noop(1));
+  //
 
   const [targetText,setTargetText]=useState("");
   const [shuffleCount,setShuffleCount]=useState(0);
@@ -94,6 +100,7 @@ export default function Home() {
               isToggle={isToggle}
               mode={mode}
               loader={loader}
+              incorrectCountPrev={incorrectCountPrev}
               theme={theme}
               setTheme={setTheme}
               changeTime={changeTime}
@@ -107,6 +114,8 @@ export default function Home() {
               setWpm={setWpm}
               dynoRawTime={dynoRawTime}
               correctCount={correctCount}
+              incorrectCount={incorrectCount}
+              setMistake={setMistake}
               totalCount={totalCount}
               setChartRaw={setChartRaw}
               setChartWpm={setChartWpm}
@@ -121,6 +130,8 @@ export default function Home() {
                   <Results accuracy={accuracy} wpm={wpm} />
                 </div>
                 <LineChart
+                  noop={noop}
+                  mistake={mistake}
                   time={time}
                   theme={theme}
                   chartRaw={chartRaw}
@@ -142,7 +153,10 @@ export default function Home() {
       <div className="flex justify-center">
         {isToggle && isValid && !loader && (
           <TypingBox
+            incorrectCount={incorrectCount}
+            incorrectCountPrev={incorrectCountPrev}
             timeVal={timeVal}
+            setMistake={setMistake}
             shuffleFirst={shuffleFirst}
             shufflePrevCount={shufflePrevCount}
             setTimeRunner={setTimeRunner}

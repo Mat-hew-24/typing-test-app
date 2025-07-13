@@ -7,6 +7,8 @@ import {
   useRef,
 } from "react";
 
+type refNum=MutableRefObject<number>
+
 type timerprop = {
   timeVal: number;
   timeRunner: boolean;
@@ -14,10 +16,13 @@ type timerprop = {
   setIsToggle: (x: boolean) => void;
   setChartRaw: Dispatch<SetStateAction<number[]>>;
   setChartWpm: Dispatch<SetStateAction<number[]>>;
-  correctCount: MutableRefObject<number>;
-  totalCount: MutableRefObject<number>;
+  correctCount: refNum;
+  totalCount: refNum;
   mode: number;
-  previousCount: MutableRefObject<number>;
+  incorrectCountPrev:refNum;
+  previousCount: refNum;
+  incorrectCount: refNum;
+  setMistake:Dispatch<SetStateAction<number[]>>;
 };
 
 export default function Timer({
@@ -25,6 +30,9 @@ export default function Timer({
   timeRunner,
   setTimeVal,
   setIsToggle,
+  incorrectCount,
+  incorrectCountPrev,
+  setMistake,
   setChartRaw,
   setChartWpm,
   correctCount,
@@ -74,9 +82,9 @@ export default function Timer({
 
       const wpm = correctCount.current / 5 / (elapsed / 60);
 
-      setChartRaw((val) => [...val, Number(rollingAverage)]);
-      setChartWpm((val) => [...val, wpm]);
-
+      setChartWpm((val) => [...val, Math.round(wpm)]);
+      setChartRaw((val) => [...val, Math.round((Number(rollingAverage)))]);
+      
       setSmallTimer((t) => t + 1);
     }, 1000);
 
@@ -89,6 +97,9 @@ export default function Timer({
       const timeout = setTimeout(() => {
         const timing = timeVal - 1;
         setTimeVal(timing);
+        const mistakeDelta=Math.max(0,incorrectCount.current-incorrectCountPrev.current)
+        setMistake(val=>[...val,mistakeDelta]);
+        incorrectCountPrev.current=incorrectCount.current;
       }, 1000);
 
       return () => clearTimeout(timeout);
@@ -101,8 +112,10 @@ export default function Timer({
       const raw = totalCount.current / 5 / (mode / 60);
       const wpm = correctCount.current / 5 / (mode / 60);
 
-      setChartRaw((val) => [...val, raw]);
-      setChartWpm((val) => [...val, wpm]);
+      setChartRaw((val) => [...val, Math.round(raw)]);
+      setChartWpm((val) => [...val, Math.round(wpm)]);
+      setMistake(val=>[...val,incorrectCount.current-incorrectCountPrev.current]);
+      incorrectCountPrev.current=incorrectCount.current;
 
       setIsToggle(false);
     }

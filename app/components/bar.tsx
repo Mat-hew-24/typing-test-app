@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 type Barprop = {
   changeTime: (x: number) => void;
+  incorrectCountPrev:MutableRefObject<number>
   setIsToggle: (x: boolean) => void;
   setTimeVal: (x: number) => void;
   setTimeRunner: (x: boolean) => void;
@@ -17,6 +18,8 @@ type Barprop = {
   dynoRawTime: React.MutableRefObject<number>;
   correctCount: MutableRefObject<number>;
   totalCount: MutableRefObject<number>;
+  incorrectCount:MutableRefObject<number>
+  setMistake:(x:Array<number>)=>void;
   setChartWpm: (x: Array<number>) => void;
   setChartRaw: (x: Array<number>) => void;
   setShuffleCount: React.Dispatch<React.SetStateAction<number>>;
@@ -32,6 +35,9 @@ const Spinner = (
 
 export default function Bar({
   changeTime,
+  incorrectCountPrev,
+  incorrectCount,
+  setMistake,
   setIsToggle,
   setShuffleCount,
   setTimeVal,
@@ -63,6 +69,7 @@ export default function Bar({
     changeTime(x);
     setIsToggle(true);
     setWordTime([]);
+    setMistake([]);
     setTimeVal(x);
     setMode(x);
     setRaw(0);
@@ -70,6 +77,8 @@ export default function Bar({
     setChartRaw([]);
     setChartWpm([]);
     setTimeRunner(false);
+    incorrectCount.current=0;
+    incorrectCountPrev.current=0;
     dynoRawTime.current = 0;
     correctCount.current = 0;
     totalCount.current = 0;

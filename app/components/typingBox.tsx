@@ -11,42 +11,49 @@ import React, {
 import styles from "./mainPage.module.css";
 import Timer from "./timer";
 
+//custom aliasing!!
 type REFS<T> = MutableRefObject<T>;
-
-type dotdotdot<T> = Dispatch<SetStateAction<T>>; //custom aliasing!!
+type dotdotdot<T> = Dispatch<SetStateAction<T>>; 
+//
 
 type TypingBoxProp = {
-  timeVal: number;
   setTimeRunner: (x: boolean) => void;
-  timeRunner: boolean;
   setTimeVal: (x: number) => void;
   setIsToggle: (x: boolean) => void;
-  wordTime: Array<number>;
   setRaw: (x: number) => void;
   setAccuracy: (x: number) => void;
   setWpm: (x: number) => void;
   setTargetText:(x:string)=>void;
   getRandomString:(x:number)=>string;
-  mode: number;
+  wordTime: Array<number>;
   dynoRawTime: REFS<number>;
   correctCount: REFS<number>;
+  incorrectCount:REFS<number>
   totalCount: REFS<number>;
+  incorrectCountPrev:REFS<number>
+  shufflePrevCount: REFS<number>;
+  shuffleFirst:REFS<boolean>;
   setChartWpm: dotdotdot<number[]>;
   setChartRaw: dotdotdot<number[]>;
+  setMistake:dotdotdot<number[]>
   targetText:string;
+  timeRunner: boolean;
   shuffleCount:number;
-  shuffleFirst:REFS<boolean>;
-  shufflePrevCount: REFS<number>;
+  timeVal: number;
+  mode: number;
 };
 
 export default function TypingBox({
   timeVal,
   setWpm,
+  setMistake,
   shuffleFirst,
+  incorrectCount,
   shufflePrevCount,
   targetText,
   getRandomString,
   setTargetText,
+  incorrectCountPrev,
   shuffleCount,
   timeRunner,
   dynoRawTime,
@@ -141,11 +148,14 @@ export default function TypingBox({
     //Count stats
     correctCount.current = 0;
     totalCount.current = 0;
+    incorrectCount.current=0;
 
     for (let i = 0; i < value.length; i++) {
       if (value[i] !== " ") {
         if (value[i] === targetText[i]) {
           correctCount.current += 1;
+        }else{
+          incorrectCount.current+=1;
         }
         totalCount.current += 1;
       }
@@ -210,6 +220,7 @@ export default function TypingBox({
         <div className={styles.timerBox}>
           <Timer
             timeVal={timeVal}
+            incorrectCountPrev={incorrectCountPrev}
             previousCount={previousCount}
             correctCount={correctCount}
             totalCount={totalCount}
@@ -217,6 +228,8 @@ export default function TypingBox({
             timeRunner={timeRunner}
             setChartRaw={setChartRaw}
             setChartWpm={setChartWpm}
+            incorrectCount={incorrectCount}
+            setMistake={setMistake}
             mode={mode}
             setIsToggle={setIsToggle}
           />
