@@ -1,0 +1,39 @@
+.mainDiv {
+  display: flex;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+
+  color: var(--text-color);
+  font-family: var(--font-geist-mono);
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center center;
+
+  padding: 10px;
+  gap: 5px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  background-color: var(--text-color);
+  mask: url("/euro.png") no-repeat center;
+  -webkit-mask: url("/euro.png") no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+.subLogo {
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+
+  background-color: var(--text-color);
+  mask: url("https://cdn.jsdelivr.net/npm/simple-icons@9.21.0/icons/github.svg")
+    no-repeat center;
+  -webkit-mask: url("https://cdn.jsdelivr.net/npm/simple-icons@9.21.0/icons/github.svg")
+    no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}

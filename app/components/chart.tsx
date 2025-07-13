@@ -18,6 +18,13 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    function getCssVar(name: string): string {
+      return getComputedStyle(document.documentElement)
+        .getPropertyValue(name)
+        .trim();
+    }
+    const textColor = getCssVar("--text-color");
+
     // Create custom tooltip element if not already present
     let tooltipEl = tooltipRef.current;
     if (!tooltipEl) {
@@ -38,7 +45,7 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
         datasets: [
           {
             label: "raw",
-            data: chartRaw.map((a)=>a>=0?a:0),
+            data: chartRaw.map((a) => (a >= 0 ? a : 0)),
             borderColor: "#d09f00",
             backgroundColor: "rgba(169, 4, 254, 0.1)",
             fill: false,
@@ -57,34 +64,6 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
             pointRadius: 2,
             pointBackgroundColor: "rgba(169, 4, 254, 0.8)",
             pointBorderColor: "rgba(169, 4, 254, 0.8)",
-          },
-          {
-            label: "Important Points",
-            data: [
-              null,
-              null,
-              null,
-              69,
-              null,
-              null,
-              null,
-              null,
-              null,
-              61,
-              null,
-              null,
-              null,
-              70,
-              null,
-            ],
-            borderColor: "rgba(0,0,0,0)",
-            backgroundColor: "rgba(255,0,0,0.5)",
-            pointBackgroundColor: "red",
-            pointBorderColor: "red",
-            pointRadius: 4,
-            type: "line",
-            fill: false,
-            tension: 0,
           },
         ],
       },
@@ -116,7 +95,6 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
   `;
 
               // Use tooltip.x and tooltip.y instead of caretX/Y
-              const canvasRect = chart.canvas.getBoundingClientRect();
               const mouseX = window.scrollX + tooltip.x;
               const mouseY = window.scrollY + tooltip.y;
 
@@ -128,12 +106,12 @@ export default function LineChart({ time, chartRaw, chartWpm }: chartProp) {
         },
         scales: {
           x: {
-            ticks: { color: "#333", font: { size: 12 } },
+            ticks: { color: textColor, font: { size: 12 } },
             grid: { display: false },
           },
           y: {
             beginAtZero: true,
-            ticks: { color: "#333", font: { size: 12 } },
+            ticks: { color: textColor, font: { size: 12 } },
             grid: { display: false },
           },
         },

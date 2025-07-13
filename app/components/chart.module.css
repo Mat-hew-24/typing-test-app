@@ -34,3 +34,7 @@
   opacity: 0;
   font-family: var(--font-geist-mono);
 }
+
+.cl {
+  color: var(--text-color);
+}
