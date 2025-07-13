@@ -46,7 +46,7 @@ export default function Timer({
     if (!starter.current) starter.current = performance.now(); //setting up small timer
     //perfomance.now() => is a browser provided timer more accurate than Date.now()
 
-    //Measuring Data every ms(changeable)
+    //Measuring Data every 1000ms(changeable)
     const interval = setInterval(() => {
       tickingCounter.current += 1;
       const typedlength = totalCount.current - previousCount.current;
@@ -63,8 +63,11 @@ export default function Timer({
       }
 
       //calculation
-      const bufferLength = buffer.current.length;
-      const bufferSum = buffer.current.reduce((a, b) => a + b, 0);
+      const bufferLength = buffer.current.length; //length of buffer
+      const bufferSum = buffer.current.reduce((a, b) => a + b, 0); //sum of elements in buffer
+      //arr.reduce((accumulator,currentVal,currentIndex,array));
+
+      //Rolling average
       const rollingAverage = (bufferSum / bufferLength).toFixed(0);
 
       const elapsed = (performance.now() - (starter.current ?? 0)) / 1000;

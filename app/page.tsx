@@ -25,15 +25,18 @@ export default function Home() {
   const [accuracy, setAccuracy] = useState(0); //Accuracy calculations
   const [mode, setMode] = useState(15); //Mode of Timer
   const [wpm, setWpm] = useState(0); //WPM calculation
+  //
 
   //CHART ARRAY STATES
   const [chartRaw, setChartRaw] = useState<number[]>([]);
   const [chartWpm, setChartWpm] = useState<number[]>([]);
+  //
 
   //running
-  const dynoRawTime = useRef(0); //I dont know sire
+  const dynoRawTime = useRef(0); //I don't know sire(cleanUp Day??)
   const correctCount = useRef(0); // Correct characters typed per session
   const totalCount = useRef(0); // Total characters typed per session
+  //
 
   //TEXT OPERATIONS AND SHUFFLING
   function getRandomString(len: number) {
@@ -46,6 +49,7 @@ export default function Home() {
 
   const [targetText,setTargetText]=useState("");
   const [shuffleCount,setShuffleCount]=useState(0);
+  //
   
   //Shuffle Guards
   const shuffleFirst=useRef(false);
@@ -60,6 +64,7 @@ export default function Home() {
     }
     setTime(newTime);
   }
+  //
 
   //First time loading into the site
   useEffect(() => {
@@ -72,6 +77,7 @@ export default function Home() {
       clearTimeout(timeval);
     };
   }, []);
+  //
 
   return (
     <>
