@@ -26,7 +26,9 @@ export default function LineChart({
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const img = new Image();
   img.src = "/RED-CROSS.png"; // public path or imported image src
-
+  img.width=6;
+  img.height=6;
+  img.style.textShadow="2px 2px 2px #ff0000"
   //CHART TICKS COLOR
   useEffect(() => {
     const chartVal = chartRef.current;

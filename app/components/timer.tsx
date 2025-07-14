@@ -154,7 +154,7 @@ export default function Timer({
   //SHOW CHART AND ADD LAST POINT is inserted into the graph data
   useEffect(() => {
     if (timeVal === 0) {
-      const raw = totalCount.current / 5 / (mode / 60);
+      const wpm = (correctCount.current/5)/(mode/60);
 
 
       smoothRaw.current=KalmanFilter(rawFrame.current);
@@ -175,7 +175,7 @@ export default function Timer({
 
 
       setChartRaw((val) => [...val, Math.round(ClampedKalman)]);
-      setChartWpm((val) => [...val, Math.round(raw)]);
+      setChartWpm((val) => [...val, Math.round(wpm)]);
       setMistake(val=>[...val,incorrectCount.current-incorrectCountPrev.current]);
       incorrectCountPrev.current=incorrectCount.current;
 

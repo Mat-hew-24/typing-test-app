@@ -186,14 +186,9 @@ export default function TypingBox({
     }
   }, [userInput]);
 
-  useEffect(()=>{
-    const view=innerBoxRef.current;
-    if (view) view.scrollTop=view?.scrollHeight;
-  },[])
-
   useEffect(() => {
     textareaRef.current?.focus();
-  }, []);
+  }, [userInput]);
 
   useEffect(() => {
     const activeEl = document.querySelector(
@@ -244,10 +239,10 @@ export default function TypingBox({
           />
         </div>
         <div ref={cursorRef} className={styles.customCursor} />
+        
         <div ref={innerBoxRef} className={styles.innerBox}>
           {(() => {
             let charIndex = 0;
-
             return targetWords.map((word, wordIdx) => {
               const wordWithSpace = word + " ";
               return (
@@ -287,6 +282,7 @@ export default function TypingBox({
             });
           })()}
         </div>
+
       </div>
     </>
   );

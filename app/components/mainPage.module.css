@@ -90,3 +90,8 @@
     opacity: 0.5;
   }
 }
+.innerBox {
+  background-color: aquamarine;
+  height: 5.7em;
+  overflow: hidden;
+}

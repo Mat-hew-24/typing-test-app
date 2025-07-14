@@ -94,13 +94,13 @@ export default function bottomBar({
       <div className={styles.mainBox}>
         <button
           onClick={() => (!isToggle ? handleclick(15, true) : handleclick(15))}
-          className=" mr-auto p-2 filter invert hover:invert-0 active:outline-0 w-[50px]"
+          className=" mr-auto p-2 filter cursor-pointer invert hover:invert-0 active:outline-0 w-[50px]"
         >
           <Image src="/resetbtn.png" alt="no" width={30} height={30} />
         </button>
         {!isToggle && (
           <button
-            className=" p-2 filter invert hover:invert-0 active:outline-0 w-[50px]"
+            className=" p-2 filter cursor-pointer invert hover:invert-0 active:outline-0 w-[50px]"
             onClick={() => {
               handleclick(mode);
             }}
