@@ -2,6 +2,7 @@
 import React, { MutableRefObject } from "react";
 import Image from "next/image";
 import { useEffect } from "react";
+import styles from "./bottomBar.module.css";
 
 type Barprop = {
   changeTime: (x: number) => void;
@@ -29,11 +30,9 @@ type Barprop = {
   isToggle: boolean;
 };
 
-const Spinner = (
-  <div className="w-12 h-12 m-auto border-4 border-t-transparent border-emerald-500 rounded-full animate-spin"></div>
-);
+const Spinner = <div></div>;
 
-export default function Bar({
+export default function bottomBar({
   changeTime,
   incorrectCountPrev,
   incorrectCount,
@@ -92,57 +91,23 @@ export default function Bar({
 
   return (
     <>
-      <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl p-2 px-6 md:w-[500px]">
-        <div className="mr-60 ml-2 flex gap-1">
+      <div className={styles.mainBox}>
+        <button
+          onClick={() => (!isToggle ? handleclick(15, true) : handleclick(15))}
+          className=" mr-auto p-2 filter invert hover:invert-0 active:outline-0 w-[50px]"
+        >
+          <Image src="/resetbtn.png" alt="no" width={30} height={30} />
+        </button>
+        {!isToggle && (
           <button
-            onClick={() =>
-              !isToggle ? handleclick(15, true) : handleclick(15)
-            }
-            className="barbtn"
-          >
-            15
-          </button>
-          <button
-            onClick={() =>
-              !isToggle ? handleclick(30, true) : handleclick(30)
-            }
-            className="barbtn"
-          >
-            30
-          </button>
-          <button
-            onClick={() =>
-              !isToggle ? handleclick(60, true) : handleclick(60)
-            }
-            className="barbtn"
-          >
-            60
-          </button>
-        </div>
-
-        <div className="flex gap-1">
-          {/*dark mode btn*/}
-          <button
-            className="barbtn p-1 rounded-4xl filter invert hover:invert-0 active:outline-0"
+            className=" p-2 filter invert hover:invert-0 active:outline-0 w-[50px]"
             onClick={() => {
-              setTheme(theme === "light" ? "dark" : "light");
+              handleclick(mode);
             }}
           >
-            <Image src="/dark-mode.png" alt="no" width={20} height={20} />
+            <Image src="/reload.png" alt="no" width={30} height={30} />
           </button>
-
-          {/*retry btn*/}
-          {!isToggle && (
-            <button
-              className="barbtn p-2 filter invert hover:invert-0 active:outline-0"
-              onClick={() => {
-                handleclick(mode);
-              }}
-            >
-              <Image src="/reload.png" alt="no" width={15} height={15} />
-            </button>
-          )}
-        </div>
+        )}
       </div>
 
       {loader && <div className="w-full h-full pt-30">{Spinner}</div>}

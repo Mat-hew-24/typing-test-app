@@ -1,6 +1,7 @@
 "use client";
 
 import Bar from "./components/bar";
+import BottomBar from "./components/bottomBar";
 import LineChart from "./components/chart";
 import { useState, useEffect, useRef } from "react";
 import Loading from "./loading";
@@ -25,7 +26,7 @@ export default function Home() {
   const [accuracy, setAccuracy] = useState(0); //Accuracy calculations
   const [mode, setMode] = useState(15); //Mode of Timer
   const [wpm, setWpm] = useState(0); //WPM calculation
-  const [mistake,setMistake] = useState<number[]>([]);
+  const [mistake, setMistake] = useState<number[]>([]);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   //
 
@@ -38,8 +39,8 @@ export default function Home() {
   const dynoRawTime = useRef(0); // I don't know sire(cleanUp Day??)
   const correctCount = useRef(0); // Correct characters typed per session
   const totalCount = useRef(0); // Total characters typed per session
-  const incorrectCount=useRef(0); // incorrect count at nth second
-  const incorrectCountPrev=useRef(0); //incorrect count at n-1th second 
+  const incorrectCount = useRef(0); // incorrect count at nth second
+  const incorrectCountPrev = useRef(0); //incorrect count at n-1th second
   //
 
   //TEXT OPERATIONS AND SHUFFLING
@@ -52,17 +53,19 @@ export default function Home() {
   }
 
   //noop function
-  const noop=(item:unknown) => {void item};
-  void (noop(1));
+  const noop = (item: unknown) => {
+    void item;
+  };
+  void noop(1);
   //
 
-  const [targetText,setTargetText]=useState("");
-  const [shuffleCount,setShuffleCount]=useState(0);
+  const [targetText, setTargetText] = useState("");
+  const [shuffleCount, setShuffleCount] = useState(0);
   //
-  
+
   //Shuffle Guards
-  const shuffleFirst=useRef(false);
-  const shufflePrevCount=useRef(0);
+  const shuffleFirst = useRef(false);
+  const shufflePrevCount = useRef(0);
   //
 
   //time array
@@ -139,6 +142,31 @@ export default function Home() {
                 />
               </div>
               <Statbar accuracy={accuracy} raw={raw} mode={mode} />
+              <BottomBar
+                isToggle={isToggle}
+                mode={mode}
+                loader={loader}
+                incorrectCountPrev={incorrectCountPrev}
+                theme={theme}
+                setTheme={setTheme}
+                changeTime={changeTime}
+                setTimeVal={setTimeVal}
+                setWordTime={setWordTime}
+                setIsToggle={setIsToggle}
+                setTimeRunner={setTimeRunner}
+                setLoader={setLoader}
+                setRaw={setRaw}
+                setMode={setMode}
+                setWpm={setWpm}
+                dynoRawTime={dynoRawTime}
+                correctCount={correctCount}
+                incorrectCount={incorrectCount}
+                setMistake={setMistake}
+                totalCount={totalCount}
+                setChartRaw={setChartRaw}
+                setChartWpm={setChartWpm}
+                setShuffleCount={setShuffleCount}
+              />
             </>
           )}
         </div>
