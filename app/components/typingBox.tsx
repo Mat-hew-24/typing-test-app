@@ -191,10 +191,10 @@ export default function TypingBox({
   }, [userInput]);
 
   useEffect(() => {
-    const id = requestAnimationFrame(()=>{
+    const id = requestAnimationFrame(() => {
       const activeEl = document.querySelector(
         `.${styles.activeLetter}`
-        ) as HTMLElement;
+      ) as HTMLElement;
       if (activeEl && cursorRef.current && innerBoxRef.current) {
         const rect = activeEl.getBoundingClientRect();
         const parentRect = innerBoxRef.current.getBoundingClientRect();
@@ -211,19 +211,25 @@ export default function TypingBox({
 
           // Auto-scroll logic - only scroll when cursor moves to a new line
           const elemTop = activeEl.offsetTop; // top position
-          const elemBottom =elemTop + activeEl.offsetHeight; //bottom pos = top + height of elem
-          
-          const scrollTop = innerBoxRef.current.scrollTop;
-          const boxClientHeight= innerBoxRef.current.clientHeight;
-          const viewBottom =scrollTop + boxClientHeight;
+          const elemBottom = elemTop + activeEl.offsetHeight + 45; //bottom pos = top + height of elem
 
-          if (elemBottom>viewBottom){  //When cursor is wrongly positioned
-            innerBoxRef.current.scrollTop=elemBottom-boxClientHeight;
+          const scrollTop = innerBoxRef.current.scrollTop;
+          const boxClientHeight = innerBoxRef.current.clientHeight;
+          const viewBottom = scrollTop + boxClientHeight;
+
+          if (elemBottom > viewBottom) {
+            //When cursor is wrongly positioned
+            innerBoxRef.current.scrollTop = elemBottom - boxClientHeight;
             requestAnimationFrame(() => {
               const newRect = activeEl.getBoundingClientRect();
-              const newParentRect = innerBoxRef.current?.getBoundingClientRect();
-              let newY:number;
-              if (newParentRect?.left && newParentRect.top && cursorRef.current){
+              const newParentRect =
+                innerBoxRef.current?.getBoundingClientRect();
+              let newY: number;
+              if (
+                newParentRect?.left &&
+                newParentRect.top &&
+                cursorRef.current
+              ) {
                 const newX = newRect.left - newParentRect?.left;
                 newY = newRect.top - newParentRect?.top;
                 cursorRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
@@ -231,14 +237,14 @@ export default function TypingBox({
                 lastCursorTop.current = newY;
               }
             });
-          }else {
+          } else {
             lastCursorTop.current = y;
           }
         }
       }
       return () => cancelAnimationFrame(id);
-   }) 
-  },[userInput]);
+    });
+  }, [userInput]);
 
   const handleWordBoxClick = () => {
     textareaRef.current?.focus();
