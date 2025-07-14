@@ -210,26 +210,35 @@ export default function TypingBox({
           }
 
           // Auto-scroll logic - only scroll when cursor moves to a new line
-          const currentCursorTop = y;
-          const containerHeight = innerBoxRef.current.offsetHeight;
+          const elemTop = activeEl.offsetTop; // top position
+          const elemBottom =elemTop + activeEl.offsetHeight; //bottom pos = top + height of elem
+          
           const scrollTop = innerBoxRef.current.scrollTop;
+          const boxClientHeight= innerBoxRef.current.clientHeight;
+          const viewBottom =scrollTop + boxClientHeight;
 
-          // Calculate the cursor position relative to the scrolled container
-          const cursorRelativeTop = currentCursorTop + scrollTop;
-
-          // Check if cursor moved to a new line (moved down by approximately line height)
-          if (currentCursorTop > containerHeight - lineHeight.current) {
-            // Scroll to bring the current line to the top
-            innerBoxRef.current.scrollTop =
-              cursorRelativeTop - lineHeight.current;
+          if (elemBottom>viewBottom){  //When cursor is wrongly positioned
+            innerBoxRef.current.scrollTop=elemBottom-boxClientHeight;
+            requestAnimationFrame(() => {
+              const newRect = activeEl.getBoundingClientRect();
+              const newParentRect = innerBoxRef.current?.getBoundingClientRect();
+              let newY:number;
+              if (newParentRect?.left && newParentRect.top && cursorRef.current){
+                const newX = newRect.left - newParentRect?.left;
+                newY = newRect.top - newParentRect?.top;
+                cursorRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
+                cursorRef.current.style.height = `${newRect.height}px`;
+                lastCursorTop.current = newY;
+              }
+            });
+          }else {
+            lastCursorTop.current = y;
           }
-
-          lastCursorTop.current = y;
         }
       }
-    })
-    return () => cancelAnimationFrame(id);
-  }, [userInput]);
+      return () => cancelAnimationFrame(id);
+   }) 
+  },[userInput]);
 
   const handleWordBoxClick = () => {
     textareaRef.current?.focus();
