@@ -8,49 +8,57 @@ type chartProp = {
   time: number[];
   chartWpm: Array<number>;
   chartRaw: Array<number>;
-  theme:string;
-  noop:(x:unknown)=>void;
-  mistake:Array<number>
+  theme: string;
+  noop: (x: unknown) => void;
+  mistake: Array<number>;
 };
 
-
-
-export default function LineChart({ time, chartRaw, chartWpm,theme,noop,mistake }: chartProp) {
+export default function LineChart({
+  time,
+  chartRaw,
+  chartWpm,
+  theme,
+  noop,
+  mistake,
+}: chartProp) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const img = new Image();
+  img.src = "/RED-CROSS.png"; // public path or imported image src
 
   //CHART TICKS COLOR
-  useEffect(()=>{
-    
-    const chartVal=chartRef.current;
-    if (!chartVal || !chartVal.options?.scales?.x?.ticks || 
-      !chartVal.options?.scales?.y?.ticks || !chartVal.options?.scales?.y1?.ticks
-    ) return;
-    
-    const tickX=chartVal.options?.scales?.x?.ticks;
-    const tickY=chartVal.options?.scales?.y?.ticks;
-    const tickY1=chartVal.options?.scales?.y1?.ticks;
+  useEffect(() => {
+    const chartVal = chartRef.current;
+    if (
+      !chartVal ||
+      !chartVal.options?.scales?.x?.ticks ||
+      !chartVal.options?.scales?.y?.ticks ||
+      !chartVal.options?.scales?.y1?.ticks
+    )
+      return;
 
+    const tickX = chartVal.options?.scales?.x?.ticks;
+    const tickY = chartVal.options?.scales?.y?.ticks;
+    const tickY1 = chartVal.options?.scales?.y1?.ticks;
 
-    if (tickX && tickY && tickY1){
-      const colorToggle = theme==="light"?"#000":"#fff";
-      tickX.color=colorToggle;
-      tickY.color=colorToggle;
-      tickY1.color=colorToggle;
-      try{
+    if (tickX && tickY && tickY1) {
+      const colorToggle = theme === "light" ? "#000" : "#fff";
+      tickX.color = colorToggle;
+      tickY.color = colorToggle;
+      tickY1.color = colorToggle;
+      try {
         chartVal.update("none");
-      }catch{
+      } catch {
         console.warn("ERR");
       }
     }
-
-  },[theme,chartRef.current]);
+  }, [theme, chartRef.current]);
   //
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    
+
     // Create custom tooltip element if not already present
     let tooltipEl = tooltipRef.current;
     if (!tooltipEl) {
@@ -93,19 +101,14 @@ export default function LineChart({ time, chartRaw, chartWpm,theme,noop,mistake 
           },
           {
             label: "mistake",
-            data: mistake.map((item)=>{
-              if (!item){
-                return null;
-              }
-              return item;
-            }),
+            data: mistake.map((item) => (item ? item : null)),
             yAxisID: "y1",
-            borderWidth: 0,
-            backgroundColor: "red",
-            pointRadius: 5,
-            pointStyle: "circle",
-            showLine: false, // only show dots
-          }
+            showLine: false,
+            pointRadius: 0.1,
+            pointStyle: img, // 👈 image here
+            pointBackgroundColor: "transparent", // optional
+            pointBorderColor: "transparent", // optional
+          },
         ],
       },
       options: {
@@ -148,31 +151,33 @@ export default function LineChart({ time, chartRaw, chartWpm,theme,noop,mistake 
         },
         scales: {
           x: {
-            ticks: { color: theme==="light" ?"#000":"#fff",
-              font: { size: 12 }, 
+            ticks: {
+              color: theme === "light" ? "#000" : "#fff",
+              font: { size: 12 },
             },
             grid: { display: false },
           },
           y: {
             beginAtZero: true,
-            ticks: { color: theme==="light" ?"#000":"#fff",
-              font: { size: 12 }, 
+            ticks: {
+              color: theme === "light" ? "#000" : "#fff",
+              font: { size: 12 },
             },
             grid: { display: false },
           },
-          y1:{
-            position:"right",
-            min:0,
-            max:Math.max(...mistake)+1,
-            beginAtZero:true,
+          y1: {
+            position: "right",
+            min: 0,
+            max: Math.max(...mistake) + 1,
+            beginAtZero: true,
             ticks: {
-              color: theme==="light" ?"#000":"#fff", 
-              font: { size: 12 } ,
+              color: theme === "light" ? "#000" : "#fff",
+              font: { size: 12 },
               callback: (value: string | number) => Number(value).toFixed(0),
               maxTicksLimit: 5,
             },
             grid: { display: false },
-          }
+          },
         },
       },
     });
