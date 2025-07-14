@@ -231,7 +231,7 @@ export default function TypingBox({
                 lastCursorTop.current = newY;
               }
             });
-          }else {
+          }else { //if Cursor in correct position
             lastCursorTop.current = y;
           }
         }
