@@ -42,6 +42,11 @@
   margin-right: 8px;
   white-space: nowrap; /* keep word together */
 }
+.word {
+  display: inline-block;
+  margin-right: 0; /* Remove if you have spacing issues */
+  line-height: 1.5; /* Add consistent line height */
+}
 
 .letter {
   display: inline;
@@ -70,8 +75,8 @@
 
 .customCursor {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 45px;
+  left: 15px;
   width: 4px;
   height: 20px;
   background-color: purple;
@@ -95,3 +100,20 @@
   height: 5.7em;
   overflow: hidden;
 }
+/* Add these properties to your .innerBox class */
+.innerBox {
+  overflow-y: auto;
+  max-height: 300px; /* Adjust based on your design */
+  scroll-behavior: auto; /* Changed from smooth to auto for more precise control */
+  /* Hide scrollbar for cleaner look */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  position: relative; /* Added for better positioning */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.innerBox::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure words wrap properly */

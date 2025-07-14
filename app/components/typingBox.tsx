@@ -13,7 +13,7 @@ import Timer from "./timer";
 
 //custom aliasing!!
 type REFS<T> = MutableRefObject<T>;
-type dotdotdot<T> = Dispatch<SetStateAction<T>>; 
+type dotdotdot<T> = Dispatch<SetStateAction<T>>;
 //
 
 type TypingBoxProp = {
@@ -21,25 +21,25 @@ type TypingBoxProp = {
   setTimeVal: (x: number) => void;
   setIsToggle: (x: boolean) => void;
   setRaw: (x: number) => void;
-  noop:(x:unknown)=>void,
+  noop: (x: unknown) => void;
   setAccuracy: (x: number) => void;
   setWpm: (x: number) => void;
-  setTargetText:(x:string)=>void;
-  getRandomString:(x:number)=>string;
+  setTargetText: (x: string) => void;
+  getRandomString: (x: number) => string;
   wordTime: Array<number>;
   dynoRawTime: REFS<number>;
   correctCount: REFS<number>;
-  incorrectCount:REFS<number>
+  incorrectCount: REFS<number>;
   totalCount: REFS<number>;
-  incorrectCountPrev:REFS<number>
+  incorrectCountPrev: REFS<number>;
   shufflePrevCount: REFS<number>;
-  shuffleFirst:REFS<boolean>;
+  shuffleFirst: REFS<boolean>;
   setChartWpm: dotdotdot<number[]>;
   setChartRaw: dotdotdot<number[]>;
-  setMistake:dotdotdot<number[]>
-  targetText:string;
+  setMistake: dotdotdot<number[]>;
+  targetText: string;
   timeRunner: boolean;
-  shuffleCount:number;
+  shuffleCount: number;
   timeVal: number;
   mode: number;
 };
@@ -75,23 +75,25 @@ export default function TypingBox({
   const wordStartTime = useRef<number | null>(null);
   const previousCount = useRef(0);
   const currentWordIndex = useRef(0);
+  const lastCursorTop = useRef(0);
+  const lineHeight = useRef(0);
 
   const flatInput = [...userInput];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const innerBoxRef = useRef<HTMLDivElement>(null);
 
-  useEffect(()=>{
-    if (!shuffleFirst.current){
-      shuffleFirst.current=true;
-      setTargetText(getRandomString(30));
+  useEffect(() => {
+    if (!shuffleFirst.current) {
+      shuffleFirst.current = true;
+      setTargetText(getRandomString(100));
       return;
     }
-    if (shufflePrevCount.current!=shuffleCount){
-      shufflePrevCount.current=shuffleCount;
-      setTargetText(getRandomString(30));
+    if (shufflePrevCount.current != shuffleCount) {
+      shufflePrevCount.current = shuffleCount;
+      setTargetText(getRandomString(100));
     }
-  },[shuffleCount]);
+  }, [shuffleCount]);
 
   const targetWords = targetText.split(" ");
 
@@ -151,14 +153,14 @@ export default function TypingBox({
     //Count stats
     correctCount.current = 0;
     totalCount.current = 0;
-    incorrectCount.current=0;
+    incorrectCount.current = 0;
 
     for (let i = 0; i < value.length; i++) {
       if (value[i] !== " ") {
         if (value[i] === targetText[i]) {
           correctCount.current += 1;
-        }else{
-          incorrectCount.current+=1;
+        } else {
+          incorrectCount.current += 1;
         }
         totalCount.current += 1;
       }
@@ -194,14 +196,36 @@ export default function TypingBox({
     const activeEl = document.querySelector(
       `.${styles.activeLetter}`
     ) as HTMLElement;
-    if (activeEl && cursorRef.current) {
+    if (activeEl && cursorRef.current && innerBoxRef.current) {
       const rect = activeEl.getBoundingClientRect();
-      const parentRect = activeEl.offsetParent?.getBoundingClientRect();
+      const parentRect = innerBoxRef.current.getBoundingClientRect();
       if (rect && parentRect) {
         const x = rect.left - parentRect.left;
-        const y = rect.top - parentRect.top;
+        const y = rect.top - parentRect.top - 10;
         cursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
         cursorRef.current.style.height = `${rect.height}px`;
+
+        // Set line height on first render
+        if (lineHeight.current === 0) {
+          lineHeight.current = rect.height;
+        }
+
+        // Auto-scroll logic - only scroll when cursor moves to a new line
+        const currentCursorTop = y;
+        const containerHeight = innerBoxRef.current.offsetHeight;
+        const scrollTop = innerBoxRef.current.scrollTop;
+
+        // Calculate the cursor position relative to the scrolled container
+        const cursorRelativeTop = currentCursorTop + scrollTop;
+
+        // Check if cursor moved to a new line (moved down by approximately line height)
+        if (currentCursorTop > containerHeight - lineHeight.current) {
+          // Scroll to bring the current line to the top
+          innerBoxRef.current.scrollTop =
+            cursorRelativeTop - lineHeight.current;
+        }
+
+        lastCursorTop.current = currentCursorTop;
       }
     }
   }, [userInput]);
@@ -239,7 +263,7 @@ export default function TypingBox({
           />
         </div>
         <div ref={cursorRef} className={styles.customCursor} />
-        
+
         <div ref={innerBoxRef} className={styles.innerBox}>
           {(() => {
             let charIndex = 0;
@@ -282,7 +306,6 @@ export default function TypingBox({
             });
           })()}
         </div>
-
       </div>
     </>
   );
