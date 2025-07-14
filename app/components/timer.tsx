@@ -174,8 +174,8 @@ export default function Timer({
       const ClampedKalman = Math.min(Math.max(averageKalman,0),300);
 
 
-      setChartRaw((val) => [...val, Math.round(raw)]);
-      setChartWpm((val) => [...val, Math.round(ClampedKalman)]);
+      setChartRaw((val) => [...val, Math.round(ClampedKalman)]);
+      setChartWpm((val) => [...val, Math.round(raw)]);
       setMistake(val=>[...val,incorrectCount.current-incorrectCountPrev.current]);
       incorrectCountPrev.current=incorrectCount.current;
 
