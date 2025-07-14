@@ -116,7 +116,6 @@ export default function TypingBox({
     if (value.length < prevLength && value.length < wordStart) {
       return;
     }
-
     //Start timing word
     if (
       value.length === 1 ||
@@ -147,7 +146,6 @@ export default function TypingBox({
       //Move to next word
       currentWordIndex.current++;
     }
-
     setUserInput(value);
 
     //Count stats
@@ -193,41 +191,44 @@ export default function TypingBox({
   }, [userInput]);
 
   useEffect(() => {
-    const activeEl = document.querySelector(
-      `.${styles.activeLetter}`
-    ) as HTMLElement;
-    if (activeEl && cursorRef.current && innerBoxRef.current) {
-      const rect = activeEl.getBoundingClientRect();
-      const parentRect = innerBoxRef.current.getBoundingClientRect();
-      if (rect && parentRect) {
-        const x = rect.left - parentRect.left;
-        const y = rect.top - parentRect.top - 10;
-        cursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
-        cursorRef.current.style.height = `${rect.height}px`;
+    const id = requestAnimationFrame(()=>{
+      const activeEl = document.querySelector(
+        `.${styles.activeLetter}`
+        ) as HTMLElement;
+      if (activeEl && cursorRef.current && innerBoxRef.current) {
+        const rect = activeEl.getBoundingClientRect();
+        const parentRect = innerBoxRef.current.getBoundingClientRect();
+        if (rect && parentRect) {
+          const x = rect.left - parentRect.left;
+          const y = rect.top - parentRect.top;
+          cursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
+          cursorRef.current.style.height = `${rect.height}px`;
 
-        // Set line height on first render
-        if (lineHeight.current === 0) {
-          lineHeight.current = rect.height;
+          // Set line height on first render
+          if (lineHeight.current === 0) {
+            lineHeight.current = rect.height;
+          }
+
+          // Auto-scroll logic - only scroll when cursor moves to a new line
+          const currentCursorTop = y;
+          const containerHeight = innerBoxRef.current.offsetHeight;
+          const scrollTop = innerBoxRef.current.scrollTop;
+
+          // Calculate the cursor position relative to the scrolled container
+          const cursorRelativeTop = currentCursorTop + scrollTop;
+
+          // Check if cursor moved to a new line (moved down by approximately line height)
+          if (currentCursorTop > containerHeight - lineHeight.current) {
+            // Scroll to bring the current line to the top
+            innerBoxRef.current.scrollTop =
+              cursorRelativeTop - lineHeight.current;
+          }
+
+          lastCursorTop.current = y;
         }
-
-        // Auto-scroll logic - only scroll when cursor moves to a new line
-        const currentCursorTop = y;
-        const containerHeight = innerBoxRef.current.offsetHeight;
-        const scrollTop = innerBoxRef.current.scrollTop;
-
-        // Calculate the cursor position relative to the scrolled container
-        const cursorRelativeTop = currentCursorTop + scrollTop;
-
-        // Check if cursor moved to a new line (moved down by approximately line height)
-        if (currentCursorTop > containerHeight - lineHeight.current) {
-          // Scroll to bring the current line to the top
-          innerBoxRef.current.scrollTop =
-            cursorRelativeTop - lineHeight.current;
-        }
-
-        lastCursorTop.current = currentCursorTop;
       }
-    }
+    })
+    return () => cancelAnimationFrame(id);
   }, [userInput]);
 
   const handleWordBoxClick = () => {
