@@ -126,6 +126,7 @@ export default function Bar({
             className="barbtn p-1 rounded-4xl filter invert hover:invert-0 active:outline-0"
             onClick={() => {
               setTheme(theme === "light" ? "dark" : "light");
+              document.documentElement.style.setProperty("--cursor-color",theme==="light"?"#ff0":"#770077");
             }}
           >
             <Image src="/dark-mode.png" alt="no" width={20} height={20} />

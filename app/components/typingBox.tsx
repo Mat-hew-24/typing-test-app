@@ -86,12 +86,12 @@ export default function TypingBox({
   useEffect(() => {
     if (!shuffleFirst.current) {
       shuffleFirst.current = true;
-      setTargetText(getRandomString(100));
+      setTargetText(getRandomString(1000));
       return;
     }
     if (shufflePrevCount.current != shuffleCount) {
       shufflePrevCount.current = shuffleCount;
-      setTargetText(getRandomString(100));
+      setTargetText(getRandomString(1000));
     }
   }, [shuffleCount]);
 
@@ -109,6 +109,10 @@ export default function TypingBox({
     let value = e.target.value;
     const lastChar = value[value.length - 1];
     const prevLength = userInput.length;
+
+    if (value.length===1){
+      document.documentElement.style.setProperty("--blinker","1");
+    }
 
     const wordStart = getCurrentWordStart();
 

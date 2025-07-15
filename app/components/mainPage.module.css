@@ -79,10 +79,10 @@
   left: 15px;
   width: 4px;
   height: 20px;
-  background-color: purple;
+  background-color: var(--cursor-color);
   border-radius: 15px;
   animation: blink 1s ease-in-out infinite;
-  transition: transform 0.12s ease, height 0.12s ease;
+  transition: transform 0.12s ease;
   z-index: 1;
 }
 
@@ -92,7 +92,7 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: var(--blinker);
   }
 }
 .innerBox {

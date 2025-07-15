@@ -17,6 +17,8 @@ body {
   --text-color: #000000;
   --box-color: #ffffff;
   --timer-color: #101112;
+  --cursor-color: #770077;
+  --blinker: 0;
 }
 
 [data-theme="dark"] {
