@@ -10,6 +10,7 @@ type Barprop = {
   setTimeVal: (x: number) => void;
   setTimeRunner: (x: boolean) => void;
   setLoader: (x: boolean) => void;
+  setConsistency: (x:number)=>void;
   loader: boolean;
   setWordTime: (x: Array<number>) => void;
   setRaw: (x: number) => void;
@@ -37,6 +38,7 @@ export default function Bar({
   changeTime,
   incorrectCountPrev,
   incorrectCount,
+  setConsistency,
   setMistake,
   setIsToggle,
   setShuffleCount,
@@ -70,6 +72,7 @@ export default function Bar({
     setMistake([]);
     setTimeVal(x);
     setMode(x);
+    setConsistency(0);
     setRaw(0);
     setWpm(0);
     setChartRaw([]);

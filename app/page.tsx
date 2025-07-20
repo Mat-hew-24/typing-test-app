@@ -28,6 +28,7 @@ export default function Home() {
   const [wpm, setWpm] = useState(0); //WPM calculation
   const [mistake, setMistake] = useState<number[]>([]);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [consistency,setConsistency] = useState(0);
   //
 
   //CHART ARRAY STATES
@@ -104,6 +105,7 @@ export default function Home() {
               mode={mode}
               loader={loader}
               incorrectCountPrev={incorrectCountPrev}
+              setConsistency={setConsistency}
               theme={theme}
               setTheme={setTheme}
               changeTime={changeTime}
@@ -141,7 +143,7 @@ export default function Home() {
                   chartWpm={chartWpm}
                 />
               </div>
-              <Statbar accuracy={accuracy} raw={raw} mode={mode} />
+              <Statbar accuracy={accuracy} raw={raw} mode={mode} consistency={consistency}/>
               <BottomBar
                 isToggle={isToggle}
                 mode={mode}
@@ -186,7 +188,9 @@ export default function Home() {
             timeVal={timeVal}
             setMistake={setMistake}
             shuffleFirst={shuffleFirst}
+            chartRaw={chartRaw}
             shufflePrevCount={shufflePrevCount}
+            setConsistency={setConsistency}
             setTimeRunner={setTimeRunner}
             timeRunner={timeRunner}
             noop={noop}

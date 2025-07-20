@@ -13,6 +13,7 @@ type timerprop = {
   timeVal: number;
   noop:(x:unknown)=>void,
   timeRunner: boolean;
+  chartRaw: Array<number>;
   setTimeVal: (x: number) => void;
   setIsToggle: (x: boolean) => void;
   setChartRaw: Dispatch<SetStateAction<number[]>>;
@@ -23,6 +24,7 @@ type timerprop = {
   incorrectCountPrev:refNum;
   previousCount: refNum;
   incorrectCount: refNum;
+  setConsistency: (x:number)=>void;
   setMistake:Dispatch<SetStateAction<number[]>>;
 };
 
@@ -31,6 +33,8 @@ export default function Timer({
   timeRunner,
   setTimeVal,
   setIsToggle,
+  setConsistency,
+  chartRaw,
   incorrectCount,
   noop,
   incorrectCountPrev,
@@ -72,8 +76,18 @@ export default function Timer({
   }
   //
 
+  //Measuring Consistency
 
-  
+  //STANDARD DEVIATION
+  function SD(val:Array<number>){
+    const mean = val.reduce((a,b)=>a+b,0)/val.length; //mean
+    const variance = val.reduce((a,b)=> a + Math.pow(b-mean,2),0)/val.length; //variance
+    return Math.sqrt(variance);  
+  }
+
+  //MEAN
+  const Mean = (val:Array<number>) => val.reduce((a,b)=>a+b,0)/val.length;
+ 
 
   // SMALL TIMER (FOR GRAPH)
   useEffect(() => {
@@ -124,9 +138,6 @@ export default function Timer({
 
       const wpm = correctCount.current / 5 / (elapsed / 60);
       
-
-      
-
       setChartWpm((val) => [...val, Math.round(wpm)]);
       setChartRaw((val) => [...val, Math.round(ClampedKalman)]);
       
@@ -155,6 +166,9 @@ export default function Timer({
   useEffect(() => {
     if (timeVal === 0) {
       const wpm = (correctCount.current/5)/(mode/60);
+
+      const consistencyValue=100-(SD(chartRaw)/Mean(chartRaw))*100;
+      setConsistency(consistencyValue);
 
 
       smoothRaw.current=KalmanFilter(rawFrame.current);

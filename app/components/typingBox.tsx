@@ -26,8 +26,10 @@ type TypingBoxProp = {
   setWpm: (x: number) => void;
   setTargetText: (x: string) => void;
   getRandomString: (x: number) => string;
+  setConsistency: (x:number)=>void;
   wordTime: Array<number>;
   dynoRawTime: REFS<number>;
+  chartRaw:Array<number>
   correctCount: REFS<number>;
   incorrectCount: REFS<number>;
   totalCount: REFS<number>;
@@ -50,9 +52,11 @@ export default function TypingBox({
   setMistake,
   shuffleFirst,
   incorrectCount,
+  chartRaw,
   shufflePrevCount,
   targetText,
   getRandomString,
+  setConsistency,
   setTargetText,
   incorrectCountPrev,
   shuffleCount,
@@ -267,6 +271,8 @@ export default function TypingBox({
         <div className={styles.timerBox}>
           <Timer
             noop={noop}
+            chartRaw={chartRaw}
+            setConsistency={setConsistency}
             timeVal={timeVal}
             incorrectCountPrev={incorrectCountPrev}
             previousCount={previousCount}
