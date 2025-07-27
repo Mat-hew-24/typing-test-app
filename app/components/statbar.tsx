@@ -17,7 +17,7 @@ export default function Statbar({ raw, accuracy, mode,consistency }: Statbarprop
       </div>
       <div>
         consistency
-        <div>{consistency.toFixed(0)}</div>
+        <div>{consistency.toFixed(0)}%</div>
       </div>
     </div>
   );
