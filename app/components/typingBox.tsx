@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import styles from "./mainPage.module.css";
 import Timer from "./timer";
+import WordGrid from "./wordGrid";
 
 //custom aliasing!!
 type REFS<T> = MutableRefObject<T>;
@@ -46,62 +47,6 @@ type TypingBoxProp = {
   mode: number;
 };
 
-const WordRenderer = React.memo(function WordRenderer({
-  targetWords,
-  userInput,
-}: {
-  targetWords: string[];
-  userInput: string;
-}) {
-  let charIndex = 0;
-  const flatInput = [...userInput];
-
-  return (
-    <>
-      {targetWords.map((word, wordIdx) => {
-        const wordWithSpace = word + " ";
-        return (
-          <div key={`word-${wordIdx}`} className={styles.word}>
-            {[...wordWithSpace].map((letter, letterIdx) => {
-              const currentInput = flatInput[charIndex];
-              let letterClass = styles.letter;
-
-              if (currentInput !== undefined) {
-                if (currentInput === letter) {
-                  letterClass += " " + styles.correct;
-                } else {
-                  letterClass += " " + styles.incorrect;
-                }
-              }
-
-              if (charIndex === userInput.length) {
-                letterClass += " " + styles.activeLetter;
-              }
-
-              const span = (
-                <span
-                  key={`${wordIdx}-${letterIdx}`}
-                  className={`${letterClass} ${
-                    letter === " " ? styles.space : ""
-                  }`}
-                >
-                  {letter === " " ? "\u00A0" : letter}
-                </span>
-              );
-
-              charIndex++;
-              return span;
-            })}
-          </div>
-        );
-      })}
-    </>
-  );
-}, (prevProps, nextProps) => {
-  // Custom comparison to prevent unnecessary re-renders
-  return prevProps.userInput === nextProps.userInput && 
-         prevProps.targetWords.length === nextProps.targetWords.length;
-});
 
 
 export default function TypingBox({
@@ -359,7 +304,7 @@ export default function TypingBox({
         
 
         <div ref={innerBoxRef} className={styles.innerBox}>
-          <WordRenderer targetWords={targetWords} userInput={userInput}/>
+          <WordGrid targetText={targetText} userInput={userInput}></WordGrid>
         </div>
       </div>
     </>
