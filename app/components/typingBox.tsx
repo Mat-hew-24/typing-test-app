@@ -139,7 +139,6 @@ export default function TypingBox({
   const currentWordIndex = useRef(0);
   const lastCursorTop = useRef(0);
   const lineHeight = useRef(0);
-  const lastStatsUpdate = useRef(0);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -214,20 +213,19 @@ export default function TypingBox({
       currentWordIndex.current++;
     }
     setUserInput(value);
+  };
 
-    // Throttle stats updates to reduce lag
-    const now = Date.now();
-    if (now - lastStatsUpdate.current > 16) { // ~60fps
-      lastStatsUpdate.current = now;
-      
-      // Count stats immediately without setTimeout
-      correctCount.current = 0;
+  useEffect(()=>{
+    if (!userInput){
+      return;
+    }
+    correctCount.current = 0;
       totalCount.current = 0;
       incorrectCount.current = 0;
 
-      for (let i = 0; i < value.length; i++) {
-        if (value[i] !== " ") {
-          if (value[i] === targetText[i]) {
+      for (let i = 0; i < userInput.length; i++) {
+        if (userInput[i] !== " ") {
+          if (userInput[i] === targetText[i]) {
             correctCount.current += 1;
           } else {
             incorrectCount.current += 1;
@@ -237,7 +235,7 @@ export default function TypingBox({
       }
 
       //ACCURACY
-      if (value.length) {
+      if (userInput.length) {
         setAccuracy((correctCount.current / totalCount.current) * 100);
       }
 
@@ -249,8 +247,7 @@ export default function TypingBox({
       //Raw
       const wordsRawTyped = totalCount.current / 5;
       setRaw(wordsRawTyped / elapsed);
-    }
-  };
+  },[userInput])
 
   useEffect(() => {
     if (userInput) setTimeRunner(true);
