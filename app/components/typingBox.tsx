@@ -185,7 +185,7 @@ export default function TypingBox({
       }
 
       //Wpm
-      const elapsed = mode / 60;
+      const elapsed = (mode-timeVal) / 60;
       const wordsTyped = correctCount.current / 5;
       setWpm(wordsTyped / elapsed);
 

@@ -9,7 +9,7 @@ type WordGridProp = {
 const WordGrid = React.memo(({ targetText, userInput }: WordGridProp) => {
   WordGrid.displayName = "WordGrid";
   const words = targetText.split(" ");
-  const flatInput = userInput.split("");
+  const flatInput = [...userInput];
   let globalCharIndex = 0;
 
   return (
