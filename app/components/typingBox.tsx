@@ -99,8 +99,11 @@ const WordRenderer = React.memo(function WordRenderer({
   );
 }, (prevProps, nextProps) => {
   // Custom comparison to prevent unnecessary re-renders
-  return prevProps.userInput === nextProps.userInput && 
-         prevProps.targetWords.length === nextProps.targetWords.length;
+  return (
+  prevProps.userInput === nextProps.userInput &&
+  prevProps.targetWords.join(" ") === nextProps.targetWords.join(" ")
+);
+
 });
 
 
@@ -210,7 +213,7 @@ export default function TypingBox({
       }
 
       //Move to next word
-      currentWordIndex.current++;
+      currentWordIndex.current+=1;
     }
     setUserInput(value);
   };
@@ -224,7 +227,6 @@ export default function TypingBox({
       incorrectCount.current = 0;
 
       for (let i = 0; i < userInput.length; i++) {
-        if (userInput[i] !== " ") {
           if (userInput[i] === targetText[i]) {
             correctCount.current += 1;
           } else {
@@ -232,7 +234,6 @@ export default function TypingBox({
           }
           totalCount.current += 1;
         }
-      }
 
       //ACCURACY
       if (userInput.length) {
