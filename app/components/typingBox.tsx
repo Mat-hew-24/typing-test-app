@@ -46,6 +46,64 @@ type TypingBoxProp = {
   mode: number;
 };
 
+const WordRenderer = React.memo(function WordRenderer({
+  targetWords,
+  userInput,
+}: {
+  targetWords: string[];
+  userInput: string;
+}) {
+  let charIndex = 0;
+  const flatInput = [...userInput];
+
+  return (
+    <>
+      {targetWords.map((word, wordIdx) => {
+        const wordWithSpace = word + " ";
+        return (
+          <div key={`word-${wordIdx}`} className={styles.word}>
+            {[...wordWithSpace].map((letter, letterIdx) => {
+              const currentInput = flatInput[charIndex];
+              let letterClass = styles.letter;
+
+              if (currentInput !== undefined) {
+                if (currentInput === letter) {
+                  letterClass += " " + styles.correct;
+                } else {
+                  letterClass += " " + styles.incorrect;
+                }
+              }
+
+              if (charIndex === userInput.length) {
+                letterClass += " " + styles.activeLetter;
+              }
+
+              const span = (
+                <span
+                  key={`${wordIdx}-${letterIdx}`}
+                  className={`${letterClass} ${
+                    letter === " " ? styles.space : ""
+                  }`}
+                >
+                  {letter === " " ? "\u00A0" : letter}
+                </span>
+              );
+
+              charIndex++;
+              return span;
+            })}
+          </div>
+        );
+      })}
+    </>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison to prevent unnecessary re-renders
+  return prevProps.userInput === nextProps.userInput && 
+         prevProps.targetWords.length === nextProps.targetWords.length;
+});
+
+
 export default function TypingBox({
   timeVal,
   setWpm,
@@ -82,7 +140,6 @@ export default function TypingBox({
   const lastCursorTop = useRef(0);
   const lineHeight = useRef(0);
 
-  const flatInput = [...userInput];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const innerBoxRef = useRef<HTMLDivElement>(null);
@@ -90,14 +147,15 @@ export default function TypingBox({
   useEffect(() => {
     if (!shuffleFirst.current) {
       shuffleFirst.current = true;
-      setTargetText(getRandomString(1000));
+      setTargetText(getRandomString(200)); // Reduced from 450 to 200
       return;
     }
     if (shufflePrevCount.current != shuffleCount) {
       shufflePrevCount.current = shuffleCount;
-      setTargetText(getRandomString(1000));
+      setTargetText(getRandomString(200)); // Reduced from 450 to 200
     }
-  }, [shuffleCount]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shuffleCount]); // Simplified dependencies for performance
 
   const targetWords = targetText.split(" ");
 
@@ -155,51 +213,57 @@ export default function TypingBox({
       currentWordIndex.current++;
     }
     setUserInput(value);
-
-    //Count stats
-    correctCount.current = 0;
-    totalCount.current = 0;
-    incorrectCount.current = 0;
-
-    for (let i = 0; i < value.length; i++) {
-      if (value[i] !== " ") {
-        if (value[i] === targetText[i]) {
-          correctCount.current += 1;
-        } else {
-          incorrectCount.current += 1;
-        }
-        totalCount.current += 1;
-      }
-    }
-
-    //ACCURACY
-    if (value.length) {
-      setAccuracy((correctCount.current / totalCount.current) * 100);
-    }
-
-    //Wpm
-    const elapsed = mode / 60;
-    const wordsTyped = correctCount.current / 5;
-    setWpm(wordsTyped / elapsed);
-
-    //Raw
-    const wordsRawTyped = totalCount.current / 5;
-    setRaw(wordsRawTyped / elapsed);
   };
+
+  useEffect(()=>{
+    if (!userInput){
+      return;
+    }
+    correctCount.current = 0;
+      totalCount.current = 0;
+      incorrectCount.current = 0;
+
+      for (let i = 0; i < userInput.length; i++) {
+        if (userInput[i] !== " ") {
+          if (userInput[i] === targetText[i]) {
+            correctCount.current += 1;
+          } else {
+            incorrectCount.current += 1;
+          }
+          totalCount.current += 1;
+        }
+      }
+
+      //ACCURACY
+      if (userInput.length) {
+        setAccuracy((correctCount.current / totalCount.current) * 100);
+      }
+
+      //Wpm
+      const elapsed = mode / 60;
+      const wordsTyped = correctCount.current / 5;
+      setWpm(wordsTyped / elapsed);
+
+      //Raw
+      const wordsRawTyped = totalCount.current / 5;
+      setRaw(wordsRawTyped / elapsed);
+  },[userInput])
 
   useEffect(() => {
     if (userInput) setTimeRunner(true);
     if (userInput.length === targetText.length) {
       console.log("Word times:", wordTime);
     }
-  }, [userInput]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInput]); // Simplified for performance
 
   useEffect(() => {
+    // Focus only once on mount
     textareaRef.current?.focus();
-  }, [userInput]);
+  }, []);
 
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
+  useEffect(() => { //CURSOR TRANSLATION OVER LINES
+    const updateCursor = () => {
       const activeEl = document.querySelector(
         `.${styles.activeLetter}`
       ) as HTMLElement;
@@ -232,26 +296,28 @@ export default function TypingBox({
               const newRect = activeEl.getBoundingClientRect();
               const newParentRect =
                 innerBoxRef.current?.getBoundingClientRect();
-              let newY: number;
               if (
                 newParentRect?.left &&
                 newParentRect.top &&
                 cursorRef.current
               ) {
                 const newX = newRect.left - newParentRect?.left;
-                newY = newRect.top - newParentRect?.top;
+                const newY = newRect.top - newParentRect?.top;
                 cursorRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
                 cursorRef.current.style.height = `${newRect.height}px`;
                 lastCursorTop.current = newY;
               }
             });
-          }else { //if Cursor in correct position
+          } else { //if Cursor in correct position
             lastCursorTop.current = y;
           }
         }
       }
-      return () => cancelAnimationFrame(id);
-    });
+    };
+
+    // Use requestAnimationFrame for smooth cursor updates
+    const id = requestAnimationFrame(updateCursor);
+    return () => cancelAnimationFrame(id);
   }, [userInput]);
 
   const handleWordBoxClick = () => {
@@ -290,47 +356,10 @@ export default function TypingBox({
         </div>
         <div ref={cursorRef} className={styles.customCursor} />
 
+        
+
         <div ref={innerBoxRef} className={styles.innerBox}>
-          {(() => {
-            let charIndex = 0;
-            return targetWords.map((word, wordIdx) => {
-              const wordWithSpace = word + " ";
-              return (
-                <div key={wordIdx} className={styles.word}>
-                  {[...wordWithSpace].map((letter) => {
-                    const currentInput = flatInput[charIndex];
-                    let letterClass = styles.letter;
-
-                    if (currentInput !== undefined) {
-                      if (currentInput === letter) {
-                        letterClass += " " + styles.correct;
-                      } else {
-                        letterClass += " " + styles.incorrect;
-                      }
-                    }
-
-                    if (charIndex === userInput.length) {
-                      letterClass += " " + styles.activeLetter;
-                    }
-
-                    const span = (
-                      <span
-                        key={charIndex}
-                        className={`${letterClass} ${
-                          letter === " " ? styles.space : ""
-                        }`}
-                      >
-                        {letter === " " ? "\u00A0" : letter}
-                      </span>
-                    );
-
-                    charIndex++;
-                    return span;
-                  })}
-                </div>
-              );
-            });
-          })()}
+          <WordRenderer targetWords={targetWords} userInput={userInput} key={shuffleCount}/>
         </div>
       </div>
     </>
