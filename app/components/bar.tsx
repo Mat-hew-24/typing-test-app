@@ -143,7 +143,7 @@ export default function Bar({
                 handleclick(mode);
               }}
             >
-              <Image src="/reload.png" alt="no" width={14} height={14} />
+              <Image src="/reload.png" alt="no" width={15} height={15} />
             </button>
           )}
         </div>
