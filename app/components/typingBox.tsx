@@ -332,6 +332,17 @@ export default function TypingBox({
     textareaRef.current?.focus();
   };
 
+  useEffect(() => {
+  if (timeVal === 0 && startTime.current) {
+    const elapsedMinutes = (Date.now() - startTime.current) / 1000 / 60;
+    const wordsTyped = correctCount.current / 5;
+    setWpm(wordsTyped / elapsedMinutes);
+    const wordsRawTyped = totalCount.current / 5;
+    setRaw(wordsRawTyped / elapsedMinutes);
+  }
+}, [timeVal]);
+
+
   return (
     <>
       <div className={styles.wordBox} onClick={handleWordBoxClick}>
