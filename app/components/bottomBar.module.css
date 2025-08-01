@@ -11,6 +11,7 @@
 }
 
 .mainBox {
+  display: none;
   background-color: black; /* bg-transparent */
   box-shadow: 2px 2px 2px #000;
   display: flex; /* flex */

@@ -15,7 +15,7 @@ export default function Navbar() {
         height={25}
         className={styles.logo}
       ></Image> */}
-      <span>Typemonkey</span>
+      <span className = {styles.title} >Typemonkey</span>
       <a
         href="https://github.com/Mat-hew-24/typing-test-app"
         target="_blank"

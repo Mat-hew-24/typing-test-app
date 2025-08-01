@@ -167,7 +167,7 @@ export default function Timer({
     if (timeVal === 0) {
       const wpm = (correctCount.current/5)/(mode/60);
 
-      const consistencyValue=100-(SD(chartRaw)/Mean(chartRaw))*100;
+      const consistencyValue=Math.max(100-(SD(chartRaw)/Mean(chartRaw))*100,0);
       setConsistency(consistencyValue);
 
 

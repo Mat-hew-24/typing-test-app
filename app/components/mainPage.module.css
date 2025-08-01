@@ -25,7 +25,7 @@
   align-items: flex-start;
   width: 85%;
   min-height: 200px;
-  padding: 40px 15px 15px 15px; /* top padding for timer */
+  padding: 40px 15px 15px 15px; /*top padding for timer*/
   background: var(--box-color);
   border-radius: 16px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);

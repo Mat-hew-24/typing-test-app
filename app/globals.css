@@ -16,6 +16,7 @@ body {
   --bg-color: #b1c7cc;
   --text-color: #000000;
   --box-color: #ffffff;
+  --hover-color: #ffffff;
   --timer-color: #101112;
   --cursor-color: #770077;
   --blinker: 0;
@@ -23,13 +24,17 @@ body {
 
 body {
   font-family: var(--font-poppins) !important;
+  background: var(--bg-color);
+  color: rgb(255, 242, 100);
 }
 
 [data-theme="dark"] {
-  --bg-color: #1e3b41;
+  --bg-color: #1f1d27;
   --text-color: #ffffff;
-  --box-color: #000000;
-  --timer-color: #bfe9f4;
+  --box-color: #b856ff;
+  --hover-color: #c36fff;
+  --timer-color: #000000;
+  --cursor-color: #784bff;
 }
 
 @theme inline {
@@ -46,13 +51,6 @@ body {
   }
 }
 
-body {
-  font-family: "Poppins" !important ;
-  background: var(--bg-color);
-  color: rgb(255, 242, 100);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.barbtn {
-  @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-emerald-400 hover:text-black;
+  .barbtn {
+    @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-[var(--hover-color)] hover:text-black;
 }

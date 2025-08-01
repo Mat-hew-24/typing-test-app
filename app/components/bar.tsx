@@ -95,7 +95,7 @@ export default function Bar({
 
   return (
     <>
-      <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl p-2 px-6 md:w-[500px]">
+      <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl border-2 border-[var(--box-color)] p-2 px-6 md:w-[500px]">
         <div className="mr-60 ml-2 flex gap-1">
           <button
             onClick={() =>

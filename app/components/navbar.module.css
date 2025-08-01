@@ -37,3 +37,7 @@
   mask-size: contain;
   -webkit-mask-size: contain;
 }
+
+.title {
+  font-family: "Poppins";
+}

@@ -145,6 +145,7 @@ export default function TypingBox({
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const startTime = useRef<number | null>(null);
   const innerBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -177,6 +178,9 @@ export default function TypingBox({
 
     if (value.length===1){
       document.documentElement.style.setProperty("--blinker","1");
+      if (!startTime.current) {
+        startTime.current = Date.now();
+      }
     }
 
     const wordStart = getCurrentWordStart();
@@ -241,13 +245,16 @@ export default function TypingBox({
       }
 
       //Wpm
-      const elapsed = mode / 60;
-      const wordsTyped = correctCount.current / 5;
-      setWpm(wordsTyped / elapsed);
+      if (startTime.current) {
+      const elapsedMinutes = (Date.now() - startTime.current) / 1000 / 60;
 
-      //Raw
+      const wordsTyped = correctCount.current / 5;
+      setWpm(wordsTyped / elapsedMinutes);
+
       const wordsRawTyped = totalCount.current / 5;
-      setRaw(wordsRawTyped / elapsed);
+      setRaw(wordsRawTyped / elapsedMinutes);
+      }
+
   },[userInput])
 
   useEffect(() => {

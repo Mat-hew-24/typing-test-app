@@ -1,8 +1,14 @@
 type Statbarprop = { raw: number; accuracy: number; mode: number; consistency:number };
 
 export default function Statbar({ raw, accuracy, mode,consistency }: Statbarprop) {
+  
+  let consistencyVal=0;
+  if (isNaN(consistency)==false){
+    consistencyVal=consistency;
+  }
+  
   return (
-    <div className="text-[var(--text-color)] flex w-270 gap-[240px] pl-10 bg-amber-400 rounded-lg pt-4 pb-4 shadow-lg mt-4">
+    <div className="text-[var(--text-color)] text-xl flex w-270 text-center justify-center gap-[240px] mx-auto bg-[var(--box-color)] rounded-lg pt-4 pb-4 shadow-lg mt-4">
       <div>
         raw
         <div>{raw.toFixed(0)}</div>
@@ -17,7 +23,9 @@ export default function Statbar({ raw, accuracy, mode,consistency }: Statbarprop
       </div>
       <div>
         consistency
-        <div>{consistency.toFixed(0)}</div>
+        <div>{
+        consistencyVal.toFixed(0)
+        }%</div>
       </div>
     </div>
   );
