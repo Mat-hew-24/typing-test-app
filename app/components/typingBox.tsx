@@ -169,14 +169,12 @@ export default function TypingBox({
       incorrectCount.current = 0;
 
       for (let i = 0; i < userInput.length; i++) {
-        if (userInput[i] !== " ") {
-          if (userInput[i] === targetText[i]) {
-            correctCount.current += 1;
-          } else {
-            incorrectCount.current += 1;
-          }
-          totalCount.current += 1;
+        if (userInput[i] === targetText[i]) {
+          correctCount.current += 1;
+        } else {
+          incorrectCount.current += 1;
         }
+        totalCount.current += 1;
       }
 
       //ACCURACY

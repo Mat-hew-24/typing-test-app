@@ -95,7 +95,7 @@ export default function Bar({
 
   return (
     <>
-      <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl border-2 border-purple-600 p-2 px-6 md:w-[500px]">
+      <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl border-2 border-[var(--box-color)] p-2 px-6 md:w-[500px]">
         <div className="mr-60 ml-2 flex gap-1">
           <button
             onClick={() =>
@@ -143,7 +143,7 @@ export default function Bar({
                 handleclick(mode);
               }}
             >
-              <Image src="/reload.png" alt="no" width={15} height={15} />
+              <Image src="/reload.png" alt="no" width={14} height={14} />
             </button>
           )}
         </div>

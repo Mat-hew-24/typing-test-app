@@ -16,6 +16,7 @@ body {
   --bg-color: #b1c7cc;
   --text-color: #000000;
   --box-color: #ffffff;
+  --hover-color: #ffffff;
   --timer-color: #101112;
   --cursor-color: #770077;
   --blinker: 0;
@@ -30,8 +31,10 @@ body {
 [data-theme="dark"] {
   --bg-color: #1f1d27;
   --text-color: #ffffff;
-  --box-color: #000000;
-  --timer-color: #bfe9f4;
+  --box-color: #b856ff;
+  --hover-color: #c36fff;
+  --timer-color: #000000;
+  --cursor-color: #784bff;
 }
 
 @theme inline {
@@ -49,5 +52,5 @@ body {
 }
 
   .barbtn {
-    @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-purple-300 hover:text-black;
+    @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-[var(--hover-color)] hover:text-black;
 }

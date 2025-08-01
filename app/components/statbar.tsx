@@ -8,7 +8,7 @@ export default function Statbar({ raw, accuracy, mode,consistency }: Statbarprop
   }
   
   return (
-    <div className="text-[var(--text-color)] text-xl flex w-270 text-center justify-center gap-[240px] mx-auto bg-purple-900 rounded-lg pt-4 pb-4 shadow-lg mt-4">
+    <div className="text-[var(--text-color)] text-xl flex w-270 text-center justify-center gap-[240px] mx-auto bg-[var(--box-color)] rounded-lg pt-4 pb-4 shadow-lg mt-4">
       <div>
         raw
         <div>{raw.toFixed(0)}</div>
