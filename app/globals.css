@@ -19,6 +19,7 @@ body {
   --correct-color: #4dff00;
   --hover-color: #ffffff;
   --timer-color: #101112;
+  --result-color: #000000;
   --cursor-color: #770077;
   --blinker: 0;
 }
@@ -35,6 +36,7 @@ body {
   --box-color: #00000000;
   /* --correct-color: #43adad */
   --hover-color: #00ffd5;
+  --result-color: #00ffd5;
   --correct-color: #00ffd5;
   --timer-color: #43adad;
   --cursor-color: #784bff;
