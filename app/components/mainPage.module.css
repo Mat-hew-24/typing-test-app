@@ -5,6 +5,7 @@
 }
 
 .textBox {
+  outline: none;
   opacity: 0;
   position: absolute;
   left: 0;
@@ -18,6 +19,7 @@
   caret-color: transparent;
   cursor: default;
 }
+
 .wordBox {
   cursor: default;
   display: flex;
@@ -55,10 +57,10 @@
 }
 
 .correct {
-  color: #61e893;
+  color: var(--correct-color);
 }
 .incorrect {
-  color: #ef4444;
+  color: #ff0000;
 }
 
 .space {
@@ -70,7 +72,7 @@
   top: 10px;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .customCursor {
@@ -79,7 +81,7 @@
   left: 15px;
   width: 4px;
   height: 20px;
-  background-color: var(--cursor-color);
+  background-color: var(--timer-color);
   border-radius: 15px;
   animation: blink 1s ease-in-out infinite;
   transition: transform 0.12s ease;
