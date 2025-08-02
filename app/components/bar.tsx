@@ -136,16 +136,15 @@ export default function Bar({
           </button>
 
           {/*retry btn*/}
-          {!isToggle && (
             <button
-              className="barbtn p-2 filter invert hover:invert-0 active:outline-0"
+              className={`barbtn p-2 filter invert hover:invert-0 active:outline-0 ${
+                isToggle ? "invisible" : "visible"}`}
               onClick={() => {
                 handleclick(mode);
               }}
             >
               <Image src="/reload.png" alt="no" width={15} height={15} />
             </button>
-          )}
         </div>
       </div>
 
