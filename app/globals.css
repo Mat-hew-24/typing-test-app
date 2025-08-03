@@ -13,14 +13,14 @@ body {
 }
 
 :root {
-  --bg-color: #b1c7cc;
-  --text-color: #000000;
+  --bg-color: #f5f7fa;
+  --text-color: #4a5568;
   --box-color: #ffffff;
-  --correct-color: #4dff00;
-  --hover-color: #ffffff;
-  --timer-color: #101112;
-  --result-color: #000000;
-  --cursor-color: #770077;
+  --correct-color: #10b981;
+  --hover-color: #e2e8f0;
+  --timer-color: #2d3748;
+  --result-color: #1a202c;
+  --cursor-color: #3182ce;
   --blinker: 0;
 }
 
@@ -56,6 +56,17 @@ body {
   }
 }
 
-  .barbtn {
-    @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-[var(--hover-color)] hover:text-black;
+.barbtn {
+  @apply text-white cursor-pointer transition-transform duration-150 ease-in-out hover:scale-110 px-2 rounded-full text-sm hover:bg-[var(--hover-color)] hover:text-black;
+}
+
+/* Remove all outlines and focus rings */
+* {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }

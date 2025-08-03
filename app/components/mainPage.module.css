@@ -6,6 +6,7 @@
 
 .textBox {
   outline: none;
+  border: none;
   opacity: 0;
   position: absolute;
   left: 0;
@@ -18,6 +19,12 @@
   pointer-events: auto;
   caret-color: transparent;
   cursor: default;
+}
+
+.textBox:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .wordBox {
@@ -37,17 +44,24 @@
   color: black;
   white-space: normal;
   word-break: normal; /* prevent breaking inside words */
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
 }
 
 .word {
   display: inline-block;
   margin-right: 8px;
-  white-space: nowrap; /* keep word together */
+  white-space: nowrap;
 }
 .word {
   display: inline-block;
-  margin-right: 0; /* Remove if you have spacing issues */
-  line-height: 1.5; /* Add consistent line height */
+  margin-right: 0;
+  line-height: 1.5;
 }
 
 .letter {
