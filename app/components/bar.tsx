@@ -98,16 +98,29 @@ export default function Bar({
       <div className="bg-black flex justify-start w-[300px] mt-4 mb-12 rounded-3xl border-2 border-[var(--hover-color)] p-2 px-6 md:w-[500px]">
         <div className="mr-60 ml-2 flex gap-1">
           <button
-            onClick={() =>
-              !isToggle ? handleclick(15, true) : handleclick(15)
+            onClick={() =>{
+              if (!isToggle){
+                handleclick(15,true);
+              }else{
+                handleclick(15);
+              }
+              document.documentElement.style.setProperty("--blinker","0");
             }
+          }
             className="barbtn"
           >
             15
           </button>
           <button
             onClick={() =>
-              !isToggle ? handleclick(30, true) : handleclick(30)
+              {
+                if (!isToggle){
+                  handleclick(30,true);
+                }else{
+                  handleclick(30);
+                }
+                document.documentElement.style.setProperty("--blinker","0");
+              }
             }
             className="barbtn"
           >
@@ -115,7 +128,14 @@ export default function Bar({
           </button>
           <button
             onClick={() =>
-              !isToggle ? handleclick(60, true) : handleclick(60)
+              {
+                if (!isToggle){
+                  handleclick(60,true);
+                }else{
+                  handleclick(60);
+                }
+                document.documentElement.style.setProperty("--blinker","0");
+              }
             }
             className="barbtn"
           >
@@ -141,6 +161,7 @@ export default function Bar({
                 isToggle ? "invisible" : "visible"}`}
               onClick={() => {
                 handleclick(mode);
+                document.documentElement.style.setProperty("--blinker","0");
               }}
             >
               <Image src="/reload.png" alt="no" width={15} height={15} />

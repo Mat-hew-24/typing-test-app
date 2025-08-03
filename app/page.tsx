@@ -1,7 +1,6 @@
 "use client";
 
 import Bar from "./components/bar";
-import BottomBar from "./components/bottomBar";
 import LineChart from "./components/chart";
 import { useState, useEffect, useRef } from "react";
 import Loading from "./loading";
@@ -144,31 +143,6 @@ export default function Home() {
                 />
               </div>
               <Statbar accuracy={accuracy} raw={raw} mode={mode} consistency={consistency}/>
-              <BottomBar
-                isToggle={isToggle}
-                mode={mode}
-                loader={loader}
-                incorrectCountPrev={incorrectCountPrev}
-                theme={theme}
-                setTheme={setTheme}
-                changeTime={changeTime}
-                setTimeVal={setTimeVal}
-                setWordTime={setWordTime}
-                setIsToggle={setIsToggle}
-                setTimeRunner={setTimeRunner}
-                setLoader={setLoader}
-                setRaw={setRaw}
-                setMode={setMode}
-                setWpm={setWpm}
-                dynoRawTime={dynoRawTime}
-                correctCount={correctCount}
-                incorrectCount={incorrectCount}
-                setMistake={setMistake}
-                totalCount={totalCount}
-                setChartRaw={setChartRaw}
-                setChartWpm={setChartWpm}
-                setShuffleCount={setShuffleCount}
-              />
             </>
           )}
         </div>
