@@ -13,13 +13,15 @@ body {
 }
 
 :root {
-  --bg-color: #f5f7fa;
+  --bg-color: #ffffff;
+  --soft-blue-gradient: linear-gradient(to right, #eff6ff, #e0e7ff);
   --text-color: #4a5568;
-  --box-color: #ffffff;
+  --box-color: rgba(0, 0, 0, 0.1);
+  --border-color: rgba(0, 0, 0, 0.1);
   --correct-color: #10b981;
   --hover-color: #e2e8f0;
   --timer-color: #2d3748;
-  --result-color: #1a202c;
+  --result-color: #432dd7;
   --cursor-color: #3182ce;
   --blinker: 0;
 }
@@ -33,7 +35,8 @@ body {
 [data-theme="dark"] {
   --bg-color: #030613;
   --text-color: #213c53;
-  --box-color: #00000000;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --box-color: rgba(255, 255, 255, 0.03);
   /* --correct-color: #43adad */
   --hover-color: #00ffd5;
   --result-color: #00ffd5;

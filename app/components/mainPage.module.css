@@ -45,12 +45,13 @@
   white-space: normal;
   word-break: normal; /* prevent breaking inside words */
   backdrop-filter: blur(2px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(
+  border: 2px solid var(--border-color);
+  /* background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.03) 0%,
     rgba(255, 255, 255, 0.01) 100%
-  );
+  ); */
+  background-color: var(--box-color);
 }
 
 .word {
