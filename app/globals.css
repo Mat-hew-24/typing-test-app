@@ -15,12 +15,13 @@ body {
 :root {
   --bg-color: #f5f7fa;
   --text-color: #4a5568;
-  --box-color: #ffffff;
   --correct-color: #10b981;
   --hover-color: #e2e8f0;
   --timer-color: #2d3748;
   --result-color: #1a202c;
   --cursor-color: #3182ce;
+  --resStatBoxColor: #eeeeee;
+  --resStatTextColor: #ff0000;
   --blinker: 0;
 }
 
@@ -33,13 +34,14 @@ body {
 [data-theme="dark"] {
   --bg-color: #030613;
   --text-color: #213c53;
-  --box-color: #00000000;
   /* --correct-color: #43adad */
   --hover-color: #00ffd5;
   --result-color: #00ffd5;
   --correct-color: #00ffd5;
   --timer-color: #43adad;
   --cursor-color: #784bff;
+  --resStatBoxColor: #ff0077;
+  --resStatTextColor: #000;
 }
 
 @theme inline {
