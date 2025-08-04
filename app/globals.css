@@ -13,12 +13,13 @@ body {
 }
 
 :root {
-  --bg-color: #f5f7fa;
+  --bg-color: #ffffff;
+  --soft-blue-gradient: linear-gradient(to right, #eff6ff, #e0e7ff);
   --text-color: #4a5568;
   --correct-color: #10b981;
   --hover-color: #e2e8f0;
   --timer-color: #2d3748;
-  --result-color: #1a202c;
+  --result-color: #432dd7;
   --cursor-color: #3182ce;
   --resStatBoxColor: #eeeeee;
   --resStatTextColor: #ff0000;
