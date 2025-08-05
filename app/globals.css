@@ -21,7 +21,7 @@ body {
   --timer-color: #2d3748;
   --result-color: #432dd7;
   --cursor-color: #3182ce;
-  --border-color: #213c53;
+  --border-color: transparent;
   --resStatBoxColor: #eeeeee;
   --resStatTextColor: #000;
   --blinker: 0;
