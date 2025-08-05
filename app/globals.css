@@ -21,8 +21,9 @@ body {
   --timer-color: #2d3748;
   --result-color: #432dd7;
   --cursor-color: #3182ce;
+  --border-color: #213c53;
   --resStatBoxColor: #eeeeee;
-  --resStatTextColor: #ff0000;
+  --resStatTextColor: #000;
   --blinker: 0;
 }
 
@@ -41,8 +42,9 @@ body {
   --correct-color: #00ffd5;
   --timer-color: #43adad;
   --cursor-color: #784bff;
-  --resStatBoxColor: #ff0077;
-  --resStatTextColor: #000;
+  --border-color: #213c53;
+  --resStatBoxColor: #030613;
+  --resStatTextColor: #00ffd5;
 }
 
 @theme inline {
