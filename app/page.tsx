@@ -26,7 +26,7 @@ export default function Home() {
   const [mode, setMode] = useState(15); //Mode of Timer
   const [wpm, setWpm] = useState(0); //WPM calculation
   const [mistake, setMistake] = useState<number[]>([]);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [consistency,setConsistency] = useState(0);
   //
 

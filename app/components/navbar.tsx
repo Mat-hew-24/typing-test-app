@@ -2,20 +2,26 @@
 import Image from "next/image";
 import styles from "./navbar.module.css";
 
+function handleClick(){
+  window.location.reload();
+}
+
 //Nav optional
 
 export default function Navbar() {
   return (
     <div className={styles.mainDiv}>
-      <div className={styles.logo}></div>
-      {/* <Image
+      <div className="flex gap-2 cursor-pointer">
+        <button onClick={handleClick}  className={styles.logo}></button>
+        {/* <Image
         src="/euro.png"
         alt=""
         width={25}
         height={25}
         className={styles.logo}
-      ></Image> */}
-      <span className = {styles.title} >Typemonkey</span>
+        ></Image> */}
+        <button onClick={handleClick} className={styles.title} >Typemonkey</button>
+      </div>
       <a
         href="https://github.com/Mat-hew-24/typing-test-app"
         target="_blank"
