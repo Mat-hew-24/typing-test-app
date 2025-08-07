@@ -212,8 +212,9 @@ export default function TypingBox({
       const expectedWord = targetWords[currentWordIndex.current] || "";
 
       if (typedWord.length < expectedWord.length) {
+        // Word was skipped - replace with incorrect characters including the space
         const pad = "~".repeat(expectedWord.length - typedWord.length);
-        value = value.slice(0, value.length - 1) + pad + " "; // overwrite with incorrect padding
+        value = value.slice(0, value.length - 1) + pad + "~"; // Replace space with ~ too
       }
 
       //Move to next word
