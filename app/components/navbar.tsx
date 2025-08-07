@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import styles from "./navbar.module.css";
 
 function handleClick(){
