@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import React, {
   useEffect,
@@ -7,105 +7,106 @@ import React, {
   MutableRefObject,
   SetStateAction,
   Dispatch,
-} from "react";
-import styles from "./mainPage.module.css";
-import Timer from "./timer";
+} from 'react'
+import styles from './mainPage.module.css'
+import Timer from './timer'
 
 //custom aliasing!!
-type REFS<T> = MutableRefObject<T>;
-type dotdotdot<T> = Dispatch<SetStateAction<T>>;
+type REFS<T> = MutableRefObject<T>
+type dotdotdot<T> = Dispatch<SetStateAction<T>>
 //
 
 type TypingBoxProp = {
-  setTimeRunner: (x: boolean) => void;
-  setTimeVal: (x: number) => void;
-  setIsToggle: (x: boolean) => void;
-  setRaw: (x: number) => void;
-  noop: (x: unknown) => void;
-  setAccuracy: (x: number) => void;
-  setWpm: (x: number) => void;
-  setTargetText: (x: string) => void;
-  getRandomString: (x: number) => string;
-  setConsistency: (x:number)=>void;
-  wordTime: Array<number>;
-  dynoRawTime: REFS<number>;
-  chartRaw:Array<number>
-  correctCount: REFS<number>;
-  incorrectCount: REFS<number>;
-  totalCount: REFS<number>;
-  incorrectCountPrev: REFS<number>;
-  shufflePrevCount: REFS<number>;
-  shuffleFirst: REFS<boolean>;
-  setChartWpm: dotdotdot<number[]>;
-  setChartRaw: dotdotdot<number[]>;
-  setMistake: dotdotdot<number[]>;
-  targetText: string;
-  timeRunner: boolean;
-  shuffleCount: number;
-  timeVal: number;
-  mode: number;
-};
+  setTimeRunner: (x: boolean) => void
+  setTimeVal: (x: number) => void
+  setIsToggle: (x: boolean) => void
+  setRaw: (x: number) => void
+  noop: (x: unknown) => void
+  setAccuracy: (x: number) => void
+  setWpm: (x: number) => void
+  setTargetText: (x: string) => void
+  getRandomString: (x: number) => string
+  setConsistency: (x: number) => void
+  wordTime: Array<number>
+  dynoRawTime: REFS<number>
+  chartRaw: Array<number>
+  correctCount: REFS<number>
+  incorrectCount: REFS<number>
+  totalCount: REFS<number>
+  incorrectCountPrev: REFS<number>
+  shufflePrevCount: REFS<number>
+  shuffleFirst: REFS<boolean>
+  setChartWpm: dotdotdot<number[]>
+  setChartRaw: dotdotdot<number[]>
+  setMistake: dotdotdot<number[]>
+  targetText: string
+  timeRunner: boolean
+  shuffleCount: number
+  timeVal: number
+  mode: number
+}
 
-const WordRenderer = React.memo(function WordRenderer({
-  targetWords,
-  userInput,
-}: {
-  targetWords: string[];
-  userInput: string;
-}) {
-  let charIndex = 0;
-  const flatInput = [...userInput];
+const WordRenderer = React.memo(
+  function WordRenderer({
+    targetWords,
+    userInput,
+  }: {
+    targetWords: string[]
+    userInput: string
+  }) {
+    let charIndex = 0
+    const flatInput = [...userInput]
 
-  return (
-    <>
-      {targetWords.map((word, wordIdx) => {
-        const wordWithSpace = word + " ";
-        return (
-          <div key={`word-${wordIdx}`} className={styles.word}>
-            {[...wordWithSpace].map((letter, letterIdx) => {
-              const currentInput = flatInput[charIndex];
-              let letterClass = styles.letter;
+    return (
+      <>
+        {targetWords.map((word, wordIdx) => {
+          const wordWithSpace = word + ' '
+          return (
+            <div key={`word-${wordIdx}`} className={styles.word}>
+              {[...wordWithSpace].map((letter, letterIdx) => {
+                const currentInput = flatInput[charIndex]
+                let letterClass = styles.letter
 
-              if (currentInput !== undefined) {
-                if (currentInput === letter) {
-                  letterClass += " " + styles.correct;
-                } else {
-                  letterClass += " " + styles.incorrect;
+                if (currentInput !== undefined) {
+                  if (currentInput === letter) {
+                    letterClass += ' ' + styles.correct
+                  } else {
+                    letterClass += ' ' + styles.incorrect
+                  }
                 }
-              }
 
-              if (charIndex === userInput.length) {
-                letterClass += " " + styles.activeLetter;
-              }
+                if (charIndex === userInput.length) {
+                  letterClass += ' ' + styles.activeLetter
+                }
 
-              const span = (
-                <span
-                  key={`${wordIdx}-${letterIdx}`}
-                  className={`${letterClass} ${
-                    letter === " " ? styles.space : ""
-                  }`}
-                >
-                  {letter === " " ? "\u00A0" : letter}
-                </span>
-              );
+                const span = (
+                  <span
+                    key={`${wordIdx}-${letterIdx}`}
+                    className={`${letterClass} ${
+                      letter === ' ' ? styles.space : ''
+                    }`}
+                  >
+                    {letter === ' ' ? '\u00A0' : letter}
+                  </span>
+                )
 
-              charIndex++;
-              return span;
-            })}
-          </div>
-        );
-      })}
-    </>
-  );
-}, (prevProps, nextProps) => {
-  // Custom comparison to prevent unnecessary re-renders
-  return (
-  prevProps.userInput === nextProps.userInput &&
-  prevProps.targetWords.join(" ") === nextProps.targetWords.join(" ")
-);
-
-});
-
+                charIndex++
+                return span
+              })}
+            </div>
+          )
+        })}
+      </>
+    )
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison to prevent unnecessary re-renders
+    return (
+      prevProps.userInput === nextProps.userInput &&
+      prevProps.targetWords.join(' ') === nextProps.targetWords.join(' ')
+    )
+  }
+)
 
 export default function TypingBox({
   timeVal,
@@ -136,223 +137,307 @@ export default function TypingBox({
   setAccuracy,
   setRaw,
 }: TypingBoxProp) {
-  const [userInput, setUserInput] = useState("");
-  const wordStartTime = useRef<number | null>(null);
-  const previousCount = useRef(0);
-  const currentWordIndex = useRef(0);
-  const lastCursorTop = useRef(0);
-  const lineHeight = useRef(0);
+  const [userInput, setUserInput] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const wordStartTime = useRef<number | null>(null)
+  const previousCount = useRef(0)
+  const currentWordIndex = useRef(0)
+  const lastCursorTop = useRef(0)
+  const lineHeight = useRef(0)
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const startTime = useRef<number | null>(null);
-  const innerBoxRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const startTime = useRef<number | null>(null)
+  const innerBoxRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!shuffleFirst.current) {
-      shuffleFirst.current = true;
-      setTargetText(getRandomString(200)); // Reduced from 450 to 200
-      return;
+      shuffleFirst.current = true
+      setTargetText(getRandomString(200)) // Reduced from 450 to 200
+      return
     }
     if (shufflePrevCount.current != shuffleCount) {
-      shufflePrevCount.current = shuffleCount;
-      setTargetText(getRandomString(200)); // Reduced from 450 to 200
+      shufflePrevCount.current = shuffleCount
+      setTargetText(getRandomString(200)) // Reduced from 450 to 200
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shuffleCount]); // Simplified dependencies for performance
+  }, [shuffleCount]) // Simplified dependencies for performance
 
-  const targetWords = targetText.split(" ");
+  const targetWords = targetText.split(' ')
 
   const getCurrentWordStart = () => {
-    let index = 0;
+    let index = 0
     for (let i = 0; i < currentWordIndex.current; i++) {
-      index += targetWords[i].length + 1; // +1 for space
+      index += targetWords[i].length + 1 // +1 for space
     }
-    return index;
-  };
+    return index
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let value = e.target.value;
-    const lastChar = value[value.length - 1];
-    const prevLength = userInput.length;
+    let value = e.target.value
+    const lastChar = value[value.length - 1]
+    const prevLength = userInput.length
 
-    if (value.length===1){
-      document.documentElement.style.setProperty("--blinker","1");
+    // Set typing state and reset timeout
+    setIsTyping(true)
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    // Reset typing state after 2 seconds of inactivity
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false)
+    }, 2000)
+
+    if (value.length === 1) {
+      document.documentElement.style.setProperty('--blinker', '1')
       if (!startTime.current) {
-        startTime.current = Date.now();
+        startTime.current = Date.now()
       }
     }
 
-    const wordStart = getCurrentWordStart();
+    const wordStart = getCurrentWordStart()
 
     //Prevent backspacing beyond current word
     if (value.length < prevLength && value.length < wordStart) {
-      return;
+      return
     }
     //Start timing word
     if (
       value.length === 1 ||
-      (userInput.endsWith(" ") && value.length > userInput.length)
+      (userInput.endsWith(' ') && value.length > userInput.length)
     ) {
-      wordStartTime.current = Date.now();
+      wordStartTime.current = Date.now()
     }
 
     // ␣ Space pressed — handle word completion or skipping
     if (
       value.length > prevLength &&
-      lastChar === " " &&
+      lastChar === ' ' &&
       wordStartTime.current
     ) {
-      const duration = Date.now() - wordStartTime.current;
-      wordTime.push(duration);
-      dynoRawTime.current += duration;
-      wordStartTime.current = null;
+      const duration = Date.now() - wordStartTime.current
+      wordTime.push(duration)
+      dynoRawTime.current += duration
+      wordStartTime.current = null
 
-      const typedWord = value.slice(wordStart, value.length - 1); // current word excluding space
-      const expectedWord = targetWords[currentWordIndex.current] || "";
+      const typedWord = value.slice(wordStart, value.length - 1) // current word excluding space
+      const expectedWord = targetWords[currentWordIndex.current] || ''
 
       if (typedWord.length < expectedWord.length) {
         // Word was skipped - replace with incorrect characters including the space
-        const pad = "~".repeat(expectedWord.length - typedWord.length);
-        value = value.slice(0, value.length - 1) + pad + "~"; // Replace space with ~ too
+        const pad = '~'.repeat(expectedWord.length - typedWord.length)
+        value = value.slice(0, value.length - 1) + pad + '~' // Replace space with ~ too
       }
 
       //Move to next word
-      currentWordIndex.current+=1;
+      currentWordIndex.current += 1
     }
-    setUserInput(value);
-  };
-
-  useEffect(()=>{
-    if (!userInput){
-      return;
-    }
-    correctCount.current = 0;
-      totalCount.current = 0;
-      incorrectCount.current = 0;
-
-      for (let i = 0; i < userInput.length; i++) {
-          if (userInput[i] === targetText[i]) {
-            correctCount.current += 1;
-          } else {
-            incorrectCount.current += 1;
-          }
-          totalCount.current += 1;
-        }
-
-      //ACCURACY
-      if (userInput.length) {
-        setAccuracy((correctCount.current / totalCount.current) * 100);
-      }
-
-      //Wpm
-      if (startTime.current) {
-      const elapsedMinutes = (Date.now() - startTime.current) / 1000 / 60;
-
-      const wordsTyped = correctCount.current / 5;
-      setWpm(wordsTyped / elapsedMinutes);
-
-      const wordsRawTyped = totalCount.current / 5;
-      setRaw(wordsRawTyped / elapsedMinutes);
-      }
-
-  },[userInput])
+    setUserInput(value)
+  }
 
   useEffect(() => {
-    if (userInput) setTimeRunner(true);
+    if (!userInput) {
+      return
+    }
+    correctCount.current = 0
+    totalCount.current = 0
+    incorrectCount.current = 0
+
+    for (let i = 0; i < userInput.length; i++) {
+      if (userInput[i] === targetText[i]) {
+        correctCount.current += 1
+      } else {
+        incorrectCount.current += 1
+      }
+      totalCount.current += 1
+    }
+
+    //ACCURACY
+    if (userInput.length) {
+      setAccuracy((correctCount.current / totalCount.current) * 100)
+    }
+
+    //Wpm
+    if (startTime.current) {
+      const elapsedMinutes = (Date.now() - startTime.current) / 1000 / 60
+
+      const wordsTyped = correctCount.current / 5
+      setWpm(wordsTyped / elapsedMinutes)
+
+      const wordsRawTyped = totalCount.current / 5
+      setRaw(wordsRawTyped / elapsedMinutes)
+    }
+  }, [userInput])
+
+  useEffect(() => {
+    if (userInput) setTimeRunner(true)
     if (userInput.length === targetText.length) {
-      console.log("Word times:", wordTime);
+      console.log('Word times:', wordTime)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInput]); // Simplified for performance
+  }, [userInput]) // Simplified for performance
 
   useEffect(() => {
     // Focus only once on mount
-    textareaRef.current?.focus();
-  }, []);
+    textareaRef.current?.focus()
+  }, [])
 
-  useEffect(() => { //CURSOR TRANSLATION OVER LINES
+  useEffect(() => {
+    //CURSOR TRANSLATION OVER LINES
     const updateCursor = () => {
       const activeEl = document.querySelector(
         `.${styles.activeLetter}`
-      ) as HTMLElement;
+      ) as HTMLElement
       if (activeEl && cursorRef.current && innerBoxRef.current) {
-        const rect = activeEl.getBoundingClientRect();
-        const parentRect = innerBoxRef.current.getBoundingClientRect();
+        const rect = activeEl.getBoundingClientRect()
+        const parentRect = innerBoxRef.current.getBoundingClientRect()
         if (rect && parentRect) {
-          const x = rect.left - parentRect.left;
-          const y = rect.top - parentRect.top;
-          cursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
-          cursorRef.current.style.height = `${rect.height}px`;
+          const x = rect.left - parentRect.left
+          const y = rect.top - parentRect.top
+          cursorRef.current.style.transform = `translate(${x}px, ${y}px)`
+          cursorRef.current.style.height = `${rect.height}px`
 
           // Set line height on first render
           if (lineHeight.current === 0) {
-            lineHeight.current = rect.height;
+            lineHeight.current = rect.height
           }
 
           // Auto-scroll logic - only scroll when cursor moves to a new line
-          const elemTop = activeEl.offsetTop; // top position
-          const elemBottom = elemTop + activeEl.offsetHeight + 45; //bottom pos = top + height of elem
+          const elemTop = activeEl.offsetTop // top position
+          const elemBottom = elemTop + activeEl.offsetHeight + 45 //bottom pos = top + height of elem
 
-          const scrollTop = innerBoxRef.current.scrollTop;
-          const boxClientHeight = innerBoxRef.current.clientHeight;
-          const viewBottom = scrollTop + boxClientHeight;
+          const scrollTop = innerBoxRef.current.scrollTop
+          const boxClientHeight = innerBoxRef.current.clientHeight
+          const viewBottom = scrollTop + boxClientHeight
 
           if (elemBottom > viewBottom) {
             //When cursor is wrongly positioned
-            innerBoxRef.current.scrollTop = elemBottom - boxClientHeight;
+            innerBoxRef.current.scrollTop = elemBottom - boxClientHeight
             requestAnimationFrame(() => {
-              const newRect = activeEl.getBoundingClientRect();
-              const newParentRect =
-                innerBoxRef.current?.getBoundingClientRect();
+              const newRect = activeEl.getBoundingClientRect()
+              const newParentRect = innerBoxRef.current?.getBoundingClientRect()
               if (
                 newParentRect?.left &&
                 newParentRect.top &&
                 cursorRef.current
               ) {
-                const newX = newRect.left - newParentRect?.left;
-                const newY = newRect.top - newParentRect?.top;
-                cursorRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
-                cursorRef.current.style.height = `${newRect.height}px`;
-                lastCursorTop.current = newY;
+                const newX = newRect.left - newParentRect?.left
+                const newY = newRect.top - newParentRect?.top
+                cursorRef.current.style.transform = `translate(${newX}px, ${newY}px)`
+                cursorRef.current.style.height = `${newRect.height}px`
+                lastCursorTop.current = newY
               }
-            });
-          } else { //if Cursor in correct position
-            lastCursorTop.current = y;
+            })
+          } else {
+            //if Cursor in correct position
+            lastCursorTop.current = y
           }
         }
       }
-    };
+    }
 
-    // Use requestAnimationFrame for smooth cursor updates
-    const id = requestAnimationFrame(updateCursor);
-    return () => cancelAnimationFrame(id);
-  }, [userInput]);
+    // requestAnimationFrame for smooth cursor updates ig
+    const id = requestAnimationFrame(updateCursor)
+    return () => cancelAnimationFrame(id)
+  }, [userInput])
 
   const handleWordBoxClick = () => {
-    textareaRef.current?.focus();
-  };
+    textareaRef.current?.focus()
+  }
+
+  const handleMouseEvents = (e: MouseEvent) => {
+    if (isTyping && textareaRef.current) {
+      // Only prevent if the target is outside the typing box
+      const typingBox = textareaRef.current.closest(`.${styles.wordBox}`)
+      if (!typingBox?.contains(e.target as Node)) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+
+        // Maintain focus on textarea
+        if (document.activeElement !== textareaRef.current) {
+          textareaRef.current.focus()
+        }
+        return false
+      }
+    }
+  }
+
+  // Add global event listeners to prevent mouse interference
+  useEffect(() => {
+    if (isTyping) {
+      const events = ['mousedown', 'mouseup', 'click'] as const
+
+      events.forEach((eventType) => {
+        document.addEventListener(eventType, handleMouseEvents, true)
+      })
+
+      // Prevent focus loss
+      const handleFocusOut = (e: FocusEvent) => {
+        if (
+          isTyping &&
+          textareaRef.current &&
+          e.target === textareaRef.current
+        ) {
+          e.preventDefault()
+          setTimeout(() => {
+            textareaRef.current?.focus()
+          }, 0)
+        }
+      }
+
+      document.addEventListener('focusout', handleFocusOut, true)
+
+      return () => {
+        events.forEach((eventType) => {
+          document.removeEventListener(eventType, handleMouseEvents, true)
+        })
+        document.removeEventListener('focusout', handleFocusOut, true)
+      }
+    }
+  }, [isTyping])
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
-  if (timeVal === 0 && startTime.current) {
-    const elapsedMinutes = (Date.now() - startTime.current) / 1000 / 60;
-    const wordsTyped = correctCount.current / 5;
-    setWpm(wordsTyped / elapsedMinutes);
-    const wordsRawTyped = totalCount.current / 5;
-    setRaw(wordsRawTyped / elapsedMinutes);
-  }
-}, [timeVal]);
-
+    if (timeVal === 0 && startTime.current) {
+      const elapsedMinutes = (Date.now() - startTime.current) / 1000 / 60
+      const wordsTyped = correctCount.current / 5
+      setWpm(wordsTyped / elapsedMinutes)
+      const wordsRawTyped = totalCount.current / 5
+      setRaw(wordsRawTyped / elapsedMinutes)
+    }
+  }, [timeVal])
 
   return (
     <>
-      <div className={styles.wordBox} onClick={handleWordBoxClick}>
+      <div
+        className={`${styles.wordBox} ${isTyping ? styles.typingMode : ''}`}
+        onClick={handleWordBoxClick}
+      >
         <textarea
+          ref={textareaRef}
           value={userInput}
           onChange={handleChange}
           className={styles.textBox}
           autoFocus
           tabIndex={0}
+          onBlur={(e) => {
+            // Prevent blur when typing
+            if (isTyping) {
+              e.preventDefault()
+              e.target.focus()
+            }
+          }}
         />
         <div className={styles.timerBox}>
           <Timer
@@ -376,12 +461,14 @@ export default function TypingBox({
         </div>
         <div ref={cursorRef} className={styles.customCursor} />
 
-        
-
         <div ref={innerBoxRef} className={styles.innerBox}>
-          <WordRenderer targetWords={targetWords} userInput={userInput} key={shuffleCount}/>
+          <WordRenderer
+            targetWords={targetWords}
+            userInput={userInput}
+            key={shuffleCount}
+          />
         </div>
       </div>
     </>
-  );
+  )
 }
